@@ -12,5 +12,17 @@
   "license": "ISC",
   "devDependencies": {
     "lite-server": "^2.3.0"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/EJBelford/DBMS_Framework.git"
+  },
+  "bugs": {
+    "url": "https://github.com/EJBelford/DBMS_Framework/issues"
+  },
+  "homepage": "https://github.com/EJBelford/DBMS_Framework#readme",
+  "dependencies": {
+    "bootstrap": "^3.3.7",
+    "navbar": "^2.1.0"
   }
 }
