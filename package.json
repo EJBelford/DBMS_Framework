@@ -22,7 +22,8 @@
   },
   "homepage": "https://github.com/EJBelford/DBMS_Framework#readme",
   "dependencies": {
-    "bootstrap": "^3.3.7",
+    "bootstrap": "^4.0.0",
+    "jquery": "^3.3.0",
     "navbar": "^2.1.0"
   }
 }
