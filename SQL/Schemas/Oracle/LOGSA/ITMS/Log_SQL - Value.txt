@@ -1,0 +1,1 @@
+    DIAG.LogSQLValue( v_ProcName, '[Description]', DiagLogging, v_DiagCategories );

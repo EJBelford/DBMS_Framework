@@ -1,0 +1,4 @@
+    -- Error text here.
+    v_ErrMsg := 'Error text here.';
+    DIAG.LogApplicationError( v_ProcName, -20000, v_ErrMsg, DiagLogging, v_DiagCategories );
+    RAISE_APPLICATION_ERROR( -20000, v_ErrMsg );

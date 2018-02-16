@@ -1,0 +1,2556 @@
+<SCRIPT LANGUAGE="JavaScript">
+<!-- Hide Javascript from non-js browsers
+
+/////////////////////////////////////////////////////////////////////////
+// Modified 12/04/2002 by Jim Privett to add validateCurrencyEntry
+//                                    function per PTR 1560
+/////////////////////////////////////////////////////////////////////////
+
+
+// BeginHeader
+//----------------------------------------------------------------------
+// File: validateClientJS.asp
+// Application: Reuse library (/inc directory)
+// 
+// Change History:
+//
+// Date       Programmer     Change
+//----------------------------------------------------------------------
+// 06/16/2001 J. Hohman      PTR 736.  Update functions
+//                           to limit scope of i to the function.
+//
+/////////////////////////////////////////////////////////////////////////
+//////////                      trim                           //////////
+/////////////////////////////////////////////////////////////////////////
+// Purpose:  Takes a given string, trims all spaces, tabs, carraige
+//           restores and newline characters from its front and back,
+//           and returns the trimmed string.
+/////////////////////////////////////////////////////////////////////////
+// Syntax:  trim(string)
+//  
+// Where 'string' is the string to be trimmed
+//
+// Returns:  the string with spaces, tabs, carrage returns & newline chars
+//           trimmed from its front and back
+/////////////////////////////////////////////////////////////////////////
+// EndHeader
+function trim(targetString) {
+
+  // Strip trailing blanks, tabs, newlines, and carraige returns
+  while ( targetString.length > 0 && " \t\r\n".indexOf(targetString.charAt(targetString.length-1)) > -1 )
+    targetString = targetString.substring(0, targetString.length-1);
+
+  // Strip leading blanks, tabs, newlines, and carraige returns
+  while ( targetString.length > 0 && " \t\r\n".indexOf(targetString.charAt(0)) > -1 )
+    targetString = targetString.substring(1, targetString.length);
+
+  return targetString;
+}
+
+
+// BeginHeader
+/////////////////////////////////////////////////////////////////////////
+//////////                validateAlphaEntry                   //////////
+/////////////////////////////////////////////////////////////////////////
+// Purpose:  Validates a given string to make sure it is made up of
+//           alphabetic characters only.  If it is not, and a 2nd
+//           argument (fieldTitle) is included, pop-up an alert 
+//           box warning user.
+//           If validation fails and a 3rd argument is included, representing
+//           a form field pointer, then focus is placed in that field.
+/////////////////////////////////////////////////////////////////////////
+// Syntax:  validateAlphaEntry(validString[, fieldTitle, [fieldPtr]])
+//  
+// Where 'validString' is the string to be evaluated
+//       'fieldTitle' is the title of a field that will be included in 
+//          the alert warning message.  This is optional unless a 'fieldPtr'
+//          is specified; if it is, and you do not want to trigger an alert
+//          message on a validation failure, set this to blank, i.e. ""
+//       'fieldPtr' is a pointer to a form field, into which the focus
+//          will be directed if validation fails.  E.g. document.formName.fieldName
+//          This is optional.
+//
+// Returns:  true if 'validString' is all alpha chars, false otherwise
+/////////////////////////////////////////////////////////////////////////
+// EndHeader
+function validateAlphaEntry(validString, fieldTitle, fieldPtr) {
+  var isAlphaValid = true;
+  // PTR 736: Added next line.
+  var i;
+  
+  for (i=0; (isAlphaValid && (i < validString.length)); i++) {
+    // check if char is valid 
+    if ("abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ ".indexOf(validString.charAt(i)) == -1) {
+      isAlphaValid = false;
+      i=validString.length;
+    }
+  }
+
+  if ( (isAlphaValid == false) && (validateAlphaEntry.arguments.length > 1) && (fieldTitle != null) && (fieldTitle != ""))
+    alert("\nInvalid alpha data entered in field: " + fieldTitle);
+
+  if ( (isAlphaValid == false) && (validateAlphaEntry.arguments.length > 2) )
+    fieldPtr.focus();
+
+  return isAlphaValid;
+}
+
+
+// BeginHeader
+/////////////////////////////////////////////////////////////////////////
+//////////           validateAlphanumericEntry                 //////////
+/////////////////////////////////////////////////////////////////////////
+// Purpose:  Validates a given string to make sure it is made up of
+//           alphabetic characters or numbers only.  If it is not, and a 2nd
+//           argument (fieldTitle) is included, pop-up an alert 
+//           box warning user.
+//           If validation fails and a 3rd argument is included, representing
+//           a form field pointer, then focus is placed in that field.
+/////////////////////////////////////////////////////////////////////////
+// Syntax:  validateAlphanumericEntry(validString[, fieldTitle[, fieldPtr]])
+//  
+// Where 'validString' is the string to be evaluated
+//       'fieldTitle' is the title of a field that will be included in 
+//          the alert warning message.  This is optional unless a 'fieldPtr'
+//          is specified; if it is, and you do not want to trigger an alert
+//          message on a validation failure, set this to blank, i.e. ""
+//       'fieldPtr' is a pointer to a form field, into which the focus
+//          will be directed if validation fails.  E.g. document.formName.fieldName
+//          This is optional.
+//
+// Returns:  true if 'validString' is all alpha or number chars, false otherwise
+/////////////////////////////////////////////////////////////////////////
+// EndHeader
+function validateAlphanumericEntry(validString, fieldTitle, fieldPtr) {
+  var isAlphanumericValid = true;
+  // PTR 736: Added next line.
+  var i;
+  
+  for (i=0; (isAlphanumericValid && (i < validString.length)); i++) {
+    // check if char is valid 
+    if ("abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789 ".indexOf(validString.charAt(i)) == -1) {
+      isAlphanumericValid = false;
+      i=validString.length;
+    }
+  }
+  if ( (isAlphanumericValid == false) && (validateAlphanumericEntry.arguments.length > 1) && (fieldTitle != null) && (fieldTitle != "") )
+    alert("\nInvalid alphanumeric data entered in field: " + fieldTitle);
+
+  if ( (isAlphanumericValid == false) && (validateAlphanumericEntry.arguments.length > 2) )
+    fieldPtr.focus();
+
+  return isAlphanumericValid;
+}
+
+
+// BeginHeader
+/////////////////////////////////////////////////////////////////////////
+//////////                validateDateEntry                    //////////
+/////////////////////////////////////////////////////////////////////////
+// Purpose:  Validates a given string to make sure it is a
+//           date in the format mm-dd-yyyy.  If it is not, and a 2nd
+//           argument (fieldTitle) is included, pop-up an alert 
+//           box warning user.
+//           If validation fails and a 3rd argument is included, representing
+//           a form field pointer, then focus is placed in that field.
+/////////////////////////////////////////////////////////////////////////
+// Syntax:  validateDateEntry(validString[, fieldTitle[, fieldPtr]])
+//  
+// Where 'validString' is the string to be evaluated
+//       'fieldTitle' is the title of a field that will be included in 
+//          the alert warning message.  This is optional unless a 'fieldPtr'
+//          is specified; if it is, and you do not want to trigger an alert
+//          message on a validation failure, set this to blank, i.e. ""
+//       'fieldPtr' is a pointer to a form field, into which the focus
+//          will be directed if validation fails.  E.g. document.formName.fieldName
+//          This is optional.
+//
+// Returns:  true if 'validateDateEntry' is a date in format mm-dd-yyyy,
+//           false otherwise
+/////////////////////////////////////////////////////////////////////////
+// EndHeader
+function validateDateEntry(validDate, fieldTitle, fieldPtr) {
+  // This variable is true if the string contains valid date in format yyyy-mm-dd; false otherwise
+  var isDateValid = true;                           // Assume date is valid
+
+  // Strip trailing blanks, tabs, newlines, and carraige returns
+  while ( validDate.length > 0 && " \t\r\n".indexOf(validDate.charAt(validDate.length-1)) > -1 )
+    validDate = validDate.substring(0, validDate.length-1);
+
+  // Strip leading blanks, tabs, newlines, and carraige returns
+  while ( validDate.length > 0 && " \t\r\n".indexOf(validDate.charAt(0)) > -1 )
+    validDate = validDate.substring(1, validDate.length);
+
+  var mm = "";                                      // Month   
+  var dd = "";                                      // Day
+  var yyyy = "";                                    // Year
+  var sep1 = 0;                                     // Pointer to position of 1st digit seperator in date string ("/" or "-")
+  var sep2 = 0;                                     // Pointer to position of 2nd digit seperator in date string ("/" or "-")
+  sep1 = validDate.indexOf("/");                    // Find position of 1st slash
+  if ( sep1 > 0 ) {                                 // If 1st slash found
+    sep2 = validDate.indexOf("/", sep1+1);          //  find position of 2nd slash
+  }
+  else {                                            // If no slashes found
+    sep1 = validDate.indexOf("-");                  // Find position of 1st dash
+    if ( sep1 > 0 ) {                               // If 1st dash found
+      sep2 = validDate.indexOf("-", sep1+1);        //  find position of 2nd dash
+    }
+  }
+
+  if ( ( sep1 >= 0 ) && (sep2 >= 0 ) ) {            // If both seperators found
+    mm = validDate.substring(0, sep1)    
+    dd = validDate.substring(sep1+1, sep2)
+    yyyy = validDate.substring(sep2+1, validDate.length)
+  }
+
+  var details = "Correct format is mm-dd-yyyy";     // Initial details msg to be returned to user on error 
+  var leastYear = 1900;                             // Year must be >= this
+  var greatestYear = 2100;                          // Year must be <= this
+
+  var currentDate = new Date();                     // Define a date variable
+  var currentYear = currentDate.getYear();          // Assign the year to a variable
+  if ( currentYear < 1000 )                         // If year is not 4 digits
+    currentYear += 1900;                            //   add 1900 to it
+
+  var yyyyValidNumber = true;                       // Define flag to indicate if year is valid number
+  var mmValidNumber = true;                         // Define flag to indicate if month is valid number
+  var ddValidNumber = true;                         // Define flag to indicate if day is valid number
+
+  // Determine if year is valid number
+  for (d=0; ( d < yyyy.length && "0123456789".indexOf(yyyy.charAt(d)) > -1 ); d++);
+  if (yyyy == "" || "0123456789".indexOf(yyyy.charAt(d)) == -1 )
+    yyyyValidNumber = false;
+
+  // Determine if month is valid number
+  for (d=0; ( d < mm.length && "0123456789".indexOf(mm.charAt(d)) > -1 ); d++);
+  if (mm == "" || "0123456789".indexOf(mm.charAt(d)) == -1 )
+    mmValidNumber = false;
+
+  // Determine if day is valid number
+  for (d=0; ( d < dd.length && "0123456789".indexOf(dd.charAt(d)) > -1 ); d++);
+  if (dd == "" || "0123456789".indexOf(dd.charAt(d)) == -1 )
+    ddValidNumber = false;
+
+  if ( yyyyValidNumber == true ) {                  // If year is a valid number...
+    yyyy = (yyyy.length < 2 ? "0"+yyyy : yyyy);     // If year only 1 char, prefix with zero  
+    if ( yyyy.length == 2 )                         // If year = 2 digits
+      yyyy = (currentYear+"").substring(0,2) + yyyy; //   prefix with 1st 2 digits of this year
+  }
+
+  if ( validDate.length > 0 ) {                     
+    if ( (yyyyValidNumber == false) || (mmValidNumber == false) || (ddValidNumber == false) )
+      isDateValid = false
+    else if ( (yyyy < leastYear) || (yyyy > greatestYear) ) {      
+      isDateValid = false;
+      details = "Year must be between " + leastYear + " and " + greatestYear;
+    }
+    else if ( (mm < 1 ) || (mm > 12 ) ) {                          
+      isDateValid = false;
+      details = "Invalid month entered";
+    }
+    else if ( (dd < 1 )  ) {                                      
+      isDateValid = false;
+      details = "Invalid day entered";
+    }
+    else if ( dd > 28 ) {          
+      var daysInMonth = 31;                                        // Assume 31 days in month
+      if ( mm == 4 || mm == 6 || mm == 9 || mm == 11 )             // If a 30-day month
+        daysInMonth = 30                                           //   change days-in-month to 30
+      else if ( mm == 2 )                                          // If month is February
+        daysInMonth = ( (yyyy/4) == parseInt(yyyy/4) ? 29 : 28 );  // If leap year, days = 29, else days = 28
+      if ( dd > daysInMonth ) {                                    // If too many days specified...
+        isDateValid = false;             
+        details = "There are only " + daysInMonth + " days in the specified month";
+      } 
+    }
+  }
+  
+  if ( (isDateValid == false) && (validateDateEntry.arguments.length > 1) && (fieldTitle != null) && (fieldTitle != "") )
+    alert("\nInvalid date entered in field: " + fieldTitle + "\n" + details);
+
+  if ( (isDateValid == false) && (validateDateEntry.arguments.length > 2) )
+    fieldPtr.focus();
+
+  return isDateValid;
+}
+
+
+// BeginHeader
+/////////////////////////////////////////////////////////////////////////
+//////////                validateDateLongYearEntry            //////////
+/////////////////////////////////////////////////////////////////////////
+// Purpose:  Validates a given string to make sure it is a
+//           date in the format mm-dd-yyyy.  Year MUST be 4 digits.
+//           If validation fails and a 3rd argument is included, representing
+//           a form field pointer, then focus is placed in that field.
+/////////////////////////////////////////////////////////////////////////
+// Syntax:  validateDateLongYearEntry(validString[, fieldTitle[, fieldPtr]])
+//  
+// Where 'validString' is the string to be evaluated
+//       'fieldTitle' is the title of a field that will be included in 
+//          the alert warning message.  This is optional unless a 'fieldPtr'
+//          is specified; if it is, and you do not want to trigger an alert
+//          message on a validation failure, set this to blank, i.e. ""
+//       'fieldPtr' is a pointer to a form field, into which the focus
+//          will be directed if validation fails.  E.g. document.formName.fieldName
+//          This is optional.
+//
+// Returns:  true if 'validateDateEntry' is a date in format mm-dd-yyyy,
+//           false otherwise
+// Change History:  Curt Zarger - 5/1/1999 modified to enforce four digit
+//                    year
+//                  Jim Privett - 2/1/2000 modified to remove pop-up alert
+//                    and change name to validateDateLongYearEntry to
+//                    keep this function consistent with others in group
+/////////////////////////////////////////////////////////////////////////
+// EndHeader
+function validateDateLongYearEntry(validDate, fieldTitle, fieldPtr) {
+  // This variable is true if the string contains valid date in format yyyy-mm-dd; false otherwise
+  var isDateValid = true;                           // Assume date is valid
+
+  // Strip trailing blanks, tabs, newlines, and carraige returns
+  while ( validDate.length > 0 && " \t\r\n".indexOf(validDate.charAt(validDate.length-1)) > -1 )
+    validDate = validDate.substring(0, validDate.length-1);
+
+  // Strip leading blanks, tabs, newlines, and carraige returns
+  while ( validDate.length > 0 && " \t\r\n".indexOf(validDate.charAt(0)) > -1 )
+    validDate = validDate.substring(1, validDate.length);
+
+  var mm = "";                                      // Month   
+  var dd = "";                                      // Day
+  var yyyy = "";                                    // Year
+  var sep1 = 0;                                     // Pointer to position of 1st digit seperator in date string ("/" or "-")
+  var sep2 = 0;                                     // Pointer to position of 2nd digit seperator in date string ("/" or "-")
+  sep1 = validDate.indexOf("/");                    // Find position of 1st slash
+  if ( sep1 > 0 ) {                                 // If 1st slash found
+    sep2 = validDate.indexOf("/", sep1+1);          //  find position of 2nd slash
+  }
+  else {                                            // If no slashes found
+    sep1 = validDate.indexOf("-");                  // Find position of 1st dash
+    if ( sep1 > 0 ) {                               // If 1st dash found
+      sep2 = validDate.indexOf("-", sep1+1);        //  find position of 2nd dash
+    }
+  }
+
+  if ( ( sep1 >= 0 ) && (sep2 >= 0 ) ) {            // If both seperators found
+    mm = validDate.substring(0, sep1)    
+    dd = validDate.substring(sep1+1, sep2)
+    yyyy = validDate.substring(sep2+1, validDate.length)
+  }
+
+  var details = "Correct format is mm-dd-yyyy";     // Initial details msg to be returned to user on error 
+  var leastYear = 1900;                             // Year must be >= this
+  var greatestYear = 2100;                          // Year must be <= this
+
+  var yyyyValidNumber = true;                       // Define flag to indicate if year is valid number
+  var mmValidNumber = true;                         // Define flag to indicate if month is valid number
+  var ddValidNumber = true;                         // Define flag to indicate if day is valid number
+
+  // Determine if year is valid number
+  for (d=0; ( d < yyyy.length && "0123456789".indexOf(yyyy.charAt(d)) > -1 ); d++);
+  if (yyyy == "" || "0123456789".indexOf(yyyy.charAt(d)) == -1 )
+    yyyyValidNumber = false;
+
+  // Determine if month is valid number
+  for (d=0; ( d < mm.length && "0123456789".indexOf(mm.charAt(d)) > -1 ); d++);
+  if (mm == "" || "0123456789".indexOf(mm.charAt(d)) == -1 )
+    mmValidNumber = false;
+
+  // Determine if day is valid number
+  for (d=0; ( d < dd.length && "0123456789".indexOf(dd.charAt(d)) > -1 ); d++);
+  if (dd == "" || "0123456789".indexOf(dd.charAt(d)) == -1 )
+    ddValidNumber = false;
+
+  if ( validDate.length > 0 ) {                     
+    if ( (yyyyValidNumber == false) || (mmValidNumber == false) || (ddValidNumber == false) )
+      isDateValid = false
+    else if ( (yyyy < leastYear) || (yyyy > greatestYear) ) {      
+      isDateValid = false;
+      details = "Year must be between " + leastYear + " and " + greatestYear;
+    }
+    else if ( yyyy.length < 4 ) {                  // If year is less than 4 digits ...
+      isDateValid = false ;
+      details = "Year must be four digits." ;
+    }
+    else if ( (mm < 1 ) || (mm > 12 ) ) {                          
+      isDateValid = false;
+      details = "Invalid month entered";
+    }
+    else if ( (dd < 1 )  ) {                                      
+      isDateValid = false;
+      details = "Invalid day entered";
+    }
+    else if ( dd > 28 ) {          
+      var daysInMonth = 31;                                        // Assume 31 days in month
+      if ( mm == 4 || mm == 6 || mm == 9 || mm == 11 )             // If a 30-day month
+        daysInMonth = 30                                           //   change days-in-month to 30
+      else if ( mm == 2 )                                          // If month is February
+        daysInMonth = ( (yyyy/4) == parseInt(yyyy/4) ? 29 : 28 );  // If leap year, days = 29, else days = 28
+      if ( dd > daysInMonth ) {                                    // If too many days specified...
+        isDateValid = false;             
+        details = "There are only " + daysInMonth + " days in the specified month";
+      } 
+    }
+  }
+  
+  if ( (isDateValid == false) && (validateDateLongYearEntry.arguments.length > 1) && (fieldTitle != null) && (fieldTitle != "") )
+    alert("\nInvalid date entered in field: " + fieldTitle + "\n" + details);
+
+  if ( (isDateValid == false) && (validateDateLongYearEntry.arguments.length > 2) )
+    fieldPtr.focus();
+
+  return isDateValid;
+}
+
+
+// BeginHeader
+/////////////////////////////////////////////////////////////////////////
+//////////              validateIntegerEntry                   //////////
+/////////////////////////////////////////////////////////////////////////
+// Purpose:  Validates a given string to make sure it is an integer.
+//           If it is not, and a 2nd argument (fieldTitle) 
+//           is included, pop-up an alert box warning user.
+//           If validation fails and a 3rd argument is included, representing
+//           a form field pointer, then focus is placed in that field.
+/////////////////////////////////////////////////////////////////////////
+// Syntax:  validateIntegerEntry(validString[, fieldTitle[, fieldPtr]])
+//  
+// Where 'validString' is the string to be evaluated
+//       'fieldTitle' is the title of a field that will be included in 
+//          the alert warning message.  This is optional unless a 'fieldPtr'
+//          is specified; if it is, and you do not want to trigger an alert
+//          message on a validation failure, set this to blank, i.e. ""
+//       'fieldPtr' is a pointer to a form field, into which the focus
+//          will be directed if validation fails.  E.g. document.formName.fieldName
+//          This is optional.
+//
+// Returns:  true if 'validString' is an integer, false otherwise
+/////////////////////////////////////////////////////////////////////////
+// EndHeader
+function validateIntegerEntry(validString, fieldTitle, fieldPtr) {
+  // PTR 736: Added next line.
+  var i;
+
+  // This variable is true if the string contains an integer; false otherwise
+  var isNumValid = true;
+
+  // Strip trailing blanks, tabs, newlines, and carraige returns
+  while ( validString.length > 0 && " \t\r\n".indexOf(validString.charAt(validString.length-1)) > -1 )
+    validString = validString.substring(0, validString.length-1);
+
+  // Strip leading blanks, tabs, newlines, and carraige returns
+  while ( validString.length > 0 && " \t\r\n".indexOf(validString.charAt(0)) > -1 )
+    validString = validString.substring(1, validString.length);
+
+  for (i=0; ( isNumValid && (i < validString.length) ); i++) {
+    // check if number is valid
+    testChar = validString.charAt(i);
+    // If character not in set of digits...
+    if ( "0123456789".indexOf(testChar) == -1 ) {
+      // If the non-digit char is not a leading negative sign,
+      // change return value to false
+      if ( !( i == 0 && testChar == "-" ) )
+        isNumValid = false;
+    }
+  }
+
+  if ( (isNumValid == false) && (validateIntegerEntry.arguments.length > 1) && (fieldTitle != null) && (fieldTitle != ""))
+    alert("\nInvalid non-integer data entered in field: " + fieldTitle);
+
+  if ( (isNumValid == false) && (validateIntegerEntry.arguments.length > 1) )
+    fieldPtr.focus();
+
+  return isNumValid;
+}
+
+
+// BeginHeader
+/////////////////////////////////////////////////////////////////////////
+//////////              validateMaxLengthEntry                 //////////
+/////////////////////////////////////////////////////////////////////////
+// Purpose:  Validates a given string to make sure its length
+//           is no longer than a given minimum number of characters. 
+//           If it is longer, and a 2nd argument (fieldTitle) is included, 
+//           pop-up an alert box warning user.  Also, if it is longer,
+//           and a 4th argument is included, representing a form field pointer,
+//           then focus is placed in that field.
+//
+/////////////////////////////////////////////////////////////////////////
+// Syntax:  validateMaxLengthEntry(validString, maxLength[, fieldTitle[, fieldPtr]])
+//  
+// Where 'validString' is the string to be evaluated
+//       'maxLength' is the most number of chars long it may be
+//       'fieldTitle' is the title of a field that will be included in 
+//          the alert warning message.  This is optional unless a 'fieldPtr'
+//          is specified; if it is, and you do not want to trigger an alert
+//          message on a validation failure, set this to blank, i.e. ""
+//       'fieldPtr' is a pointer to a form field, into which the focus
+//          will be directed if validation fails.  E.g. document.formName.fieldName
+//          This is optional.
+//
+// Returns:  true if 'validString' is maxLength or less chars long, false otherwise
+/////////////////////////////////////////////////////////////////////////
+// EndHeader
+function validateMaxLengthEntry(validString, maxLength, fieldTitle, fieldPtr) {
+
+  // Strip trailing blanks, tabs, newlines, and carraige returns
+  while ( validString.length > 0 && " \t\r\n".indexOf(validString.charAt(validString.length-1)) > -1 )
+    validString = validString.substring(0, validString.length-1);
+
+  // Strip leading blanks, tabs, newlines, and carraige returns
+  while ( validString.length > 0 && " \t\r\n".indexOf(validString.charAt(0)) > -1 )
+    validString = validString.substring(1, validString.length);
+
+  var isLongEnough = (validString.length > maxLength ? false : true);
+
+  if ( (isLongEnough == false) && ( validateMaxLengthEntry.arguments.length > 2) && (fieldTitle != null) && (fieldTitle != "") )
+    alert("\nThe " + fieldTitle + " field must be at most " + maxLength + " characters long");
+
+ if ( (isLongEnough == false) && (validateMaxLengthEntry.arguments.length > 3) )
+    fieldPtr.focus();
+
+  return isLongEnough;
+}
+
+
+// BeginHeader
+/////////////////////////////////////////////////////////////////////////
+//////////              validateMinLengthEntry                 //////////
+/////////////////////////////////////////////////////////////////////////
+// Purpose:  Validates a given string to make sure its length
+//           meets a given minimum number of characters. 
+//           If it does not, and a 2nd argument (fieldTitle) is included, 
+//           pop-up an alert box warning user.  If it does not and a 4th
+//           argument is included, representing a form field pointer,
+//           then focus is placed in that field.
+/////////////////////////////////////////////////////////////////////////
+// Syntax:  validateMinLengthEntry(validString, minLength[, fieldTitle[, fieldPtr]])
+//  
+// Where 'validString' is the string to be evaluated
+//       'minLength' is the least number of chars long it may be
+//       'fieldTitle' is the title of a field that will be included in 
+//          the alert warning message.  This is optional unless a 'fieldPtr'
+//          is specified; if it is, and you do not want to trigger an alert
+//          message on a validation failure, set this to blank, i.e. ""
+//       'fieldPtr' is a pointer to a form field, into which the focus
+//          will be directed if validation fails.  E.g. document.formName.fieldName
+//          This is optional.
+//
+// Returns:  true if 'validString' is minLength or more chars long, false otherwise
+/////////////////////////////////////////////////////////////////////////
+// EndHeader
+function validateMinLengthEntry(validString, minLength, fieldTitle, fieldPtr) {
+
+  // Strip trailing blanks, tabs, newlines, and carraige returns
+  while ( validString.length > 0 && " \t\r\n".indexOf(validString.charAt(validString.length-1)) > -1 )
+    validString = validString.substring(0, validString.length-1);
+
+  // Strip leading blanks, tabs, newlines, and carraige returns
+  while ( validString.length > 0 && " \t\r\n".indexOf(validString.charAt(0)) > -1 )
+    validString = validString.substring(1, validString.length);
+
+  var isLongEnough = (validString.length < minLength ? false : true);
+
+  if ( (isLongEnough == false) && ( validateMinLengthEntry.arguments.length > 2) && (fieldTitle != null) && (fieldTitle != "") )
+    alert("\nThe " + fieldTitle + " field must be at least " + minLength + " characters long");
+
+  if ( (isLongEnough == false) && ( validateMinLengthEntry.arguments.length > 3) )
+    fieldPtr.focus();
+
+  return isLongEnough;
+}
+
+
+// BeginHeader
+/////////////////////////////////////////////////////////////////////////
+//////////              validateNonblankEntry                  //////////
+/////////////////////////////////////////////////////////////////////////
+// Purpose:  Validates a given string to make sure it is not empty (blank).
+//           If it is blank, and a 2nd argument (fieldTitle) is included, 
+//           pop-up an alert box warning user.  If it is blank and a 3rd
+//           argument is included, representing a form field pointer,
+//           then focus is placed in that field.
+/////////////////////////////////////////////////////////////////////////
+// Syntax:  validateNonblankEntry(validString[, fieldTitle[, fieldPtr]])
+//  
+// Where 'validString' is the string to be evaluated
+//       'fieldTitle' is the title of a field that will be included in 
+//          the alert warning message.  This is optional unless a 'fieldPtr'
+//          is specified; if it is, and you do not want to trigger an alert
+//          message on a validation failure, set this to blank, i.e. ""
+//       'fieldPtr' is a pointer to a form field, into which the focus
+//          will be directed if validation fails.  E.g. document.formName.fieldName
+//          This is optional.
+//
+// Returns:  true if 'validString' is not empty (blank), false otherwise
+/////////////////////////////////////////////////////////////////////////
+// EndHeader
+function validateNonblankEntry(validString, fieldTitle, fieldPtr) {
+
+  // Strip trailing blanks, tabs, newlines, and carraige returns
+  while ( validString.length > 0 && " \t\r\n".indexOf(validString.charAt(validString.length-1)) > -1 )
+    validString = validString.substring(0, validString.length-1);
+
+  // Strip leading blanks, tabs, newlines, and carraige returns
+  while ( validString.length > 0 && " \t\r\n".indexOf(validString.charAt(0)) > -1 )
+    validString = validString.substring(1, validString.length);
+
+  var isNotEmpty = (validString == "" ? false : true);
+
+  if ( (isNotEmpty == false) && (validateNonblankEntry.arguments.length > 1) && (fieldTitle != null) && (fieldTitle != "") )
+    alert("\nInput required in field: " + fieldTitle);
+
+  if ( (isNotEmpty == false) && (validateNonblankEntry.arguments.length > 2) )
+    fieldPtr.focus();
+
+  return isNotEmpty;
+}
+
+
+// BeginHeader
+/////////////////////////////////////////////////////////////////////////
+//////////               validateNotInEntry                    //////////
+/////////////////////////////////////////////////////////////////////////
+// Purpose:  Validates a given string to make sure it does NOT contain
+//           a second given string.  If the second string IS found,
+//           and a 3rd argument (fieldTitle) is included, pop-up an
+//           alert box warning user of its presence.  Also, if it is 
+//           found and a 4th argument is included, representing a form 
+//           field pointer, then focus is placed in that field.
+//           
+/////////////////////////////////////////////////////////////////////////
+// Syntax:  validateNotInEntry(validString, testString[, fieldTitle[, fieldPtr]])
+//  
+// Where 'validString' is the string to be evaluated
+//       'testString' is the string whose presense within 'validString'
+//          is to be tested for
+//       'fieldTitle' is the title of a field that will be included in 
+//          the alert warning message.  This is optional unless a 'fieldPtr'
+//          is specified; if it is, and you do not want to trigger an alert
+//          message on a validation failure, set this to blank, i.e. ""
+//       'fieldPtr' is a pointer to a form field, into which the focus
+//          will be directed if validation fails.  E.g. document.formName.fieldName
+//          This is optional.
+//
+// Returns:  true if 'testString' is NOT found in 'validString', false otherwise
+/////////////////////////////////////////////////////////////////////////
+// EndHeader
+function validateNotInEntry(validString, testString, fieldTitle, fieldPtr) {
+  var isNotIn = true;
+
+  // Strip trailing blanks, tabs, newlines, and carraige returns
+  while ( validString.length > 0 && " \t\r\n".indexOf(validString.charAt(validString.length-1)) > -1 )
+    validString = validString.substring(0, validString.length-1);
+
+  // Strip leading blanks, tabs, newlines, and carraige returns
+  while ( validString.length > 0 && " \t\r\n".indexOf(validString.charAt(0)) > -1 )
+    validString = validString.substring(1, validString.length);
+
+  if ( validString.indexOf(testString) > -1 ) 
+    isNotIn = false;
+
+  if ( (isNotIn == false) && (validateNotInEntry.arguments.length > 2) && (fieldTitle != null) && (fieldTitle != "") ) 
+    alert("\nDisallowed character(s) '" + testString + "' found in field: " + fieldTitle);
+
+  if ( (isNotIn == false) && (validateNotInEntry.arguments.length > 3) )
+    fieldPtr.focus();
+
+  return isNotIn;
+}
+
+
+// BeginHeader
+/////////////////////////////////////////////////////////////////////////
+//////////               validateNumberEntry                   //////////
+/////////////////////////////////////////////////////////////////////////
+// Purpose:  Validates a given string to make sure it is made up of
+//           numbers only.  If it is not, and a 2nd argument (fieldTitle) 
+//           is included, pop-up an alert box warning user.
+//           If validation fails and a 3rd argument is included, representing
+//           a form field pointer, then focus is placed in that field.
+/////////////////////////////////////////////////////////////////////////
+// Syntax:  validateNumberEntry(validString[, fieldTitle[, fieldPtr]])
+//  
+// Where 'validString' is the string to be evaluated
+//       'fieldTitle' is the title of a field that will be included in 
+//          the alert warning message.  This is optional unless a 'fieldPtr'
+//          is specified; if it is, and you do not want to trigger an alert
+//          message on a validation failure, set this to blank, i.e. ""
+//       'fieldPtr' is a pointer to a form field, into which the focus
+//          will be directed if validation fails.  E.g. document.formName.fieldName
+//          This is optional.
+//
+// Returns:  true if 'validString' is all numeric, false otherwise
+/////////////////////////////////////////////////////////////////////////
+// EndHeader
+function validateNumberEntry(validString, fieldTitle, fieldPtr) {
+  // This variable is true if the string contains valid numbers; false otherwise
+  var isNumValid = true;
+  var decimalFound = false;
+  // PTR 736: Added next line.
+  var i;
+
+  // Strip trailing blanks, tabs, newlines, and carraige returns
+  while ( validString.length > 0 && " \t\r\n".indexOf(validString.charAt(validString.length-1)) > -1 )
+    validString = validString.substring(0, validString.length-1);
+
+  // Strip leading blanks, tabs, newlines, and carraige returns
+  while ( validString.length > 0 && " \t\r\n".indexOf(validString.charAt(0)) > -1 )
+    validString = validString.substring(1, validString.length); 
+
+  for (i=0; i < validString.length; i++) {
+    // check if number is valid
+    testChar = validString.charAt(i);
+    if ( ("0123456789-.".indexOf(testChar) == -1) || ((testChar == "-") && (i > 0)) || ((testChar == ".") && decimalFound) ) {
+      isNumValid = false;
+      i=validString.length;
+    }
+    else
+      if ( testChar == "." )
+        decimalFound = true;
+  }
+  if ( (isNumValid == false) && (validateNumberEntry.arguments.length > 1) && (fieldTitle != null) && (fieldTitle != "") )
+    alert("\nInvalid numeric data entered in field: " + fieldTitle);
+
+  if ( (isNumValid == false) && (validateNumberEntry.arguments.length > 2) )
+    fieldPtr.focus();
+
+  return isNumValid;
+}
+
+
+// BeginHeader
+/////////////////////////////////////////////////////////////////////////
+//////////              validateOneWordEntry                  //////////
+/////////////////////////////////////////////////////////////////////////
+// Purpose:  Validates a given string to make sure it is made up of one
+//           word (i.e. no embedded blanks).  If it does, and a 2nd argument
+//           (fieldTitle) is included, pop-up an alert box warning user.
+//           If validation fails and a 3rd argument is included, representing
+//           a form field pointer, then focus is placed in that field.
+/////////////////////////////////////////////////////////////////////////
+// Syntax:  validateOneWordEntry(validString[, fieldTitle[, fieldPtr]])
+//  
+// Where 'validString' is the string to be evaluated
+//       'fieldTitle' is the title of a field that will be included in 
+//          the alert warning message.  This is optional unless a 'fieldPtr'
+//          is specified; if it is, and you do not want to trigger an alert
+//          message on a validation failure, set this to blank, i.e. ""
+//       'fieldPtr' is a pointer to a form field, into which the focus
+//          will be directed if validation fails.  E.g. document.formName.fieldName
+//          This is optional.
+//
+// Returns:  true if 'validString' is one word, false otherwise
+/////////////////////////////////////////////////////////////////////////
+// EndHeader
+function validateOneWordEntry(validString, fieldTitle, fieldPtr) {
+
+  // Strip trailing blanks, tabs, newlines, and carraige returns
+  while ( validString.length > 0 && " \t\r\n".indexOf(validString.charAt(validString.length-1)) > -1 )
+    validString = validString.substring(0, validString.length-1);
+
+  // Strip leading blanks, tabs, newlines, and carraige returns
+  while ( validString.length > 0 && " \t\r\n".indexOf(validString.charAt(0)) > -1 )
+    validString = validString.substring(1, validString.length);
+
+  var isOneWord = (validString.indexOf(" ") >= 0 ? false : true);
+
+  if ( (isOneWord == false) && (validateOneWordEntry.arguments.length > 1) && (fieldTitle != null) && (fieldTitle != "") )
+    alert("\nInvalid embedded blank(s) in field: " + fieldTitle);
+
+  if ( (isOneWord == false) && (validateOneWordEntry.arguments.length > 2) )
+    fieldPtr.focus();
+
+  return isOneWord;
+}
+
+
+// BeginHeader
+/////////////////////////////////////////////////////////////////////////
+//////////                validateTimeEntry                    //////////
+/////////////////////////////////////////////////////////////////////////
+// Purpose:  Validates a given string to make sure it is a
+//           time value in the format hours:minutes, and that hours
+//           is 24 or less and minutes is 59 or less.
+//           If any of these test fail, and a 2nd
+//           argument (fieldTitle) is included, pop-up an alert 
+//           box warning user.  If it fails and a 3rd
+//           argument is included, representing a form field pointer,
+//           then focus is placed in that field.
+/////////////////////////////////////////////////////////////////////////
+// Syntax:  validateTimeEntry(validString[, fieldTitle[, fieldPtr]])
+//  
+// Where 'validString' is the string to be evaluated
+//       'fieldTitle' is the title of a field that will be included in 
+//          the alert warning message.  This is optional unless a 'fieldPtr'
+//          is specified; if it is, and you do not want to trigger an alert
+//          message on a validation failure, set this to blank, i.e. ""
+//       'fieldPtr' is a pointer to a form field, into which the focus
+//          will be directed if validation fails.  E.g. document.formName.fieldName
+//          This is optional.
+//
+// Returns:  true if 'validateTimeEntry' is a valid time value in format hours:minutes,
+//           false otherwise
+/////////////////////////////////////////////////////////////////////////
+// EndHeader
+function validateTimeEntry(validTime, fieldTitle, fieldPtr) {
+  // This variable is true if the string contains valid date in format hours:minutes; false otherwise
+  var isTimeValid = true;                           // Assume date is valid
+
+  // Strip trailing blanks, tabs, newlines, and carraige returns
+  while ( validTime.length > 0 && " \t\r\n".indexOf(validTime.charAt(validTime.length-1)) > -1 )
+    validTime = validTime.substring(0, validTime.length-1);
+
+  // Strip leading blanks, tabs, newlines, and carraige returns
+  while ( validTime.length > 0 && " \t\r\n".indexOf(validTime.charAt(0)) > -1 )
+    validTime = validTime.substring(1, validTime.length);
+
+  var hours = "";                                   // Hours
+  var minutes = "";                                 // Minutes
+  var sep = 0;                                      // Pointer to position of digit seperator in time string (":")
+  sep = validTime.indexOf(":");                     // Find position of seperator
+  if ( sep > 0 ) {                                  // If seperator found in 1st char or more
+    hours = validTime.substring(0, sep)                      // extract hours    
+    minutes = validTime.substring(sep+1, validTime.length)   // extract minutes
+  }
+
+  // Strip trailing blanks, tabs, newlines, and carraige returns
+  while ( hours.length > 0 && " \t\r\n".indexOf(hours.charAt(hours.length-1)) > -1 )
+    hours = hours.substring(0, hours.length-1);
+
+  // Strip leading blanks, tabs, newlines, and carraige returns
+  while ( hours.length > 0 && " \t\r\n".indexOf(hours.charAt(0)) > -1 )
+    hours = hours.substring(1, hours.length);
+
+  // Strip trailing blanks, tabs, newlines, and carraige returns
+  while ( minutes.length > 0 && " \t\r\n".indexOf(minutes.charAt(hours.length-1)) > -1 )
+    minutes = minutes.substring(0, minutes.length-1);
+
+  // Strip leading blanks, tabs, newlines, and carraige returns
+  while ( minutes.length > 0 && " \t\r\n".indexOf(minutes.charAt(0)) > -1 )
+    minutes = minutes.substring(1, minutes.length);
+
+  if ( hours.length == 0 || minutes.length == 0 )              // Ensure neither value blank
+    isTimeValid = false
+  else {                                                       // Ensure both values are numbers
+    for(d=0; (d < hours.length && "0123456789".indexOf(hours.charAt(d)) > -1 ); d++);
+    if ( "0123456789".indexOf(hours.charAt(d)) == -1 )
+      isTimeValid = false
+    else {
+      for(d=0; (d < minutes.length && "0123456789".indexOf(minutes.charAt(d)) > -1 ); d++);
+      if ( "0123456789".indexOf(minutes.charAt(d)) == -1 )
+        isTimeValid = false
+      else {                                                  // Ensure values not too large
+        if ( parseInt(hours) > 24 || parseInt(minutes) > 59 || (parseInt(hours) == 24 && parseInt(minutes) > 0) ) 
+          isTimeValid = false;
+      }
+    }
+  }
+  
+  if ( (isTimeValid == false) && ( validateTimeEntry.arguments.length > 1) && (fieldTitle != null) && (fieldTitle != "") )
+    alert("\nInvalid time entered in field: " + fieldTitle + "\nTime must be in format hours:minutes");
+
+  if ( (isTimeValid == false) && ( validateTimeEntry.arguments.length > 2) )
+    fieldPtr.focus();
+
+  return isTimeValid;
+}
+
+
+// BeginHeader
+/////////////////////////////////////////////////////////////////////////
+//////////            validateWholeNumberEntry                 //////////
+/////////////////////////////////////////////////////////////////////////
+// Purpose:  Validates a given string to make sure it is made up of
+//           numbers only.  If it is not, and a 2nd argument (fieldTitle) 
+//           is included, pop-up an alert box warning user.
+//           If validation fails and a 3rd argument is included, representing
+//           a form field pointer, then focus is placed in that field.
+/////////////////////////////////////////////////////////////////////////
+// Syntax:  validateWholeNumberEntry(validString[, fieldTitle[, fieldPtr]])
+//  
+// Where 'validString' is the string to be evaluated
+//       'fieldTitle' is the title of a field that will be included in 
+//          the alert warning message.  This is optional unless a 'fieldPtr'
+//          is specified; if it is, and you do not want to trigger an alert
+//          message on a validation failure, set this to blank, i.e. ""
+//       'fieldPtr' is a pointer to a form field, into which the focus
+//          will be directed if validation fails.  E.g. document.formName.fieldName
+//          This is optional.
+//
+// Returns:  true if 'validString' is all numeric, false otherwise
+/////////////////////////////////////////////////////////////////////////
+// EndHeader
+function validateWholeNumberEntry(validString, fieldTitle, fieldPtr) {
+  // This variable is true if the string contains valid numbers; false otherwise
+  var isNumValid = true;
+  // PTR 736: Added next line.
+  var i;
+
+  // Strip trailing blanks, tabs, newlines, and carraige returns
+  while ( validString.length > 0 && " \t\r\n".indexOf(validString.charAt(validString.length-1)) > -1 )
+    validString = validString.substring(0, validString.length-1);
+
+  // Strip leading blanks, tabs, newlines, and carraige returns
+  while ( validString.length > 0 && " \t\r\n".indexOf(validString.charAt(0)) > -1 )
+    validString = validString.substring(1, validString.length);
+
+  for (i=0; ( isNumValid && (i < validString.length) ); i++) {
+    // check if number is valid
+    testChar = validString.charAt(i);
+    // If character not in set of digits, change return value to false
+    if ( "0123456789".indexOf(testChar) == -1 )
+      isNumValid = false;
+  }
+
+  if ( (isNumValid == false) && (validateWholeNumberEntry.arguments.length > 1) && (fieldTitle != null) && (fieldTitle != "") )
+    alert("\nInvalid non-whole number data entered in field: " + fieldTitle);
+
+  if ( (isNumValid == false) && (validateWholeNumberEntry.arguments.length > 2) )
+    fieldPtr.focus();
+
+  return isNumValid;
+}
+
+
+// BeginHeader
+/////////////////////////////////////////////////////////////////////////
+//////////                validateEmailEntry                   //////////
+/////////////////////////////////////////////////////////////////////////
+// Purpose:  Validates a given string to make sure it is in the form
+//           of a valid Email address (name@domain.ext).  If it is not, 
+//           and a 2nd argument (fieldTitle) is included, pop-up an alert 
+//           box warning user.
+//           If validation fails and a 3rd argument is included, representing
+//           a form field pointer, then focus is placed in that field.
+/////////////////////////////////////////////////////////////////////////
+// Syntax:  validateEmailEntry(validString[, fieldTitle, [fieldPtr]])
+//  
+// Where 'validString' is the string to be evaluated
+//       'fieldTitle' is the title of a field that will be included in 
+//          the alert warning message.  This is optional unless a 'fieldPtr'
+//          is specified; if it is, and you do not want to trigger an alert
+//          message on a validation failure, set this to blank, i.e. ""
+//       'fieldPtr' is a pointer to a form field, into which the focus
+//          will be directed if validation fails.  E.g. document.formName.fieldName
+//          This is optional.
+//
+// Returns:  true if 'validString' is a valid Email address, false otherwise
+/////////////////////////////////////////////////////////////////////////
+// EndHeader
+function validateEmailEntry(validString, fieldTitle, fieldPtr) {
+  var isEmailValid = true;      // Flag indicates if address is valid; assume it is
+  var invalidChars = " /:,;";   // List of invalid email address chars
+  var errMsg = "";              // Error msg to be returned
+  // PTR 736: Added next line.
+  var i;
+
+  // Strip trailing blanks, tabs, newlines, and carraige returns
+  while ( validString.length > 0 && " \t\r\n".indexOf(validString.charAt(validString.length-1)) > -1 )
+    validString = validString.substring(0, validString.length-1);
+
+  // Strip leading blanks, tabs, newlines, and carraige returns
+  while ( validString.length > 0 && " \t\r\n".indexOf(validString.charAt(0)) > -1 )
+    validString = validString.substring(1, validString.length);
+  
+  if ( validString.length > 0 ) {       // Proceed if address field is not blank
+    var atPos = validString.indexOf("@",1);              // Get position of "At-sign"
+    if ( atPos == -1 )  {                                // If no At-sign found, validation failed
+      isEmailValid = false;
+      errMsg = 'No "@" character found in Email address.';
+    }
+    else if ( validString.indexOf("@", atPos+1) > -1 ) { // See if there's a 2nd At-sign
+      isEmailValid = false;                              // If 2nd At-sign found, validation failed
+      errMsg = 'Only one "@" character is allowed in an Email address.';
+    }
+    else {
+      var periodPos = validString.indexOf(".",atPos);    // Find position of period after At-sign
+      if ( periodPos == -1 ) {                           // If no period found, validation failed
+        isEmailValid = false;
+        errMsg = 'No period found in domain part of Email address.';
+      }
+      else if ( periodPos == (atPos + 1) ) {             // See if any chars between @ and period
+        isEmailValid = false;
+        errMsg = 'No characters between "@" and period.';
+      }
+      else if ( "." == validString.charAt(validString.length-1) ) {  // See if period is last char of string
+        isEmailValid = false;
+        errMsg = 'An Email address may not end with a period.';
+      }
+    }
+    // Loop through email address and check for presence of invalid chars
+    for (i=0; (isEmailValid && (i < validString.length)); i++) {
+      if (invalidChars.indexOf(validString.charAt(i)) > -1) {  // Bad char found; validation failed
+        isEmailValid = false;
+        if ( validString.charAt(i) == " " )
+          errMsg = 'Invalid embedded blank found in Email address.'
+        else
+          errMsg = 'Invalid character "' + validString.charAt(i) + '" found in Email address.';
+      }
+    }
+  }
+
+  // If invalid address & user specified a field title, create error alert
+  if ( (isEmailValid == false) && (validateEmailEntry.arguments.length > 1) && (fieldTitle != null) && (fieldTitle != ""))
+    alert('\nInvalid Email address entered in field: ' + fieldTitle + '\n\n' + errMsg);
+
+  // If invalid address & user specified a field pointer, set focus to that field
+  if ( (isEmailValid == false) && (validateEmailEntry.arguments.length > 2) )
+    fieldPtr.focus();
+
+  return isEmailValid;
+}
+
+
+// BeginHeader
+/////////////////////////////////////////////////////////////////////////
+//////////              validateCurrencyEntry                   //////////
+/////////////////////////////////////////////////////////////////////////
+// Purpose:  Validates a given string to make sure it is in a valid
+//           curreny format.  Any of the following qualifies as a
+//           valid currency format:
+//
+//           1) Integers
+//           2) Numbers with a decimal point followed by two (and ONLY two) digits
+//           3) Integers or Numbers (see previous two rules), with every group of 3
+//              digits separated by commas.  (E.g. 1,234 and 1,234,567 are valid, but 1,23,456 is not)
+//           4) Any of the above preceded by a dollar sign ($)
+//           5) Any of the above preceded by a minus sign (-)
+//
+//           If the string is NOT in a valid currency format, and a 2nd argument (fieldTitle) 
+//           is included, then pop-up an alert box warning user.
+//           If validation fails and a 3rd argument is included, representing
+//           a form field pointer, then focus is placed in that field.
+//
+//           This function was added per PTR 1560          
+/////////////////////////////////////////////////////////////////////////
+// Syntax:  validateCurrencyEntry(validString[, fieldTitle[, fieldPtr]])
+//  
+// Where 'validString' is the string to be evaluated
+//       'fieldTitle' is the title of a field that will be included in 
+//          the alert warning message.  This is optional unless a 'fieldPtr'
+//          is specified; if it is, and you do not want to trigger an alert
+//          message on a validation failure, set this to blank, i.e. ""
+//       'fieldPtr' is a pointer to a form field, into which the focus
+//          will be directed if validation fails.  E.g. document.formName.fieldName
+//          This is optional.
+//
+// Returns:  true if 'validString' is a valid currency value, false otherwise
+/////////////////////////////////////////////////////////////////////////
+// EndHeader
+function validateCurrencyEntry(validString, fieldTitle, fieldPtr) {
+
+  // Declare a local variable to contain currency value and set it to value of 1st argument
+  var fieldValue = validString;
+
+  // Strip trailing blanks, tabs, newlines, and carraige returns
+  while ( fieldValue.length > 0 && " \t\r\n".indexOf(fieldValue.charAt(fieldValue.length-1)) > -1 )
+    fieldValue = fieldValue.substring(0, fieldValue.length-1);
+
+  // Strip leading blanks, tabs, newlines, and carraige returns
+  while ( fieldValue.length > 0 && " \t\r\n".indexOf(fieldValue.charAt(0)) > -1 )
+    fieldValue = fieldValue.substring(1, validString.length);
+
+  // If 1st char is a "-" then that is okay; discard it and trim any blanks between it and rest of fieldValue
+  if ( fieldValue.indexOf("-") == 0 ) {
+    fieldValue = fieldValue.substring(1, validString.length);                  // Remove leading "-"
+    while ( fieldValue.length > 0 && " ".indexOf(fieldValue.charAt(0)) > -1 )  // Remove any remaining blanks before rest
+      fieldValue = fieldValue.substring(1, validString.length);
+  }
+
+  // If 1st char is now a "$" then that is okay; discard it and trim any blanks between it and rest of fieldValue
+  if ( fieldValue.indexOf("$") == 0 ) {
+    fieldValue = fieldValue.substring(1, validString.length);                  // Remove leading "$"
+    while ( fieldValue.length > 0 && " ".indexOf(fieldValue.charAt(0)) > -1 )  // Remove any remaining blanks before number
+      fieldValue = fieldValue.substring(1, validString.length);
+  }
+
+  // Declare variable whose value this function will return; assume it is true (field is a valid currency value)
+  var isCurrency = true;
+
+  // Loop through each char in currency field, validating the characters and their 
+  // relative positions
+  for (var c = 0; (c < fieldValue.length && isCurrency); c++ ) {
+    if ( fieldValue.charAt(c) == "." && (fieldValue.length - c) != 3 )
+      isCurrency = false
+    else if ( ".,".indexOf(fieldValue.charAt(c)) == -1 && isNaN(fieldValue.charAt(c)) )
+      isCurrency = false;
+  }
+
+  // If number is still valid so far, and contains comma(s), make sure they are in the right places
+  if ( isCurrency && fieldValue.indexOf(",") > -1 ) {
+
+    // Start by truncating any trailing decimal places
+    if ( fieldValue.indexOf(".") > -1 )
+      fieldValue = fieldValue.substring(0, fieldValue.indexOf("."));
+
+    // Perform a loop, shaving off parts of the fieldValue until we've removed
+    // all commas and the number still validates
+    while ( isCurrency && fieldValue.indexOf(",") > -1 ) {
+
+      // If the last comma position subtracted from the length doesn't equal 4, the number is invalid
+      if ( fieldValue.length - fieldValue.lastIndexOf(",") != 4 )
+        isCurrency = false
+      else {  // Truncate last part of the number from the last comma forward
+        fieldValue = fieldValue.substring(0, fieldValue.lastIndexOf(","));
+      }
+    }
+
+    // If the number validated okay, but what we have left after removing all the
+    // comma-separated sections is itself greater than 3 digits, the number is invalid
+    if ( isCurrency && fieldValue.length > 3 )
+      isCurrency = false;
+  }
+
+  // If invalid and user specified a field value, display message telling user which field was invalid
+  if ( (isCurrency == false) && ( validateCurrencyEntry.arguments.length > 1) && (fieldTitle != null) && (fieldTitle != "") )
+    alert("\nInvalid currency value entered in field: " + fieldTitle);
+
+  // If invalid and user specified a field pointer, place focus on that field
+  if ( (isCurrency == false) && (validateCurrencyEntry.arguments.length > 2) )
+    fieldPtr.focus();
+
+  return isCurrency;
+
+}
+
+
+// -->
+</SCRIPT>
+<html>
+<head>
+
+  <title>New PCD</title>
+  <script TYPE="text/javascript">
+//****************************** Begin JavaScript ******************************
+var EditWin    = null;
+var ApproveWin = null;
+var SearchWin  = null;
+var ModifyWin  = null;
+
+//Function to delete any blank options that may exist in the select boxes
+function ClearBlankOptions(ThisForm)
+{
+	//clean the contracts list
+    for(var k = ThisForm.ContractList.options.length-1; k >= 0 ;  k--)
+	{
+		if(ThisForm.ContractList.options[k].text == "")
+		{
+			ThisForm.ContractList.options[k] = null;
+		}
+	}
+
+    //MAM  SR2030486  clean the classifications list
+    for(var k = ThisForm.ClassificationList.options.length-1; k >= 0 ;  k--)
+	{
+		if(ThisForm.ClassificationList.options[k].text == "")
+		{
+			ThisForm.ClassificationList.options[k] = null;
+		}
+	}
+
+	//clean the approvers list
+    for(var k = ThisForm.ApproverList.options.length-1; k >= 0 ;  k--)
+	{
+		if(ThisForm.ApproverList.options[k].text == "")
+		{
+			ThisForm.ApproverList.options[k] = null;
+		}
+	}
+
+	//clean the programs list
+    for(var k = ThisForm.ProgramList.options.length-1; k >= 0 ;  k--)
+	{
+		if(ThisForm.ProgramList.options[k].text == "")
+		{
+			ThisForm.ProgramList.options[k] = null;
+		}
+	}
+
+	//clean the additional recipients list
+    for(var k = ThisForm.RecipientList.options.length-1; k >= 0 ;  k--)
+	{
+		if(ThisForm.RecipientList.options[k].text == "")
+		{
+			ThisForm.RecipientList.options[k] = null;
+		}
+	}
+
+	//clean the action responsible people list
+    for(var k = ThisForm.ActionList.options.length-1; k >= 0 ;  k--)
+	{
+		if(ThisForm.ActionList.options[k].text == "")
+		{
+			ThisForm.ActionList.options[k] = null;
+		}
+	}
+
+	//clean the program recipients list
+    for(var k = ThisForm.ProgramRecipientList.options.length-1; k >= 0 ;  k--)
+	{
+		if(ThisForm.ProgramRecipientList.options[k].text == "")
+		{
+			ThisForm.ProgramRecipientList.options[k] = null;
+		}
+	}
+
+	//clean the attachments list
+    for(var k = ThisForm.AttachmentList.options.length-1; k >= 0 ;  k--)
+	{
+		if(ThisForm.AttachmentList.options[k].text == "")
+		{
+			ThisForm.AttachmentList.options[k] = null;
+		}
+	}
+}
+
+//Function to create the specified number of blank options for the specified select box
+function CreateBlankOptions(List, Number)
+{
+    for (var i = 0; i < Number; i++)
+	{
+		List.options[List.options.length] = new Option;
+	}
+}
+
+//Function to add action responsible people
+function OnAddActionUser(ThisForm)
+{
+	CreateBlankOptions(ThisForm.ActionList, 10);
+	ActionWin = window.open('UseridSearch.asp?Mode=Action','ActionWin',
+	            'scrollbars,resizable,width=600,height=550,top=0,left=270');				//PTR 1121
+}
+
+//Function to add additional recipients
+function OnAddRecipient(ThisForm)
+{
+	CreateBlankOptions(ThisForm.RecipientList, 20);
+	RecipientWin = window.open('UseridSearch.asp?Mode=Recipient','RecipientWin',
+							   'scrollbars,resizable,width=600,height=430,top=0,left=270');	//PTR 1121
+}
+
+//Function to add additional attachments
+function OnAddAttachment(ThisForm)
+{
+	CreateBlankOptions(ThisForm.AttachmentList, 1);
+	AttachmentWin = window.open('Attachment.asp?Id=' + ThisForm.Id.value,'AttachmentWin',
+								'scrollbars,resizable,width=400,height=190,top=0,left=270');
+}
+
+//Function to add additional approvers
+function OnAddApprover(ThisForm)
+{
+	ClearBlankOptions(ThisForm);	//make sure there are no blanks in the contract box
+	if (ThisForm.ContractList.options.length == 0)
+		alert("You must select at least one contract before choosing approvers!");
+	else
+	{
+		CreateBlankOptions(ThisForm.ApproverList, 10);
+		var i;
+		var contract_arr = "";
+
+		//generate a string with all contracts delimited by commas
+		for (i=0; i < ThisForm.ContractList.options.length; i++)
+		{
+			contract_arr = contract_arr + ThisForm.ContractList.options[i].value;
+			if (i != (ThisForm.ContractList.options.length - 1))	//add the comma only if this isn't the last contract in the list
+			{
+				contract_arr = contract_arr + ",";
+			}
+		}
+		ApproverWin = window.open('ModifyApprover.asp?ConName=' + contract_arr,'ApproverWin',
+								  'resizable,scrollbars,width=500,height=370,top=0,left=290');
+	}
+}
+
+//Function to add additional programs
+function OnAddProgram(ThisForm)
+{
+	CreateBlankOptions(ThisForm.ProgramList,10);
+	CreateBlankOptions(ThisForm.ProgramRecipientList,200);			//PTR 1072
+
+	if (ThisForm.ContractList.options.length == 0)
+	{
+		alert("At Least One Contract Must Be Selected Prior To Selecting A Program.");
+	}
+	else
+	{
+	    var i;
+		var contract_arr = "";
+
+		//generate a string with all contracts delimited by commas
+	    for (i=0; i < ThisForm.ContractList.options.length; i++)
+		{
+			contract_arr = contract_arr + ThisForm.ContractList.options[i].value;
+			if (i != (ThisForm.ContractList.options.length - 1))
+			{
+				contract_arr = contract_arr + ",";
+			}
+		}
+		ProgramWin = window.open('ModifyProgram.asp?Mode=Select&ConName=' + contract_arr,'ProgramWin',
+								 'resizable,scrollbars,width=500,height=350,top=0,left=290');
+	}
+}
+
+//Function to add additional contracts
+function OnAddContract(ThisForm)
+{
+	CreateBlankOptions(ThisForm.ContractList,10);
+	ContractWin = window.open('ModifyContract.asp','ContractWin',
+							  'scrollbars,resizable,width=340,height=340,top=0,left=400');
+}
+
+
+// MAM SR2030486 START Added new function to add additional classifications
+function OnAddClassification(ThisForm)
+{
+	var unrestrictedpcd;
+	
+	for(i=0; i < ThisForm.ClassificationList.options.length; i++)		//for every possible option
+	{
+	   //if this is an unrestricted PCD, then the user cannot add other classifications to the list unless they remove it  from the list first
+	   if(ThisForm.ClassificationList.options[i].value == "1")
+		 {
+		    unrestrictedpcd = true
+		 }
+					     		   
+       if(unrestrictedpcd)
+	     { 
+		    alert("If the classification is unrestricted, you may not select additional classifications for this PCD");
+		    return false;
+	     }
+	} //for(i=0; i < ThisForm.ClassificationList.options.length; i++)	
+	
+	CreateBlankOptions(ThisForm.ClassificationList,10);
+	ContractWin = window.open('ModifyClassification.asp?PcdId=' + ThisForm.Id.value,'ContractWin',
+							  'scrollbars,resizable,width=1200,height=825,top=0,left=600');
+} // function onAddClassification(ThisForm) end
+// MAM SR2030486 END Added new function to add additional classifications
+
+function OnViewAttachment(ThisForm)
+{
+	if(ThisForm.AttachmentList.selectedIndex == -1)
+	{
+		alert('No file was selected for viewing.');
+	}
+	else
+	{
+		window.open('download_action.asp?Id=' + ThisForm.Id.value + '&targetFileName=' + ThisForm.AttachmentList.options[ThisForm.AttachmentList.selectedIndex].value,
+					'ViewFile', 'menubar,scrollbars,resizable,width=600,height=600,top=100,left=100');  //PTR 1076	1328
+	}
+}
+
+function OnDeleteAttachment(ThisForm)
+{
+	if(ThisForm.AttachmentList.selectedIndex == -1)
+	{
+		alert("No file(s) were selected for deleting.");
+	}
+	else
+	{
+		for(var i=ThisForm.AttachmentList.options.length - 1; i >= 0; i--)
+		{
+			if(ThisForm.AttachmentList.options[i].selected)
+			{
+				msg = "Are you sure you want to delete " + ThisForm.AttachmentList.options[i].text + " file?"
+				if(confirm(msg))
+				{
+					AttachmentWin = window.open('delete_action.asp?Id=' + ThisForm.Id.value + '&targetFileName=' + ThisForm.AttachmentList.options[i].value, 'mywindow', 'scrollbars,resizable,width=200,height=30');
+					ThisForm.AttachmentList.options[i] = null;
+				}
+				else
+				{
+					ThisForm.AttachmentList.options[i].selected = false;
+				}
+			}
+		}
+	}
+}
+
+function OnDeleteContract(ThisForm)
+{
+	if(ThisForm.ContractList.selectedIndex == -1)
+	{
+		alert("No contract(s) were selected for deleting.");
+	}
+	else
+	{
+		for(var i=ThisForm.ContractList.options.length - 1; i >= 0; i--)
+		{
+			if(ThisForm.ContractList.options[i].selected)
+			{
+				msg = "Are you sure you wish to delete the " + ThisForm.ContractList.options[i].text + " Contract?"
+				if(confirm(msg))
+					ThisForm.ContractList.options[i] = null;
+				else
+					ThisForm.ContractList.options[i].selected = false;
+			}
+		}
+	}
+}
+
+// MAM SR2030486 START Added new function to delete classifications
+function OnDeleteClassification(ThisForm)
+{
+	if(ThisForm.ClassificationList.selectedIndex == -1)
+	{
+		alert("No classification(s) were selected for deleting.");
+	}
+	else
+	{
+		for(var i=ThisForm.ClassificationList.options.length - 1; i >= 0; i--)
+		{
+			if(ThisForm.ClassificationList.options[i].selected)
+			{
+				msg = "Are you sure you wish to delete the " + ThisForm.ClassificationList.options[i].text + " Classification?"
+				if(confirm(msg))
+				{	
+				  if (ThisForm.ClassificationList.options[i].value == "7")
+				    {ThisForm.ThirdParty.value = "";}
+				  if (ThisForm.ClassificationList.options[i].value == "8")
+				    {ThisForm.OCI.value = "";}
+				  ThisForm.ClassificationList.options[i] = null; 
+				 }
+				else
+					ThisForm.ClassificationList.options[i].selected = false;
+			} // if(ThisForm.ClassificationList.options[i].selected)
+		} // for(var i=ThisForm.ClassificationList.options.length - 1; i >= 0; i--) 
+	} // else
+} // function end
+// MAM SR2030486 END Added new function to delete classifications
+
+function OnDeleteApprover(ThisForm)
+{
+	if(ThisForm.ApproverList.selectedIndex == -1)
+	{
+		alert("No approver(s) were selected for deleting.");
+	}
+	else
+	{
+		for(var i=ThisForm.ApproverList.options.length - 1; i >= 0; i--)
+		{
+			if(ThisForm.ApproverList.options[i].selected)
+			{
+				msg = "Are you sure you wish to delete the approver " + 
+				       ThisForm.ApproverList.options[i].text + "?"
+				if(confirm(msg))
+					ThisForm.ApproverList.options[i] = null;
+				else
+					ThisForm.ApproverList.options[i].selected = false;
+			}
+		}
+	}
+}
+
+function OnDeleteProgram(ThisForm)
+{
+	if(ThisForm.ProgramList.selectedIndex == -1)
+	{
+		alert("No program(s) were selected for deleting.");
+	}
+	else
+	{
+		for(var i=ThisForm.ProgramList.options.length - 1; i >= 0; i--)
+		{
+			if(ThisForm.ProgramList.options[i].selected)
+			{
+				msg = "Are you sure you wish to delete the " + 
+					   ThisForm.ProgramList.options[i].text + " program?"
+				if(confirm(msg))
+				{
+					//if the program being deleted was used for the program code, reset the program code
+					if(ThisForm.ProgramCode.value == ThisForm.ProgramList.options[i].text)
+						ThisForm.ProgramCode.value = "Select From List Above, and click SetCode";
+
+					ThisForm.ProgramList.options[i] = null;
+
+					//delete any program recipients that were only in the deleted program
+					DeleteWin = window.open('ModifyProgram.asp?Mode=Delete','DeleteWin','scrollbars,resizable,width=400,height=190');
+				}
+				else
+					ThisForm.ProgramList.options[i].selected = false;
+			}
+		}
+	}
+}
+
+function OnDeleteAction(ThisForm)
+{
+	if(ThisForm.ActionList.selectedIndex == -1)
+	{
+		alert("No action responsible people were selected for deleting.");
+	}
+	else
+	{
+		for(i=ThisForm.ActionList.options.length - 1; i >= 0; i--)
+		{
+			if(ThisForm.ActionList.options[i].selected)
+			{
+				msg = "Are you sure you wish to delete " + 
+					   ThisForm.ActionList.options[i].text + "?"
+				if(confirm(msg))
+					ThisForm.ActionList.options[i] = null;
+				else
+					ThisForm.ActionList.options[i].selected = false;
+			}
+		}
+	}
+}
+
+function OnDeleteRecipient(ThisForm)
+{
+	if(ThisForm.RecipientList.selectedIndex == -1)
+	{
+		alert("No recipients were selected for deleting.");
+	}
+	else
+	{
+		for(i=ThisForm.RecipientList.options.length - 1; i >= 0; i--)
+		{
+			if(ThisForm.RecipientList.options[i].selected)
+			{
+				msg = "Are you sure you wish to delete " + 
+				       ThisForm.RecipientList.options[i].text + "?"
+				if(confirm(msg))
+					ThisForm.RecipientList.options[i] = null;
+				else
+					ThisForm.RecipientList.options[i].selected = false;
+			}
+		}
+	}
+}
+
+//MAM 1 SR2024643 Added new function to allow approvers to remove program recipients
+function OnDeleteProgramRecipient(ThisForm)
+{
+	if(ThisForm.ProgramsRecipientList.selectedIndex == -1)
+	{
+		alert("No recipients were selected for deleting.");
+	}
+	else
+	{   var recipient = "" ; 
+	    var previouslyDeletedRecipients = "";
+	   	for(i=ThisForm.ProgramsRecipientList.options.length - 1; i >= 0; i--)
+		{
+			if(ThisForm.ProgramsRecipientList.options[i].selected)
+			{   			   
+				msg = "Are you sure you wish to delete " + 
+				       ThisForm.ProgramsRecipientList.options[i].text + "?"
+				       
+				if(confirm(msg))
+				{
+					recipient = ThisForm.ProgramsRecipientList.options[i].value ;
+					
+					ThisForm.ProgramsRecipientList.options[i] = null;
+									
+					previouslyDeletedRecipients = ThisForm.programRecipientDelete.value ;
+					
+					
+					if(ThisForm.programRecipientDelete.value.length == 0)
+					    {
+					       ThisForm.programRecipientDelete.value = recipient ;
+					    }					   
+					else
+					   {
+						  ThisForm.programRecipientDelete.value = previouslyDeletedRecipients + "," + recipient ;
+					   }
+									  
+				} // end confirm msg
+				else
+				    ThisForm.ProgramsRecipientList.options[i].selected = false;
+			
+			} //end if program recipient option selected
+		} //end for loop
+			   
+	} // else a value was selected
+} // end the function
+
+//End of MAM 1 SR2024643 Added new function to allow approvers to remove program recipients
+
+
+
+//Function run when the user hits the cancel button
+function OnCancel(ThisForm)
+{
+	
+	  //Clear any uploaded attachments from the database
+	  AttachmentWin = window.open('delete_action.asp?Id=' + ThisForm.Id.value, 'AttachmentWin', 'resizable,width=200,height=30'); 
+	if (history.length <= 1)	//if this page was the first page loaded by the browser
+	    window.location='Main.asp';
+	else
+		history.back();
+}
+
+//PTR 3149 Added the capabilty to close a pcd.
+function OnClose(ThisForm,index)
+{
+		if (confirm("Are you sure you want to close this PCD?\n\nIf yes, click \"OK\".  If no, click \"Cancel\".")) {
+		//MAM SR2024314 Added additional if else statements and closeRevisions variable below to confirm 
+		//if user also wants to close all prior revisions
+		
+		  if (confirm("Do you also want to close all prior revisions of this PCD?\n\nIf yes, click \"OK\".  If no, click \"Cancel\".\n\nNote: \"Cancel\" will close the current PCD only")){
+				var closeRevisions = "Y";
+				ThisForm.action = "Close.asp?index="+index+"&closeRevisions="+closeRevisions;
+				ThisForm.submit();
+		  }
+		  else
+		  {
+		      var closeRevisions = "N";
+		      ThisForm.action = "Close.asp?index="+index+"&closeRevisions="+closeRevisions;
+			  ThisForm.submit();
+		  }
+		}
+	return;
+}
+//PTR 3149 End
+
+//PTR 3149 - function to view the log information of a particular pcd
+function OnViewLog(ThisForm,index)
+{
+
+		ThisForm.action = "ViewLog.asp?index="+index;
+		ThisForm.submit();
+	return;
+}
+//End PTR 3149
+
+//Function run when the user chooses to delete a draft or rework PCD
+function OnDelete(ThisForm)
+{
+	if (confirm("Are you sure you want to PERMANENTLY DELETE this PCD?"))
+	{
+		ThisForm.State.value = "Delete";
+		ThisForm.submit();
+	}
+}
+
+//Function to trim leading and trailing spaced from a string
+function Trim(strText)
+{
+    // this will get rid of leading spaces 
+    while (strText.substring(0,1) == ' ') 
+        strText = strText.substring(1, strText.length);
+
+    // this will get rid of trailing spaces 
+    while (strText.substring(strText.length-1,strText.length) == ' ')
+        strText = strText.substring(0, strText.length-1);
+
+   return strText;
+}
+
+//Function run when a user chooses to save a draft PCD
+function OnSave(ThisForm)
+{
+	ThisForm.State.value = "Save";
+	ClearBlankOptions(ThisForm);
+
+
+// Check to see if the Work package field is too long. --- INC3933383 TIM
+		text = new String(document.forms[0].WorkPackage.value)
+		if (text.length > 1000)
+		{
+		msg =   "\nYour Work Package entry is " +
+				text.length + " characters," +
+				"\nwhich is too long to be saved in the database." +
+				"\n\nThe maximum number of characters is 1000." +
+				"\n\nSelect OK to drop the excess characters and" +
+				"\nsubmit the form." +
+				"\n\nSelect Cancel to go back and edit the form." ;
+				if (!(confirm(msg))) 
+			return;
+		else
+			document.forms[0].WorkPackage.value = text.substring(0,1000);
+		}			
+
+		
+	// SR2030486  MAM - START Loop thru the options and mark true if ThirdParty or OCI has been selected
+	var thirdparty = false;
+	var oci= false;
+	
+	 for(j=0; j < ThisForm.ClassificationList.options.length; j++)	
+	 {
+	    if(ThisForm.ClassificationList.options[j].value == "7")
+	     {
+	       thirdparty = true;
+	     }
+	     
+	    if(ThisForm.ClassificationList.options[j].value == "8")
+	     {
+	       oci = true;
+	     }
+	 }
+	 // SR2030486 END - Loop thru the options and mark true if ThirdParty or OCI has been selected	
+      
+	allOk = true;
+	//Check input
+	if (!validateNonblankEntry(ThisForm.Dept.value, "Dept", ThisForm.Dept))
+	{
+		//focus on dept
+		window.scrollBy(0,-10); // relative positioning
+		allOk = false;
+	}
+	else if (!validateNonblankEntry(ThisForm.Subject.value, "Subject", ThisForm.Subject))
+	{
+		//focus on subject
+		window.scrollBy(0,-10); // relative positioning
+		allOk = false;
+	}
+	
+	// SR2031179 MAM 2 Added validatation for due date field
+	else if (!validateDateLongYearEntry(ThisForm.DueDate.value, "Due Date", ThisForm.DueDate)) 
+	{
+		//focus on dept
+		window.scrollBy(0,-10); // relative positioning
+		allOk = false;
+	}
+	
+		
+    //SR2030486 MAM - START Added validation on the ClassificationList field	
+    //Ensure the new field is required	
+	else if (ThisForm.ClassificationList.options.length == 0)
+    {
+		alert("Input required in field: Classifications");
+		ThisForm.ClassificationList.focus();
+		window.scrollBy(0,-40); // relative positioning
+		allOk = false;	
+	}
+	
+	
+	// If thirdparty is a selected option, ensure that its text field is filled in		
+	else if(thirdparty && ThisForm.ThirdParty.value == "" )
+	{
+	    alert("Third Party Proprietary Information is required");
+		ThisForm.ThirdParty.focus;
+    	window.scrollBy(0,-10); // relative positioning
+		allOk = false;
+				
+     }    
+	
+	// If thirdparty is not a selected option, ensure that its text field is not filled in			 
+	else if(!thirdparty && ThisForm.ThirdParty.value != "")
+	{
+	    alert("Third Party Proprietary Information is filled in, but is not selected on the list");
+		ThisForm.ThirdParty.focus;
+    	window.scrollBy(0,-40); // relative positioning
+		allOk = false;
+				
+    } 
+     
+ 	// If oci is a selected option, ensure that its text field is filled in		
+	else if(oci && ThisForm.OCI.value == "" )
+	{
+	    alert("Organizational Conflict of Interest is required");
+		ThisForm.OCI.focus;
+    	window.scrollBy(0,-40); // relative positioning
+		allOk = false;
+	}    
+	
+	// If thirdparty is not a selected option, ensure that its text field is not filled in			 
+	else if(!oci && ThisForm.OCI.value != "")
+	{
+	    alert("Organizational Conflict of Interest is filled in, but is not selected on the list");
+		ThisForm.ThirdParty.focus;
+    	window.scrollBy(0,-40); // relative positioning
+	   allOk = false;
+	} 
+	// SR2030486 MAM -END Added validation on the Classificationlist field
+			
+	else if (ThisForm.ContractList.options.length == 0)
+	{
+		alert("Input required in field: Contracts/Purchase Orders");
+		ThisForm.ContractList.focus();
+		window.scrollBy(0,-40); // relative positioning
+		allOk = false;
+	}
+	else if (ThisForm.ApproverList.options.length == 0)
+	{
+		alert("Input required in field: Approvers");
+		ThisForm.ApproverList.focus();
+		window.scrollBy(0,-50); // relative positioning
+		allOk = false;
+    }
+	else if (ThisForm.ProgramList.options.length == 0)
+	{
+		alert("Input required in field: Programs");
+		ThisForm.ProgramList.focus();
+		window.scrollBy(0,-60); // relative positioning
+		allOk = false;
+	}
+	else if (ThisForm.ProgramCode.value == "Select From List Above, and click SetCode" || ThisForm.ProgramCode.value == "")
+	{
+		alert("Input required in field: Program to use in PCD number");
+		ThisForm.ProgramList.focus();
+		window.scrollBy(0,-60); // relative positioning
+		allOk = false;
+	}
+	else {
+		//select all options in select boxes to pass them in the form
+		//SR2030486 MAM Added classifications options 
+		for (i=0; i < ThisForm.ClassificationList.options.length; i++)
+		{
+			ThisForm.ClassificationList.options[i].selected = true;
+		}
+		//SR2030486 MAM - END
+		for (i=0; i < ThisForm.ContractList.options.length; i++)
+		{
+			ThisForm.ContractList.options[i].selected = true;
+		}
+		for (i=0; i < ThisForm.ApproverList.options.length; i++)
+		{
+			ThisForm.ApproverList.options[i].selected = true;
+		}
+		for (i=0; i < ThisForm.ProgramList.options.length; i++)
+		{
+			ThisForm.ProgramList.options[i].selected = true;
+		}
+		for (i=0; i < ThisForm.ProgramRecipientList.options.length; i++)
+		{
+			ThisForm.ProgramRecipientList.options[i].selected = true;
+		}
+		for (i=0; i < ThisForm.ActionList.options.length; i++)
+		{
+			ThisForm.ActionList.options[i].selected = true;
+		}
+		for (i=0; i < ThisForm.RecipientList.options.length; i++)
+		{
+			ThisForm.RecipientList.options[i].selected = true;
+		}
+		for (i=0; i < ThisForm.AttachmentList.options.length; i++)
+		{
+			ThisForm.AttachmentList.options[i].selected = true;
+		}
+	}
+
+	if (allOk)
+	{
+		ThisForm.submit();
+	}
+}
+
+//Function run when a user chooses to submit a PCD
+function OnSubmit(ThisForm)
+{
+	// SR2030486  MAM - START Loop thru the options and mark true if ThirdParty or OCI has been selected
+	var thirdparty = false;
+	var oci= false;
+	
+	 for(j=0; j < ThisForm.ClassificationList.options.length; j++)	
+	 {
+	    if(ThisForm.ClassificationList.options[j].value == "7")
+	     {
+	       thirdparty = true;
+	     }
+	     
+	    if(ThisForm.ClassificationList.options[j].value == "8")
+	     {
+	       oci = true;
+	     }
+	 }
+	 // SR2030486 END - Loop thru the options and mark true if ThirdParty or OCI has been selected	
+
+
+// Check to see if the Work package field is too long.  --- INC3933383 TIM
+		text = new String(document.forms[0].WorkPackage.value)
+		if (text.length > 1000)
+		{
+		msg =   "\nYour Work Package entry is " +
+				text.length + " characters," +
+				"\nwhich is too long to be saved in the database." +
+				"\n\nThe maximum number of characters is 1000." +
+				"\n\nSelect OK to drop the excess characters and" +
+				"\nsubmit the form." +
+				"\n\nSelect Cancel to go back and edit the form." ;
+				if (!(confirm(msg))) 
+			return;
+		else
+			document.forms[0].WorkPackage.value = text.substring(0,1000);
+		}			
+	
+	
+	// PTR 1121 Begin
+	if (ThisForm.submitCheck.value == "true") {
+		alert("This PCD has already been submitted once.");
+		return;
+	} else {
+		//if this is a revision to an approved PCD, mark it as such
+		if (Trim(ThisForm.Status.value) == "Approved")
+			ThisForm.State.value = "Resubmit";
+		else
+			ThisForm.State.value = "Submit";
+		ClearBlankOptions(ThisForm);
+
+		allOk = true;
+		//Check input
+		if (!validateNonblankEntry(ThisForm.Dept.value, "Dept", ThisForm.Dept)) {
+			//focus on dept
+			window.scrollBy(0,-10); // relative positioning
+			allOk = false;
+		} else if (!validateNonblankEntry(ThisForm.Subject.value, "Subject", ThisForm.Subject)) {
+			//focus on subject
+			window.scrollBy(0,-10); // relative positioning
+			allOk = false;
+			
+	   // SR2030486  MAM Added validation on the ClassificationList field		
+		
+		
+		// SR2031179 MAM 2 Added validatation for due date field
+	    } else if (!validateDateLongYearEntry(ThisForm.DueDate.value, "Due Date", ThisForm.DueDate)) {
+		  //focus on dept
+		  window.scrollBy(0,-10); // relative positioning
+		  allOk = false;
+	  	
+			
+		} else if (ThisForm.ClassificationList.options.length == 0) {
+			alert("Input required in field: Classifications");
+			ThisForm.ClassificationList.focus();
+			window.scrollBy(0,-40); // relative positioning
+			allOk = false;	
+			
+			
+		// If thirdparty is a selected option, ensure that its text field is filled in		
+	    } else if(thirdparty && ThisForm.ThirdParty.value == "" ) {
+	        alert("Third Party Proprietary Information is required");
+		    ThisForm.ThirdParty.focus;
+    	    window.scrollBy(0,-40); // relative positioning
+		    allOk = false;
+			       
+	
+	    // If thirdparty is not a selected option, ensure that its text field is not filled in			 
+	   } else if(!thirdparty && ThisForm.ThirdParty.value != "") {
+	        alert("Third Party Proprietary Information is filled in, but is not selected on the list");
+		    ThisForm.ThirdParty.focus;
+    	    window.scrollBy(0,-40); // relative positioning
+		    allOk = false;
+				
+          
+ 	   // If oci is a selected option, ensure that its text field is filled in		
+	  } else if(oci && ThisForm.OCI.value == "" ) {
+	      alert("Organizational Conflict of Interest is required");
+		  ThisForm.OCI.focus;
+    	  window.scrollBy(0,-40); // relative positioning
+		  allOk = false;
+	  
+	  	
+	  // If thirdparty is not a selected option, ensure that its text field is not filled in			 
+	  } else if(!oci && ThisForm.OCI.value != "") {
+	      alert("Organizational Conflict of Interest is filled in, but is not selected on the list");
+		  ThisForm.ThirdParty.focus;
+    	  window.scrollBy(0,-40); // relative positioning
+	      allOk = false;
+			
+	  // SR2030486  MAM END  Added validation on the ClassificationList field		
+			
+		} else if (ThisForm.ContractList.options.length == 0) {
+			alert("Input required in field: Contracts/Purchase Orders");
+			ThisForm.ContractList.focus();
+			window.scrollBy(0,-40); // relative positioning
+			allOk = false;
+		} else if (ThisForm.ApproverList.options.length == 0) {
+			alert("Input required in field: Approvers");
+			ThisForm.ApproverList.focus();
+			window.scrollBy(0,-50); // relative positioning
+			allOk = false;
+		} else if (ThisForm.ProgramList.options.length == 0) {
+			alert("Input required in field: Programs");
+			ThisForm.ProgramList.focus();
+			window.scrollBy(0,-60); // relative positioning
+			allOk = false;
+		} else if (ThisForm.ProgramCode.value == "Select From List Above, and click SetCode" || ThisForm.ProgramCode.value == "") {
+			alert("Input required in field: Program to use in PCD number");
+			ThisForm.ProgramList.focus();
+			window.scrollBy(0,-60); // relative positioning
+			allOk = false;
+		} else if (ThisForm.Comments.value.length == 0) {
+			alert("Input required in field: Action/Comments");
+			ThisForm.Comments.focus();
+			window.scrollBy(0,-50); // relative positioning
+			allOk = false;
+		} else {
+			//select all options in select boxes to pass them in the form
+			// SR2030486 MAM Added classifications options 
+		    for (i=0; i < ThisForm.ClassificationList.options.length; i++) {
+			   ThisForm.ClassificationList.options[i].selected = true;
+		    }
+		    // SR2030486 MAM - END
+			for (i=0; i < ThisForm.ContractList.options.length; i++) {
+				ThisForm.ContractList.options[i].selected = true;
+			}
+			for (i=0; i < ThisForm.ApproverList.options.length; i++) {
+				ThisForm.ApproverList.options[i].selected = true;
+			}
+			for (i=0; i < ThisForm.ProgramList.options.length; i++) {
+				ThisForm.ProgramList.options[i].selected = true;
+			}
+			for (i=0; i < ThisForm.ProgramRecipientList.options.length; i++) {
+				ThisForm.ProgramRecipientList.options[i].selected = true;
+			}
+			for (i=0; i < ThisForm.ActionList.options.length; i++) {
+				ThisForm.ActionList.options[i].selected = true;
+			}
+			for (i=0; i < ThisForm.RecipientList.options.length; i++) {
+				ThisForm.RecipientList.options[i].selected = true;
+			}
+			for (i=0; i < ThisForm.AttachmentList.options.length; i++) {
+				ThisForm.AttachmentList.options[i].selected = true;
+			}
+		}
+
+		if (allOk) {
+			//build strings of the contracts and approvers and call the verify window which will submit the form if there are sufficient approvers
+			Contracts = "";
+			Approvers = "";
+			for(i=0; i < ThisForm.ContractList.options.length; i++)
+			  Contracts = Contracts + ThisForm.ContractList.options[i].value + ",";
+			for(i=0; i < ThisForm.ApproverList.options.length; i++)
+			  Approvers = Approvers + ThisForm.ApproverList.options[i].value + ",";
+			VerifyWin = window.open('VerifySufficientApprovers.asp?Contracts=' + Contracts + '&Approvers=' + Approvers,'verifywin',
+									'resizable,width=385,height=110');
+		}
+	}
+	// PTR 1121 End
+}
+
+//Function run when an approver chooses to approve a PCD
+function OnApprove(ThisForm)
+{
+	// PTR 1121 Begin
+	if (ThisForm.approveCheck.value == "true") {
+		alert("This PCD has already been approved once.");
+		return;
+	} else {
+		ThisForm.State.value = "Approve";
+		ThisForm.approveCheck.value = "true";
+		ThisForm.submit();
+	}
+	// PTR 1121 End
+}
+
+//Function run when an approver chooses to designate a PCD for rework
+function OnRework(ThisForm)
+{
+	ThisForm.State.value = "Rework";
+	if (ThisForm.ReworkComments.value.length == 0)
+		alert("You must specify rework comments before designating for rework!");
+	else
+		ThisForm.submit();
+}
+
+//Function called when a user want to forward details of an approved PCD to someone
+function OnForward(ThisForm)
+{
+	ForwardWin = window.open('Forward.asp?Id=' + ThisForm.Id.value,'ForwardWin','resizable,width=385,height=250,screenX=0,screenY=0,top=0,left=0');
+}
+
+//Function used to verify that the user is within text area constraints on number of characters
+function textCounter(field,maxlimit,fieldname)
+{
+	if (field.value.length > maxlimit)
+	{
+		field.value = field.value.substring(0, maxlimit);					// if too long...trim it
+		alert(fieldname + " cannot exceed " + maxlimit + " characters.");
+		field.focus();
+	}
+	return true;
+}
+
+//Function called when the user chooses the SetCode button to set which program code to use in the PCD number
+function setProgramCode(ThisForm)
+{
+	if(ThisForm.ProgramList.selectedIndex != -1)
+		ThisForm.ProgramCode.value = ThisForm.ProgramList[ThisForm.ProgramList.selectedIndex].text;
+	else
+	{
+		alert("You must first select a Program from the list of programs.");
+		ThisForm.ProgramList.focus();
+	}
+}
+
+// PTR 950 Begin
+//Function called when the user chooses to copy a PCD to do another one with the same data
+function OnCopy(ThisForm, index)
+{
+	if (confirm("Are you sure you want to make a copy of this PCD?\n\nIf yes, click \"OK\".  If no, click \"Cancel\".")) {
+		ThisForm.action = "Copy.asp?index="+index;
+		//alert("This function is under construction.");
+		ThisForm.submit();
+	}
+	return;
+}
+// PTR 950 End
+
+// PTR 964 Begin
+// Function to check and see if any revisions can be made
+function OnRevise(ThisForm)
+{
+	var RevChar = ThisForm.Pcd.value;
+	RevChar = RevChar.charAt(RevChar.length - 1);
+	if (RevChar == "Z")
+	{
+		alert("No more revisions can be made to this PCD.\n\nYou must start with a new PCD.");
+		return;
+	}
+	else
+	{ 
+			window.location="PcdEdit.asp?Option=Edit&PId=514&PName=ARCI+FY17+TI16+Production&Id=New"; 
+	}
+}
+// PTR 964 End
+
+// PTR 1211 Begin
+//PTR 2016 remove code that calls pcdprint with cid and cname
+//if this code was invoked from an email link there is no Cid and Cname. Also
+// pcdprint did not use cid and cname.
+function viewPrint() { 
+ PrintWin = window.open('PcdPrint.asp?Id=New&Print=friendly',
+						   'PrintWin', 'width=660,height=490,status=yes,location=yes,scrollbars=yes,resizable=yes,toolbar=yes,menubar=yes');
+//PTR 1655
+PrintWin.focus();
+}
+
+// PTR 1211 End
+//******************************* End JavaScript *******************************
+  </script>
+</head>
+
+<body>
+
+
+  <form name=MainForm action="Status.asp?PId=514&PName=ARCI+FY17+TI16+Production" method=post>
+
+
+<input type=hidden name="State" value="">
+<input type=hidden name="ConName" value="">
+<input type=hidden name="approveCheck" value="">		
+<input type=hidden name="submitCheck" value="">			
+<input type=hidden name="Id" value=0>
+
+
+<input type=hidden name="CreationTimestamp" value=4/26/2017>
+
+<table border=0 cellspacing=5 cellpadding=5 width=95%>
+  <tr>
+    <td>
+	  <table width=100% cellspacing=0 cellpadding=1 border=0>
+	    <tr valign=bottom>
+		  <td align=left width=33%><font size=-1><i><b>* = Required Field</b></i></font></td>
+		  <td align=center><b><font face="Arial,Helvetica" color="#000000" size=+2>New PCD</b></font></td>
+		  
+			<td align=right width=33%> 
+			</td>
+		  
+		</tr>
+	    <tr><td>&nbsp;</td></tr>
+	  </table>
+
+	  
+	  <table Border=0 CELLSPACING=0 CELLPADDING=0 WIDTH=100%>
+		<tr>
+		  <td BGCOLOR="000000">
+		  <table border=0 cellpadding=3 cellspacing=1 width=100%>
+		    <tr>
+			  
+			  <td bgcolor="#eeeeee" width=50%> 
+				<table border=0 cellpadding=0 cellspacing=0>
+				<tr valign=top>
+				<td valign=top><b>PCD:</b>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</td>
+				<td valign=top nowrap>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Draft-001316 
+				  <input type=hidden name="Pcd" value="Draft-001316"> 
+				</td>
+				</tr>
+				</table>
+			  </td>
+
+			  
+			  <td bgcolor="#eeeeee" width=50%>
+			    <b>Date:</b>&nbsp;&nbsp;&nbsp;4/26/2017 
+				  <input type=hidden name="Date" value="4/26/2017"> 
+			  </td>
+			</tr>
+			  
+			<tr> 
+			  
+			  <td bgcolor="#eeeeee">
+				<table cellpadding=0 cellspacing=0 border=0>
+				<tr>
+				<td><b>Current&nbsp;Status:</b>&nbsp;&nbsp;&nbsp;</td>
+				<td>
+				  New
+				  <input type=hidden name="Status" value="New"> 
+				</td>
+				</tr>
+				</table>
+			  </td>
+				
+			  
+			  <td bgcolor="#eeeeee">
+			    <b>Revision:</b>&nbsp;&nbsp;&nbsp;
+			  	  New 
+				  <input type=hidden name="Revision" value=0> 
+			  </td>
+			</tr>
+    
+		    <tr> 
+			  
+			  <td bgcolor="#eeeeee">
+			    <b>Department*:&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</b> 
+				  <input type=text name=Dept value=M480 size=4 maxlength=4> 
+			  </td>
+
+			  
+			  <td bgcolor="#eeeeee">
+			    <b>Originator:</b>&nbsp;&nbsp;&nbsp;Belford, Eugene 
+				  <input type=hidden name=Originator value="n67154"> 
+			  </td>
+		    </tr>
+    
+		    <tr> 
+			  
+			  <td bgcolor="#eeeeee">
+ 			    <b>Subject*:</b>&nbsp;&nbsp;&nbsp; 
+			      <input type=text name="Subject" value="" maxlength=200 size=100> 
+			  </td>
+			  
+			  
+			  
+			  <td bgcolor="#eeeeee">
+ 			    <b>Due Date: &nbsp;&nbsp;&nbsp;</b>  
+			      <input type=text name="DueDate" value="" maxlength=10 size=10>
+			    <a href="javascript: window.dateField = document.MainForm.DueDate;calendar = window.open('calendar.asp?dindex=','cal','WIDTH=200,HEIGHT=250');void(0);">Calendar</a>
+				
+			     
+			  </td>
+			  
+			    
+		    </tr>
+			
+			
+					
+		  <tr>
+			  
+			  <td bgcolor="#eeeeee" colspan=2> 
+			    <b>Classification*:</b>
+			    <table cellpadding=10>
+				  <tr>  
+					  <td> 
+  					    <select multiple name="ClassificationList" size=10 width="500" style="width:500">  
+					    </select>
+					  </td>
+					
+					  <td> 
+					    <div align = right> 
+					      <input type=button style="width:75" name=ViewButton1 value="Add" width=75 onClick="OnAddClassification(MainForm)">
+						  <p> 
+						  <input type=button style="width:75" name=ViewButton2 value="Delete" width=75 onClick="OnDeleteClassification(MainForm)">
+					    </div>
+					    </td>
+					    
+					     <td> 
+					    <div align = right> 
+					     <table> 
+					       <tr> <td> <b> Third Party Proprietary Information: </b> </td> <td> <input type=text maxlength=50 size=50 name="ThirdParty" value=""> </td> </tr>
+						
+						   <tr> <td> <b> Organizational Conflict of Interest (OCI): </b> </td> <td> <input type=text  maxlength=50 size=50 name="OCI" value=""> </td> </tr>
+					     	     
+					     </table>
+					    </td>
+					 				   			    
+					     
+				    </td>
+				  </tr>
+			    </table>
+			  </td>
+		    </tr>
+			
+			
+		    <tr>
+			  
+			  <td bgcolor="#eeeeee" colspan=2> 
+			    <b>Contract(s)&nbsp;/&nbsp;Purchase&nbsp;Order(s)*:</b>
+			    <table cellpadding=10>
+				  <tr>  
+					  <td> 
+  					    <select multiple name="ContractList" size=4 width="250" style="width:250">  
+						    <option value=""> 
+					    </select>
+					  </td>
+					
+					  <td> 
+					    <div align = right> 
+					      <input type=button style="width:75" name=ViewButton value="Add..." width=75 onClick="OnAddContract(MainForm)">
+						  <p> 
+						  <input type=button style="width:75" name=ViewButton value="Delete" width=75 onClick="OnDeleteContract(MainForm)">
+					    </div> 
+				    </td>
+				  </tr>
+			    </table>
+			  </td>
+		    </tr>
+
+		    <tr>
+			  
+			  <td bgcolor="#eeeeee" colspan=2>
+			    <b>Approver(s)*:</b><br>
+			    <i>
+			      <font size=-1>
+				    (A)&nbsp;=&nbsp;Approved;&nbsp;&nbsp;(R)&nbsp;=&nbsp;Rework;&nbsp;&nbsp;(P)&nbsp;=&nbsp;Pending;&nbsp;&nbsp;(X)&nbsp;=&nbsp;No&nbsp;Action&nbsp;Required 
+				  </font>
+			    </i>
+			    <table cellpadding=10>
+				  <tr>  
+					  <td> 
+					    <select multiple name="ApproverList" size=4 width=250 style="width:250">  
+					    </select>
+					  </td>
+            
+					  <td> 
+					    <div align = right> 
+						  <input type=button style="width:75" name=ViewButton value="Add..." width=75 onClick="OnAddApprover(MainForm)">
+						  <p> 
+					      <input type=button style="width:75" name=ViewButton value="Delete" width=75 onClick="OnDeleteApprover(MainForm)">
+					    </div> 
+				    </td>
+				  </tr>
+			    </table>
+			  </td>
+		    </tr>
+		    <tr>
+			   
+			
+			  <td bgcolor="#FFF7E5" colspan=2> 
+			    <b>Action&nbsp;Responsible&nbsp;Person(s):</b>	<!--PTR 1111-->
+			    <table cellpadding=10>
+				  <tr>  
+					  <td> 
+					    <select multiple name="ActionList" size=10 width=250 style="width:250"> 
+					    </select>
+					  </td>
+					
+					  <td> 
+					    <div align = right> 
+						  <input type=button style="width:75" name=ViewButton value="Add..." width=75 onClick="OnAddActionUser(MainForm)">
+						  <p> 
+						  <input type=button style="width:75" name=ViewButton value="Delete" width=75 onClick="OnDeleteAction(MainForm)">
+					    </div>
+				    </td>
+				  </tr>
+			    </table>
+			  </td>
+		    </tr>
+            
+            
+		    <tr valign=top>
+ 			  
+			  <td bgcolor="#eeeeee" >
+			    <B>Program(s)*:</B>
+				
+				  <p>
+				
+			    <table cellpadding=10>
+				  <tr>  
+				      <td> 
+					    <select multiple name="ProgramList" size=4 width=250 style="width:250">  
+					    </select>
+				      </td>
+				
+				      <td>
+					    <div align = right> 
+					      <table cellspacing=0 cellpadding=0 border=0>
+						    <tr>
+						      <td>
+						        <input type=button style="width:75" name=ViewButton value="Add..." width=75 onClick="OnAddProgram(MainForm)">
+						      </td>
+						    </tr>
+				  
+						    <tr>
+  						      <td>
+							    <input type=button style="width:75" name=ViewButton value="Delete" width=75 onClick="OnDeleteProgram(MainForm)">
+						      </td>
+						    </tr>
+				  
+						    <tr>
+						      <td>
+							    <input type=button style="width:75" name=SetCode value="SetCode" width=75 onClick="setProgramCode(MainForm)">
+						      </td>
+						    </tr>
+					      </table>
+					    </div> 
+				    </td>
+			      </tr>
+			    </table>
+			  </td>
+			  <td bgcolor="#eeeeee"> 
+			    <b>Program&nbsp;Recipient(s):</b><BR>
+			      <font size=-1><i>(Automatically&nbsp;filled&nbsp;based&nbsp;on&nbsp;program(s)&nbsp;selected)</i></font>
+			    <table cellpadding=10>
+				  <tr>
+				    <td> 
+					  <select multiple name=ProgramRecipientList size=4 width=250 style="width:250">  
+					  </select>
+					</td>
+			      </tr>
+			    </table>
+			  </td> 
+		    </tr>
+		    <tr>			
+			  
+			  <td bgcolor="#eeeeee" colspan=2>
+			    <B>Program&nbsp;to&nbsp;use&nbsp;in&nbsp;PCD&nbsp;number*:</B>
+			    <table cellpadding=10>
+			      <tr>
+				    <td> 
+						  <input type=text name="ProgramCode" value="Select From List Above, and click SetCode" size=41 onFocus="MainForm.ProgramList.focus(),alert('Select from list above, and click SetCode')"> 
+				    </td>
+				  </tr>
+			    </table>
+			  </td>
+		    </tr>
+
+		    <tr> 
+			  
+			  <td bgcolor="#eeeeee" colspan=2>
+			    <B>Additional&nbsp;Recipient(s):</B>
+			    <table cellpadding=10>
+				  <tr>  
+					  <td> 
+					    <select multiple name="RecipientList" size=4 width=250 style="width:250">  
+					    </select>
+					  </td>
+					
+					  <td>
+  					    <div align = right> 
+						  <input type=button style="width:75" name=ViewButton value="Add..." width=75 onClick="OnAddRecipient(MainForm)">
+						  <p> 
+						  <input type=button style="width:75" name=ViewButton value="Delete" width=75 onClick="OnDeleteRecipient(MainForm)">
+					    </div>  
+					</td>
+				  </tr>
+			    </table>
+			  </td>
+		    </tr>  
+		
+		
+		  <tr> 
+			  
+			  <td bgcolor="#eeeeee" colspan=2>
+			    <b>Work&nbsp;&nbsp;Package:</b>
+			    <table cellpadding=10>
+			      <tr>
+				    <td>  
+  					    <textarea cols=76 name=WorkPackage rows=4 wrap=hard></textarea> 
+			        </td>
+				  </tr>
+			    </table>
+			  </td>
+		    </tr>
+		     
+		
+		    <tr> 
+			  
+			  <td bgcolor="#eeeeee" colspan=2>
+			    <b>Action&nbsp;/&nbsp;Comments*:</b>
+			    <table cellpadding=10>
+			      <tr>
+				    <td>  
+  					    <textarea cols=76 name=Comments rows=15 wrap=hard></textarea> 
+			        </td>
+				  </tr>
+			    </table>
+			  </td>
+		    </tr>
+
+		    <tr> 
+			  
+			  <td bgcolor="#eeeeee" colspan=2>
+			    <b>Reference:</b>
+			    <table cellpadding=10>
+			      <tr>
+				    <td>  
+					    <textarea cols=76 name=Reference rows=4 wrap=hard onKeyUp="textCounter(Reference, 250, 'Reference')"
+																		  onKeyPress="textCounter(Reference, 250, 'Reference')"
+																		  onFocus="textCounter(Reference, 250, 'Reference')"
+																		  onBlur="textCounter(Reference, 250, 'Reference')"
+																		  onKeyDown="textCounter(Reference, 250, 'Reference')"
+																		  onClick="textCounter(Reference, 250, 'Reference')"
+																		  onSelect="textCounter(Reference, 250, 'Reference')"></textarea> 
+				    </td>
+				  </tr>
+			    </table>
+			  </td>
+		    </tr>
+
+		    
+
+
+
+		    <tr>
+			   
+			  <td bgcolor="#eeeeee" colspan=2> 
+			    <b>Attachments:</b>
+			    <table cellpadding=10>
+				  <tr> 
+				    <td> 
+					  <select multiple name=AttachmentList size=4 width=300>  
+					  </select> 
+				    </td>
+				
+				    <td width=50%> 
+					  <table width=100% cellspacing=0 cellpadding=0 border=0>  
+						  <tr> 
+						    <td> 
+							  <input type=button style="width:75" width=75 value="Add..." onClick="javascript:OnAddAttachment(document.MainForm);">
+						    </td>
+						  </tr>
+					      <tr> 
+						    <td>
+						      <input type=button style="width:75" width=75 value="View" onClick="javascript:OnViewAttachment(document.MainForm);">
+						    </td>
+					      </tr>
+						  <tr> 
+						    <td> 
+							  <input type=button style="width:75" width=75 value="Delete" onClick="javascript:OnDeleteAttachment(document.MainForm);">
+						    </td>
+						  </tr>  
+					  </table>
+				    </td>
+				  </tr>
+			    </table>
+			  </td>
+		    </tr>
+		  </table>
+		</td>
+	  </tr>
+	  
+	  
+	  
+	
+	  
+	  <tr><td>&nbsp;</td></tr>
+	</table>
+
+
+
+
+	
+	<table WIDTH="100%">
+	  <tr>
+			  <input type=hidden name="isARevision" value="No">
+			 			  
+			  <td>
+			    <center><input type=button style="width:80" name=ViewButton value="Save" width=80 onClick="OnSave(MainForm)"></center>
+			  </td>
+				
+			<td>
+			  <center><input type=button style="width:80" name=ViewButton value="Submit" width=80 onClick="OnSubmit(MainForm)"></center>
+			</td> 
+				
+			<td>
+			  <center><input type=button style="width:80" name=ViewButton value="Cancel" width=80 onClick="OnCancel(MainForm)"></center>
+			</td> 
+		</tr>
+	  </table>
+	</td>
+  </tr>
+</table>
+</form>
+</body>
+</html>

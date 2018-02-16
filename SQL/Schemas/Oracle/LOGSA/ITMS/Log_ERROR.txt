@@ -1,0 +1,1 @@
+    DIAG.LogError( v_ProcName, DiagLogging, v_DiagCategories );

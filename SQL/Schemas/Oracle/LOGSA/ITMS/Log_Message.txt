@@ -1,0 +1,1 @@
+    DIAG.LogMessage( v_ProcName, '[Message]', DiagLogging, v_DiagCategories );

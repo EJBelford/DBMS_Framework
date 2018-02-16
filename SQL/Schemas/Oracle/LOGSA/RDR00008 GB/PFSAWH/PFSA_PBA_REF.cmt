@@ -1,0 +1,115 @@
+/*--*----|----*----|----*----|---- TEAM ITSS ----*----|----|----*----|----*---*/
+--
+--         NAME: gb_pfsa_pba_ref 
+--      PURPOSE: PERFORMANCE BASED LOGISTICS - Parent record for all the 
+--               contract related information, (NIIN, UIC, SN, etc.) 
+--
+-- TABLE SOURCE: gb_pfsa_pba_ref.cmt 
+--
+--   CREATED BY: Gene Belford 
+-- CREATED DATE: 20 February 2008
+--
+--  ASSUMPTIONS:
+--
+--  LIMITATIONS:
+--
+--        NOTES:
+--
+-- 
+/*--*----|----*----|----*----|----*----|----*----|----*----|----*----|----*---*/
+--     Change History:
+-- DDMMMYY - Who - Ticket # - CR # - Details
+-- 20FEB08 - GB  -          -      - Created 
+--
+/*--*----|----*----|----*----|---- TEAM ITSS ----*----|----|----*----|----*---*/
+--
+--
+
+COMMENT ON TABLE pfsa_pba_ref 
+IS 'PFSA_PBA_REF - PERFORMANCE BASED AGREEMENTS - Parent record for all the contract related information, (NIIN, UIC, SN, etc.)'; 
+
+
+COMMENT ON COLUMN pfsa_pba_ref.pba_id 
+IS 'PBA_ID - '; 
+
+COMMENT ON COLUMN pfsa_pba_ref.pba_key1 
+IS 'PBA_KEY1 - ';
+
+COMMENT ON COLUMN pfsa_pba_ref.pba_key2 
+IS 'PBA_KEY2 - ';
+
+COMMENT ON COLUMN pfsa_pba_ref.pba_seq 
+IS 'PBA_SEQ - ';
+
+COMMENT ON COLUMN pfsa_pba_ref.pba_title 
+IS 'PBA_TITLE - ';
+
+COMMENT ON COLUMN pfsa_pba_ref.pba_point_of_contact 
+IS 'PBA_POINT_OF_CONTACT - ';
+
+COMMENT ON COLUMN pfsa_pba_ref.pba_description 
+IS 'PBA_DESCRIPTION - ';
+
+COMMENT ON COLUMN pfsa_pba_ref.pba_agreement_date_id 
+IS 'PBA_AGREEMENT_DATE_ID - ';
+
+COMMENT ON COLUMN pfsa_pba_ref.pba_status_code 
+IS 'PBA_STATUS_CODE - ';
+
+COMMENT ON COLUMN pfsa_pba_ref.pba_from_date_id 
+IS 'PBA_FROM_DATE_ID - ';
+
+COMMENT ON COLUMN pfsa_pba_ref.pba_to_date_id 
+IS 'PBA_TO_DATE_ID - ';
+
+COMMENT ON COLUMN pfsa_pba_ref.pba_lifecyle_logistics_phase 
+IS 'PBA_LIFECYLE_LOGISTICS_PHASE - ';
+
+COMMENT ON COLUMN pfsa_pba_ref.pba_retention_period 
+IS 'PBA_RETENTION_PERIOD - ';
+
+COMMENT ON COLUMN pfsa_pba_ref.pba_freeze_flag 
+IS 'PBA_FREEZE_FLAG - ';
+
+COMMENT ON COLUMN pfsa_pba_ref.status 
+IS 'STATUS - The Extract-Transform-Load (ETL) status of the record in question.  [C - Current, D - Duplicate, E - Error, H - Historical, L - Logical, P - Processed, Q - Questionable, R - Ready to Process, T- ?????, Z - Future]';
+
+COMMENT ON COLUMN pfsa_pba_ref.updt_by 
+IS 'UPDT_BY - The date/timestamp of when the record was created/updated.';
+
+COMMENT ON COLUMN pfsa_pba_ref.lst_updt 
+IS 'LST_UPDT - Indicates either the program name or user ID of the person who updated the record.';
+
+COMMENT ON COLUMN pfsa_pba_ref.active_flag 
+IS 'ACTIVE_FLAG - Flag indicating if the record is active or not.';
+
+COMMENT ON COLUMN pfsa_pba_ref.active_date 
+IS 'ACTIVE_DATE - Additional control for active_Fl indicating when the record became active.';
+
+COMMENT ON COLUMN pfsa_pba_ref.inactive_date 
+IS 'INACTIVE_DATE - Additional control for active_Fl indicating when the record went inactive.';
+
+COMMENT ON COLUMN pfsa_pba_ref.insert_by 
+IS 'INSERT_BY - Reports who initially created the record.';
+
+COMMENT ON COLUMN pfsa_pba_ref.insert_date 
+IS 'INSERT_DATE - Reports when the record was initially created.';
+
+COMMENT ON COLUMN pfsa_pba_ref.update_by 
+IS 'UPDATE_BY - Reports who last updated the record.';
+
+COMMENT ON COLUMN pfsa_pba_ref.update_date 
+IS 'UPDATE_DATE - Reports when the record was last updated.';
+
+COMMENT ON COLUMN pfsa_pba_ref.delete_flag 
+IS 'DELETE_FLAG - Flag indicating if the record can be deleted.';
+
+COMMENT ON COLUMN pfsa_pba_ref.delete_date 
+IS 'DELETE_DATE - Additional control for DELETE_FLAG indicating when the record was marked for deletion.';
+
+COMMENT ON COLUMN pfsa_pba_ref.hidden_flag 
+IS 'HIDDEN_FLAG - Flag indicating if the record should be hidden from the general user in things like drop-down lists.';
+
+COMMENT ON COLUMN pfsa_pba_ref.hidden_date 
+IS 'HIDDEN_DATE - Additional control for HIDDEN_FLAG indicating when the record was hidden.';
+

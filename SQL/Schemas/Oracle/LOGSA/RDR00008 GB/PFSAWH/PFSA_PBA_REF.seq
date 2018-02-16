@@ -1,0 +1,35 @@
+/*--*----|----*----|----*----|---- TEAM ITSS ----*----|----|----*----|----*---*/
+--
+--         NAME: pfsa_pba_ref 
+--      PURPOSE: PERFORMANCE BASED LOGISTICS - Parent record for all the 
+--               contract related information, (NIIN, UIC, SN, etc.) 
+--
+-- TABLE SOURCE: pfsa_pba_ref.seq
+--
+--   CREATED BY: Gene Belford 
+-- CREATED DATE: 20 February 2008
+--
+--  ASSUMPTIONS:
+--
+--  LIMITATIONS:
+--
+--        NOTES:
+--
+-- 
+/*--*----|----*----|----*----|----*----|----*----|----*----|----*----|----*---*/
+--     Change History:
+-- DDMMMYY - Who - Ticket # - CR # - Details
+-- 20FEB08 - GB  -          -      - Created 
+--
+/*--*----|----*----|----*----|---- TEAM ITSS ----*----|----|----*----|----*---*/
+
+/*----- Sequence  -----*/
+
+CREATE SEQUENCE pfsa_pba_ref_seq
+    START WITH 1000000
+--    MAXVALUE   9999999
+    MINVALUE   1
+    NOCYCLE
+    NOCACHE
+    NOORDER;
+

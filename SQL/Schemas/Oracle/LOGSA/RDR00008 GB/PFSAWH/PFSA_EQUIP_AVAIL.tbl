@@ -1,0 +1,27 @@
+ALTER TABLE pfsa_equip_avail 
+ ADD (grab_stamp  DATE); 
+
+ALTER TABLE pfsa_equip_avail 
+ ADD (proc_stamp  DATE); 
+
+ALTER TABLE pfsa_equip_avail 
+ ADD (status  VARCHAR2(1)); 
+
+ALTER TABLE pfsa_equip_avail 
+ ADD (sys_ei_uid  VARCHAR2(78)); 
+
+
+/*----- Table Meta-Data -----*/ 
+
+COMMENT ON COLUMN pfsa_equip_avail.grab_stamp 
+IS 'GRAB_STAMP - The sysdate of the time the grab procedure that populated the table was executed.'; 
+
+COMMENT ON COLUMN pfsa_equip_avail.proc_stamp  
+IS 'PROC_STAMP - The sysdate of the time the process procedure was executed.'; 
+
+COMMENT ON COLUMN pfsa_equip_avail.status  
+IS 'STATUS - The Extract-Transform-Load (ETL) status of the record in question.  [C - Current, D - Duplicate, E - Error, H - Historical, L - Logical, P - Processed, Q - Questionable, R - Ready to Process, T- ?????, Z - Future]';
+
+COMMENT ON COLUMN pfsa_equip_avail.sys_ei_uid  
+IS 'SYS_EI_UID - The Department of Defense unique identifier for the system end item.'; 
+

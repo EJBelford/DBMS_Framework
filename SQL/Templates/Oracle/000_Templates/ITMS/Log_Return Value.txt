@@ -1,0 +1,1 @@
+    DIAG.LogReturnValue( v_ProcName, v_Result, DiagLogging, v_DiagCategories );

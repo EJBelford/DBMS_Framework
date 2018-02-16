@@ -1,0 +1,4 @@
+\\mtndfs.acct04.us.lmco.com\DFSroot\Projects
+
+
+Make sure you use the JavaScript view, then right click a conflicting file > Team > Merge Tool > put the code you want to keep in the left window > save > right click the file again > Team > Add to Index

@@ -1,0 +1,34 @@
+/*--*----|----*----|----*----|---- TEAM ITSS ----*----|----|----*----|----*---*/
+--
+--         NAME: pfsa_pba_frz_dates_ref
+--      PURPOSE: To calculate the desired information.
+--
+-- TABLE SOURCE: PFSA_PBA_FRZ_DATES_REF.idx 
+--
+--   CREATED BY: Gene Belford
+-- CREATED DATE: 24 MArch 2008 
+--
+--  ASSUMPTIONS:
+--
+--  LIMITATIONS:
+--
+--        NOTES:
+--
+-- 
+/*--*----|----*----|----*----|----*----|----*----|----*----|----*----|----*---*/
+--     Change History:
+-- DDMMMYY - Who - Ticket # - CR # - Details 
+-- 24MAR08 - GB  -          -      - Created 
+--
+/*--*----|----*----|----*----|---- TEAM ITSS ----*----|----|----*----|----*---*/
+--
+--
+
+/*----- Indexs -----*/
+
+CREATE UNIQUE INDEX ixu_pfsa_pba_frz_dates_ref 
+    ON pfsa_pba_frz_dates_ref
+    (
+    rec_id
+    );
+

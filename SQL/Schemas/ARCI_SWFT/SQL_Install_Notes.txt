@@ -1,0 +1,151 @@
+mysql -u root -p<m> -v
+mysql -u pcd -p<P> -v
+
+use pcd_tracker;
+
+prompt \u@\h [\d]>
+ 
+-- mysql_upgrade -u root -p<m>
+
+clear; ll -R /home/ebelford/git/pcd/pcd-tracker/database
+
+
+\h 
+List of all MySQL commands:
+Note that all text commands must be first on line and end with ';'
+?         (\?) Synonym for `help'.
+clear     (\c) Clear the current input statement.
+connect   (\r) Reconnect to the server. Optional arguments are db and host.
+delimiter (\d) Set statement delimiter.
+edit      (\e) Edit command with $EDITOR.
+ego       (\G) Send command to mysql server, display result vertically.
+exit      (\q) Exit mysql. Same as quit.
+go        (\g) Send command to mysql server.
+help      (\h) Display this help.
+nopager   (\n) Disable pager, print to stdout.
+notee     (\t) Don't write into outfile.
+pager     (\P) Set PAGER [to_pager]. Print the query results via PAGER.
+print     (\p) Print current command.
+prompt    (\R) Change your mysql prompt.
+quit      (\q) Quit mysql.
+rehash    (\#) Rebuild completion hash.
+source    (\.) Execute an SQL script file. Takes a file name as an argument.
+status    (\s) Get status information from the server.
+system    (\!) Execute a system shell command.
+tee       (\T) Set outfile [to_outfile]. Append everything into given outfile.
+use       (\u) Use another database. Takes database name as argument.
+charset   (\C) Switch to another charset. Might be needed for processing binlog with multi-byte charsets.
+warnings  (\W) Show warnings after every statement.
+nowarning (\w) Don't show warnings after every statement.
+resetconnection(\x) Clean session context.
+
+For server side help, type 'help contents'
+
+show databases;
+
+source ./260_functions/f_create_pcd_id.sql
+source ./270_procedures/sp_trackers_insert_entry_form.sql
+
+use pcd_dev; 
+
+CREATE USER 'pcd'@'localhost' IDENTIFIED BY 'Pcd1234!';
+GRANT ALL PRIVILEGES ON *.* TO 'pcd'@'localhost';
+
+CREATE USER 'pcd'@'158.187.251.195' IDENTIFIED BY 'Pcd1234!';
+GRANT ALL PRIVILEGES ON *.* TO 'pcd'@'158.187.251.195';
+
+FLUSH PRIVILEGES;
+
+-- SELECT * FROM mysql.user ORDER BY user, host;
+SELECT user, host, select_priv, insert_priv, update_priv, delete_priv FROM mysql.user ORDER BY user, host;
+
++-----------------+-----------+-------------+-------------+-------------+-------------+
+| host            | user      | Select_priv | Insert_priv | Update_priv | Delete_priv |
++-----------------+-----------+-------------+-------------+-------------+-------------+
+| localhost       | root      | Y           | Y           | Y           | Y           |
+| lmisdemdb001    | root      | Y           | Y           | Y           | Y           |
+| 127.0.0.1       | root      | Y           | Y           | Y           | Y           |
+| ::1             | root      | Y           | Y           | Y           | Y           |
+| localhost       | mysql.sys | N           | N           | N           | N           |
+| 158.187.251.195 | pcd       | Y           | Y           | Y           | Y           |
+| localhost       | pcd       | Y           | Y           | Y           | Y           |
++-----------------+-----------+-------------+-------------+-------------+-------------+
+7 rows in set (0.00 sec)
+
+
+select TABLE_NAME from information_schema.TABLES where TABLE_SCHEMA = 'pcd_tracker';
+
+select TABLE_NAME from information_schema.VIEWS where TABLE_SCHEMA = 'pcd_tracker';
+
+SELECT * FROM vw_tracker_active ORDER BY rec_id DESC LIMIT 5;
+
++------------------------+
+| TABLE_NAME             |
++------------------------+
+| vw_end_of_life         |
+| vw_hw_list_all         |
+| vw_hw_list_items_all   |
+| vw_pcd_delivery_wakeup |
+| vw_pcd_funded_no_pcd   |
+| vw_pcd_fy_not_funded   |
+| vw_pcd_wakeup          |
+| vw_remarks             |
+| vw_task_all            |
+| vw_tracker_active      |
+| vw_tracker_all         |
+| vw_tracker_pcd         |
+| vw_user_feedback_all   |
++------------------------+
+
+
+select ROUTINE_TYPE, ROUTINE_NAME from information_schema.ROUTINES WHERE ROUTINE_SCHEMA = 'pcd_tracker' ORDER BY ROUTINE_TYPE, ROUTINE_NAME;
+
+CALL pcd_tracker.sp_trackers_get_by_recid(0);
+  
++--------------+------------------------------------+
+| ROUTINE_TYPE | ROUTINE_NAME                       |
++--------------+------------------------------------+
+| FUNCTION     | f_create_pcd_id                    |
+| FUNCTION     | f_remarks_string                   |
+| FUNCTION     | uuid_v4                            |
+| PROCEDURE    | sp_attachments_flag_deleted        |
+| PROCEDURE    | sp_attachments_flag_pcd            |
+| PROCEDURE    | sp_attachments_get_by_parent_recid |
+| PROCEDURE    | sp_attachments_get_by_recid        |
+| PROCEDURE    | sp_attachments_insert              |
+| PROCEDURE    | sp_enum_type_list_all              |
+| PROCEDURE    | sp_enum_value_list_by_type         |
+| PROCEDURE    | sp_hw_list_insert                  |
+| PROCEDURE    | sp_hw_list_items_by_parent_recid   |
+| PROCEDURE    | sp_hw_list_items_by_recid          |
+| PROCEDURE    | sp_hw_list_items_insert            |
+| PROCEDURE    | sp_hw_list_update                  |
+| PROCEDURE    | sp_remarks_delete_by_recid         |
+| PROCEDURE    | sp_remarks_flag_deleted            |
+| PROCEDURE    | sp_remarks_flag_pcd                |
+| PROCEDURE    | sp_remarks_get_by_parent_recid     |
+| PROCEDURE    | sp_remarks_insert                  |
+| PROCEDURE    | sp_remarks_update                  |
+| PROCEDURE    | sp_tasks_get_by_parent_recid       |
+| PROCEDURE    | sp_tasks_insert                    |
+| PROCEDURE    | sp_tasks_update                    |
+| PROCEDURE    | sp_trackers_delete_row             |
+| PROCEDURE    | sp_trackers_get_by_recid           |
+| PROCEDURE    | sp_trackers_insert                 |
+| PROCEDURE    | sp_trackers_insert_entry_form      |
+| PROCEDURE    | sp_trackers_new_row                |
+| PROCEDURE    | sp_trackers_update                 |
+| PROCEDURE    | sp_trackers_update_all_flds        |
+| PROCEDURE    | sp_user_feedback_get_all           |
+| PROCEDURE    | sp_user_feedback_insert            |
+| PROCEDURE    | sp_user_feedback_update            |
++--------------+------------------------------------+
+
+
+
+===============================================================================
+USEFUL SITES
+===============================================================================
+
+https://www.techonthenet.com/index.php
+ 

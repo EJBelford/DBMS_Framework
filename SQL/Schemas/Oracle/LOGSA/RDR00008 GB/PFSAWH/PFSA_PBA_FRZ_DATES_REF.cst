@@ -1,0 +1,68 @@
+/*--*----|----*----|----*----|---- TEAM ITSS ----*----|----|----*----|----*---*/
+--
+--         NAME: pfsa_pba_frz_dates_ref
+--      PURPOSE: To calculate the desired information.
+--
+-- TABLE SOURCE: PFSA_PBA_FRZ_DATES_REF.cst 
+--
+--   CREATED BY: Gene Belford
+-- CREATED DATE: 24 MArch 2008 
+--
+--  ASSUMPTIONS:
+--
+--  LIMITATIONS:
+--
+--        NOTES:
+--
+-- 
+/*--*----|----*----|----*----|----*----|----*----|----*----|----*----|----*---*/
+--     Change History:
+-- DDMMMYY - Who - Ticket # - CR # - Details 
+-- 24MAR08 - GB  -          -      - Created 
+--
+/*--*----|----*----|----*----|---- TEAM ITSS ----*----|----|----*----|----*---*/
+--
+--
+/*----- Foreign Key -----*/
+
+ALTER TABLE gb_pfsa_pba_frz_dates_ref  
+    DROP CONSTRAINT fk_pfsa_pba_items_ref;        
+
+ALTER TABLE gb_pfsa_pba_frz_dates_ref  
+    ADD CONSTRAINT fk_pfsa_pba_items_ref  
+    FOREIGN KEY (pba_id) 
+    REFERENCES gb_pfsa_pba_ref(pba_id);
+
+/*----- Constraints -----*/
+
+ALTER TABLE gb_pfsa_pba_frz_dates_ref  
+    DROP CONSTRAINT ck_pfsa_pba_frz_dat_ref_act_fl;        
+
+ALTER TABLE gb_pfsa_pba_frz_dates_ref  
+    ADD CONSTRAINT ck_pfsa_pba_frz_dat_ref_act_fl 
+    CHECK (active_flag='I' OR active_flag='N' OR active_flag='Y');
+
+ALTER TABLE gb_pfsa_pba_frz_dates_ref  
+    DROP CONSTRAINT ck_pfsa_pba_frz_dat_ref_del_fl;        
+
+ALTER TABLE gb_pfsa_pba_frz_dates_ref  
+    ADD CONSTRAINT ck_pfsa_pba_frz_dat_ref_del_fl 
+    CHECK (delete_flag='N' OR delete_flag='Y');
+
+ALTER TABLE gb_pfsa_pba_frz_dates_ref  
+    DROP CONSTRAINT ck_pfsa_pba_frz_dat_ref_hid_fl;       
+
+ALTER TABLE gb_pfsa_pba_frz_dates_ref  
+    ADD CONSTRAINT ck_pfsa_pba_frz_dat_ref_hid_fl 
+    CHECK (hidden_flag='N' OR hidden_flag='Y');
+
+ALTER TABLE gb_pfsa_pba_frz_dates_ref  
+    DROP CONSTRAINT ck_pfsa_pba_frz_dat_ref_status;        
+
+ALTER TABLE gb_pfsa_pba_frz_dates_ref  
+    ADD CONSTRAINT ck_pfsa_pba_frz_dat_ref_status 
+    CHECK (status='C' OR status='D' OR status='E' OR status='H' 
+        OR status='L' OR status='P' OR status='Q' OR status='R'
+        OR status='T' OR status='Z' OR status='N'
+        );
+

@@ -1,0 +1,42 @@
+CREATE OR REPLACE TRIGGER TR_I_PFSA_USAGE_EVENT
+-- This trigger sets the defaults for the new standard warehouse interface columns
+--
+--
+BEFORE INSERT ON PFSA_USAGE_EVENT
+FOR EACH ROW
+DECLARE
+
+  ps_oerr         VARCHAR2(6) := null;
+  ps_location          VARCHAR2(10) := null;
+  ps_procedure_name         VARCHAR2(30) := 'TR_I_PFSA_USAGE_EVENT';
+  ps_msg     VARCHAR2(200) := 'trigger_failed';
+  ps_id_key     VARCHAR2(200) := null; -- set in cases
+  
+  pl_sysdate    date := sysdate;
+
+
+BEGIN
+
+  :new.status := 'C';
+  :new.lst_updt := pl_sysdate;
+  :new.active_flag := 'A';
+  :new.active_date := pl_sysdate;
+  :new.inactive_date := to_date('01-01-1990', 'MM-DD-YYYY');
+  :new.insert_by := user;
+  :new.insert_date := pl_sysdate;
+  :new.update_by := null;
+  :new.update_date := to_date('01-01-1990', 'MM-DD-YYYY');
+  :new.delete_flag := 'N';
+  :new.delete_date := to_date('01-01-1990', 'MM-DD-YYYY');
+  :new.hidden_flag := 'N';
+  :new.hidden_date := to_date('01-01-1990', 'MM-DD-YYYY');
+
+
+EXCEPTION WHEN OTHERS THEN
+    ps_oerr := sqlcode;
+    ps_id_key := :new.sys_ei_niin||'|'||:new.pfsa_item_id||'|'||:new.record_type||'|'||:new.usage_mb||'|'||:new.from_dt;
+    insert into std_pfsa_debug_tbl (ps_procedure, ps_oerr, ps_location, called_by, ps_id_key, ps_msg, msg_dt)
+           values (ps_procedure_name, ps_oerr, ps_location, null, ps_id_key, ps_msg, sysdate);
+
+END;
+/

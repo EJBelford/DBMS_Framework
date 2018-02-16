@@ -1,0 +1,6 @@
+    DIAG.LogSQL( v_ProcName, SQL%ROWCOUNT || ' rows updated.', DiagLogging, v_DiagCategories );
+
+-- if checking the row count later
+    v_NumUpdated := SQL%ROWCOUNT;
+    DIAG.LogSQL( v_ProcName, v_NumUpdated || ' rows updated.', DiagLogging, v_DiagCategories );
+    if( v_NumUpdated ...

@@ -1,0 +1,37 @@
+/*--*----|----*----|----*----|---- TEAM ITSS ----*----|----|----*----|----*---*/
+--
+--         NAME: pfsa_pba_type_ref 
+--      PURPOSE: PERFORMANCE BASED LOGISTICS - Parent record for all the 
+--               contract related information, (NIIN, UIC, SN, etc.) 
+--
+--       SOURCE: pfsa_pba_type_ref.idx 
+--
+--   CREATED BY: Gene Belford 
+-- CREATED DATE: 10 March 2008
+--
+--  ASSUMPTIONS:
+--
+--  LIMITATIONS:
+--
+--        NOTES:
+--
+-- 
+/*--*----|----*----|----*----|----*----|----*----|----*----|----*----|----*---*/
+--     Change History:
+-- DDMMMYY - Who - Ticket # - CR # - Details
+-- 10MAR08 - GB  -          -      - Created 
+--
+/*--*----|----*----|----*----|---- TEAM ITSS ----*----|----|----*----|----*---*/
+--
+--
+
+/*----- Indexs -----*/
+
+DROP INDEX ixu_pfsa_pba_type_cd_ref;
+
+CREATE UNIQUE INDEX ixu_pfsa_pba_type_cd_ref 
+    ON pfsa_pba_type_ref
+    (
+    item_identifier_type_cd
+    );
+

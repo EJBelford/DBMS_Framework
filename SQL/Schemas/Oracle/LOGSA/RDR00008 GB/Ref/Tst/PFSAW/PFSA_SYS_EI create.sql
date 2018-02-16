@@ -1,0 +1,62 @@
+
+ALTER TABLE PFSAW.PFSA_SYS_EI
+ DROP PRIMARY KEY CASCADE;
+DROP TABLE PFSAW.PFSA_SYS_EI CASCADE CONSTRAINTS;
+
+--
+-- PFSA_SYS_EI  (Table) 
+--
+CREATE TABLE /*PFSAW.*/PFSA_SYS_EI
+(
+  SYS_EI_NIIN   VARCHAR2(9 BYTE),
+  PFSA_SYSTEM   VARCHAR2(20 BYTE),
+  EIC           VARCHAR2(3 BYTE),
+  LIN           VARCHAR2(6 BYTE),
+  AIRCRAFT      VARCHAR2(1 BYTE),
+  STATUS        VARCHAR2(1 BYTE),
+  LST_UPDT      DATE,
+  UPDT_BY       VARCHAR2(30 BYTE),
+  SYS_EI_NOMEN  VARCHAR2(35 BYTE)
+)
+LOGGING 
+NOCOMPRESS 
+NOCACHE
+NOPARALLEL
+MONITORING;
+
+COMMENT ON TABLE /*PFSAW.*/PFSA_SYS_EI IS 'This table represents all system/end items which exist in the User Layer in the PFSA World.  This table is maintained by the promotion processes.  All system/end item metrics are tied to this table, and the analytical views which have been constructed around the system/end item';
+
+
+--
+-- PK_PFSAW_PFSA_SYS_EI  (Index) 
+--
+CREATE UNIQUE INDEX /*PFSAW.*/PK_PFSAW_PFSA_SYS_EI ON /*PFSAW.*/PFSA_SYS_EI
+(SYS_EI_NIIN)
+LOGGING
+NOPARALLEL;
+
+
+DROP PUBLIC SYNONYM PFSA_SYS_EI;
+
+--
+-- PFSA_SYS_EI  (Synonym) 
+--
+CREATE PUBLIC SYNONYM PFSA_SYS_EI FOR /*PFSAW.*/PFSA_SYS_EI;
+
+
+-- 
+-- Non Foreign Key Constraints for Table PFSA_SYS_EI 
+-- 
+ALTER TABLE /*PFSAW.*/PFSA_SYS_EI ADD (
+  CONSTRAINT PK_PFSAW_PFSA_SYS_EI
+ PRIMARY KEY
+ (SYS_EI_NIIN));
+
+
+GRANT SELECT ON  PFSAW.PFSA_SYS_EI TO LIW_BASIC;
+
+GRANT SELECT ON  PFSAW.PFSA_SYS_EI TO LIW_RESTRICTED;
+
+GRANT SELECT ON  PFSAW.PFSA_SYS_EI TO S_PFSAW;
+
+

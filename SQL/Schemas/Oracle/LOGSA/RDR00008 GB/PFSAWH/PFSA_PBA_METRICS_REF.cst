@@ -1,0 +1,78 @@
+/*----- Primary Key -----*/
+
+ALTER TABLE pfsa_pba_metrics_ref  
+    DROP CONSTRAINT pk_pfsa_pba_metrics_ref;        
+
+ALTER TABLE pfsa_item_goal_metrics_ref  
+    ADD CONSTRAINT pk_pfsa_pba_metrics_ref 
+    PRIMARY KEY 
+    (
+    metric_id
+    )    
+) 
+
+/*----- Foreign Key -----*/
+/*
+ALTER TABLE pfsa_item_goal_metrics_ref  
+    DROP CONSTRAINT fk_pfsa_code_perf_met_id;        
+
+ALTER TABLE pfsa_item_goal_metrics_ref  
+    ADD CONSTRAINT fk_pfsa_code_perf_met_id 
+    FOREIGN KEY (perf_met_id) 
+    REFERENCES xx_pfsa_yyyyy_dim(perf_met_id);
+*/
+/*----- Constraints - UNIQUE Key -----*/ 
+
+ALTER TABLE pfsa_pba_metrics_ref  
+    DROP CONSTRAINT idu0_pfsa_pba_metrics_refl;        
+
+ALTER TABLE pfsa_pba_metrics_ref  
+    ADD CONSTRAINT idu0_pfsa_pba_metrics_ref 
+    UNIQUE  
+    (
+    rec_id
+    );    
+
+ALTER TABLE pfsa_pba_metrics_ref  
+    DROP CONSTRAINT idu1_pfsa_pba_metrics_refl;        
+
+ALTER TABLE pfsa_pba_metrics_ref  
+    ADD CONSTRAINT idu1_pfsa_pba_metrics_ref 
+    UNIQUE  
+    (
+    metric_id
+    );    
+
+/*----- Constraints -----*/
+
+ALTER TABLE pfsa_pba_metrics_ref  
+    DROP CONSTRAINT ck_pfsa_pba_met_ref_act_fl;        
+
+ALTER TABLE pfsa_pba_metrics_ref  
+    ADD CONSTRAINT ck_pfsa_pba_met_ref_act_fl 
+    CHECK (active_flag='I' OR active_flag='N' OR active_flag='Y');
+
+ALTER TABLE pfsa_pba_metrics_ref  
+    DROP CONSTRAINT ck_pfsa_pba_met_ref_del_fl;        
+
+ALTER TABLE pfsa_pba_metrics_ref  
+    ADD CONSTRAINT ck_pfsa_pba_met_ref_del_fl 
+    CHECK (delete_flag='N' OR delete_flag='Y');
+
+ALTER TABLE pfsa_pba_metrics_ref  
+    DROP CONSTRAINT ck_pfsa_pba_met_ref_hid_fl;       
+
+ALTER TABLE pfsa_pba_metrics_ref  
+    ADD CONSTRAINT ck_pfsa_pba_met_ref_hid_fl 
+    CHECK (hidden_flag='N' OR hidden_flag='Y');
+
+ALTER TABLE pfsa_pba_metrics_ref  
+    DROP CONSTRAINT ck_pfsa_pba_met_ref_status;        
+
+ALTER TABLE pfsa_pba_metrics_ref  
+    ADD CONSTRAINT ck_pfsa_pba_met_ref_status 
+    CHECK (status='C' OR status='D' OR status='E' OR status='H' 
+        OR status='L' OR status='P' OR status='Q' OR status='R'
+        OR status='T' OR status='Z' OR status='N'
+        );
+

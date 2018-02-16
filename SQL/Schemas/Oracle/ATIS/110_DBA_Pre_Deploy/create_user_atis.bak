@@ -1,0 +1,5 @@
+CREATE USER atis
+    IDENTIFIED BY atis_pw 
+    DEFAULT TABLESPACE tbs_perm_01
+    TEMPORARY TABLESPACE tbs_temp_01 
+    QUOTA 20M ON tbs_perm_01;

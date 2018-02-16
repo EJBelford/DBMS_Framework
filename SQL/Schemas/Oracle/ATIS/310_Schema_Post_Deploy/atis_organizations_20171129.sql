@@ -1,0 +1,15 @@
+
+DELETE FROM atis_organizations;
+
+
+INSERT INTO atis_organizations (org_id, uic, unit_name) 
+          SELECT 1, 'WW56WW', '56th Brigade' FROM DUAL 
+UNION ALL SELECT 2, 'WW56HC', 'HHC/56 BDE' FROM DUAL 
+UNION ALL SELECT 3, 'WW21WW', '2-111 IN' FROM DUAL 
+UNION ALL SELECT 4, 'WW21HC', 'HHC/2-111 IN' FROM DUAL 
+UNION ALL SELECT 5, 'WW21A0', 'A/2-111 IN' FROM DUAL 
+UNION ALL SELECT 6, 'WW21B0', 'B/2-111 IN' FROM DUAL 
+UNION ALL SELECT 7, 'WW21C0', 'C/2-111 IN' FROM DUAL ; 
+
+
+SELECT org_id, uic, unit_name FROM atis_organizations;

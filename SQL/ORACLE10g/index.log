@@ -1,0 +1,21 @@
+08/16/2004 10:17:48: Starting build.
+08/16/2004 10:17:48: Connecting to index.
+08/16/2004 10:17:50: Searching: P:\010Comp\Oracle8\351-7\CD\final_CD_folder
+08/16/2004 10:17:51: Indexing 3 documents.
+08/16/2004 10:17:52: Extracting from P:\010Comp\Oracle8\351-7\CD\final_CD_folder\book.pdf.
+08/16/2004 10:18:04: Writing this portion of P:\010Comp\Oracle8\351-7\CD\final_CD_folder\book.pdf to index; the rest will be done later.
+08/16/2004 10:18:04: Extracting from P:\010Comp\Oracle8\351-7\CD\final_CD_folder\EULA.pdf.
+08/16/2004 10:18:04: P:\010Comp\Oracle8\351-7\CD\final_CD_folder\EULA.pdf: Page 1 had an error.
+08/16/2004 10:18:05: Extracting from P:\010Comp\Oracle8\351-7\CD\final_CD_folder\ReadMe.pdf.
+08/16/2004 10:18:07: Extracting from P:\010Comp\Oracle8\351-7\CD\final_CD_folder\book.pdf.
+08/16/2004 10:19:30: Removing index entries for changed or deleted documents.
+08/16/2004 10:19:30: Removing unnecessary index entries.
+08/16/2004 10:19:31: Building Word Assist List.
+08/16/2004 10:19:32: Waiting for about 20 seconds to perform routine index update.
+08/16/2004 10:19:54: Oracle Database 10g: The Complete Reference - Index Build Successful.
+08/16/2004 10:19:54:   Total Acrobat files in all directories: 3
+08/16/2004 10:19:54:   Total new files: 3
+08/16/2004 10:19:54:   Total pages indexed: 1350
+08/16/2004 10:19:54:   Total number of files skipped: 0
+08/16/2004 10:19:54:   Total deleted files: 0
+08/16/2004 10:19:54: P:\010Comp\Oracle8\351-7\CD\final_CD_folder\index.pdx - Index Build Successful.

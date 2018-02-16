@@ -1,0 +1,13 @@
+/*----- Indexs -----*/
+/*
+DROP INDEX ixu_PFSA_PBS_ITM_MET_RUL_MAP;
+
+CREATE UNIQUE INDEX ixu_PFSA_PBA_ITM_MET_RUL_MAP 
+    ON pfsa_pba_itm_metric_rul_map
+    (
+    pba_id ,
+    physical_item_id ,
+    metric_id ,
+    rule_id 
+    );
+*/

@@ -1,0 +1,129 @@
+CREATE OR REPLACE TRIGGER TR_U_PFSA_USAGE_EVENT
+-- This trigger sets the defaults for the new standard warehouse interface columns
+--
+--
+BEFORE UPDATE ON PFSA_USAGE_EVENT
+FOR EACH ROW
+DECLARE
+
+  ps_oerr         VARCHAR2(6) := null;
+  ps_location          VARCHAR2(10) := null;
+  ps_procedure_name         VARCHAR2(30) := 'TR_U_PFSA_USAGE_EVENT';
+  ps_msg     VARCHAR2(200) := 'trigger_failed';
+  ps_id_key     VARCHAR2(200) := null; -- set in cases
+  
+  pl_sysdate    date := sysdate;
+
+  delete_record     boolean := FALSE;
+  hide_record       boolean := FALSE;
+  activate_record   boolean := FALSE;
+  update_record     boolean := TRUE; -- ie. the trigger fired.  boolean not really needed but added for readability 
+
+BEGIN
+ 
+  :new.lst_updt := pl_sysdate;
+  :new.insert_by := :old.insert_by;
+  :new.insert_date := :old.insert_date;
+  
+  IF :old.status = 'C' THEN -- was an active record
+     IF :new.status = 'C' THEN -- still and active record
+        update_record := TRUE;
+     ELSIF :new.status = 'H' THEN -- history record, reflects both hide and delete
+        hide_record := TRUE;
+        delete_record := TRUE;
+        update_record := TRUE;
+     ELSE -- implies new status is q and hiding only
+        hide_record := TRUE;
+        update_record := TRUE;
+     END IF;
+  ELSIF :old.status = 'H' THEN -- deleted record, 
+    IF :new.status = 'C' THEN -- activating record
+       activate_record := TRUE;
+       update_record := TRUE;
+    ELSE -- implies new status is q and hiding record, which was already hiddent
+       update_record := TRUE;
+    END IF;
+  ELSE -- assumes old status was q
+    IF :new.status = 'H' THEN
+       delete_record := TRUE;
+       update_record := TRUE;
+    ELSE   
+       update_record := TRUE;
+    END IF;
+  END IF;
+
+-- check to see if values really change
+  IF (  nvl(:new.STATUS, '|') = nvl(:old.STATUS, '|') AND
+        nvl(:new.READING, '|') = nvl(:old.READING, '|') AND
+        nvl(:new.REPORTED_USAGE, 0) = nvl(:old.REPORTED_USAGE, 0) AND
+        nvl(:new.ACTUAL_MB, '|') = nvl(:old.ACTUAL_MB, '|') AND
+        nvl(:new.ACTUAL_READING, 0) = nvl(:old.ACTUAL_READING, 0) AND
+        nvl(:new.ACTUAL_USAGE, 0) = nvl(:old.ACTUAL_USAGE, 0) AND
+        nvl(:new.ACTUAL_DATA_REC_FLAG, '|') = nvl(:old.ACTUAL_DATA_REC_FLAG, '|') AND
+        nvl(:new.PHYSICAL_ITEM_ID, '|') = nvl(:old.PHYSICAL_ITEM_ID, '|') AND
+        nvl(:new.PHYSICAL_ITEM_SN_ID, '|') = nvl(:old.PHYSICAL_ITEM_SN_ID, '|') AND
+        nvl(:new.FRZ_INPUT_DATE, '1-JAN-1950') = nvl(:old.FRZ_INPUT_DATE, '1-JAN-1950') AND
+        nvl(:new.FRZ_INPUT_DATE_ID, '|') = nvl(:old.FRZ_INPUT_DATE_ID, '|') AND
+        nvl(:new.SYS_EI_NIIN, '|') = nvl(:old.SYS_EI_NIIN, '|') AND
+        nvl(:new.PFSA_ITEM_ID, '|') = nvl(:old.PFSA_ITEM_ID, '|') AND
+        nvl(:new.RECORD_TYPE, '|') = nvl(:old.RECORD_TYPE, '|') AND
+        nvl(:new.USAGE_MB, '|') = nvl(:old.USAGE_MB, '|') AND
+        nvl(:new.FROM_DT, '1-JAN-1950') = nvl(:old.FROM_DT, '1-JAN-1950') AND
+        nvl(:new.USAGE, 0) = nvl(:old.USAGE, 0) AND
+        nvl(:new.TYPE_USAGE, '|') = nvl(:old.TYPE_USAGE, '|') AND
+        nvl(:new.TO_DT, '1-JAN-1950') = nvl(:old.TO_DT, '1-JAN-1950') AND
+        nvl(:new.USAGE_DATE, '1-JAN-1950') = nvl(:old.USAGE_DATE, '1-JAN-1950') AND
+        nvl(:new.READY_DATE, '1-JAN-1950') = nvl(:old.READY_DATE, '1-JAN-1950') AND
+        nvl(:new.DAY_DATE, '1-JAN-1950') = nvl(:old.DAY_DATE, '1-JAN-1950') AND
+        nvl(:new.MONTH_DATE, '1-JAN-1950') = nvl(:old.MONTH_DATE, '1-JAN-1950') AND
+        nvl(:new.PFSA_ORG, '|') = nvl(:old.PFSA_ORG, '|') AND
+        nvl(:new.UIC, '|') = nvl(:old.UIC, '|') AND
+        nvl(:new.SYS_EI_SN, '|') = nvl(:old.SYS_EI_SN, '|') AND
+        nvl(:new.ITEM_DAYS, 0) = nvl(:old.ITEM_DAYS, 0) AND
+        nvl(:new.DATA_SRC, '|') = nvl(:old.DATA_SRC, '|') AND
+        nvl(:new.GENIND, '|') = nvl(:old.GENIND, '|')) THEN
+        -- no real data changed
+            update_record := FALSE;
+  END IF;
+
+  IF update_record THEN 
+     :new.update_date := pl_sysdate;
+     :new.update_by := user;
+  ELSE
+     :new.update_date := :old.update_date;
+     :new.update_by := :old.update_by;
+  END IF;
+  
+  IF delete_record THEN
+     :new.delete_flag := 'Y';
+     :new.delete_date := pl_sysdate;
+  ELSE
+     :new.delete_flag := :old.delete_flag;
+     :new.delete_date := :old.delete_date;
+  END IF;
+  
+  IF hide_record THEN 
+     :new.hidden_flag := 'Y';
+     :new.hidden_date := pl_sysdate;
+  ELSE
+     :new.hidden_flag := :old.hidden_flag;
+     :new.hidden_date := :old.hidden_date;
+  END IF;
+
+  IF activate_record THEN
+     :new.active_flag := 'Y';
+     :new.active_date := pl_sysdate;
+  ELSE
+     :new.active_flag := :old.active_flag;
+     :new.active_date := :old.active_date;
+  END IF;
+
+EXCEPTION WHEN OTHERS THEN
+    ps_oerr := sqlcode;
+    ps_id_key := :old.sys_ei_niin||'|'||:old.pfsa_item_id||'|'||:old.record_type||'|'||:old.usage_mb||'|'||:old.from_dt;
+    insert into std_pfsa_debug_tbl (ps_procedure, ps_oerr, ps_location, called_by, ps_id_key, ps_msg, msg_dt)
+           values (ps_procedure_name, ps_oerr, ps_location, null, ps_id_key, ps_msg, sysdate);
+
+END;
+/
+

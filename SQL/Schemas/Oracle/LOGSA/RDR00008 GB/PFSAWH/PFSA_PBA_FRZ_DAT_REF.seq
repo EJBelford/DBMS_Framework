@@ -1,0 +1,38 @@
+/*--*----|----*----|----*----|---- TEAM ITSS ----*----|----|----*----|----*---*/
+--
+--         NAME: pfsa_pba_frz_dat_ref_seq 
+--      PURPOSE: To calculate the desired information.
+--
+--       SOURCE: PFSA_PBA_FRZ_DAT_REF.seq 
+--
+--   CREATED BY: Gene Belford
+-- CREATED DATE: 24 March 2008 
+--
+--  ASSUMPTIONS:
+--
+--  LIMITATIONS:
+--
+--        NOTES:
+--
+-- 
+/*--*----|----*----|----*----|----*----|----*----|----*----|----*----|----*---*/
+--     Change History:
+-- DDMMMYY - Who - Ticket # - CR # - Details 
+-- 24MAR08 - GB  -          -      - Created 
+--
+/*--*----|----*----|----*----|---- TEAM ITSS ----*----|----|----*----|----*---*/
+--
+--
+
+/*----- Sequence  -----*/
+
+DROP SEQUENCE pfsa_pba_frz_dat_ref_seq;
+
+CREATE SEQUENCE pfsa_pba_frz_dat_ref_seq
+    START WITH 10000
+--    MAXVALUE   99999
+    MINVALUE   1
+    NOCYCLE
+    NOCACHE
+    NOORDER; 
+

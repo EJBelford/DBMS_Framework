@@ -1,0 +1,69 @@
+SELECT	* 
+FROM	PFSAPLG.XB 
+
+SELECT	
+DISTINCT	eiacodxa 
+FROM	pfsaplg.xb 
+
+SELECT	* 
+FROM	PFSAPLG.XB 
+WHERE	eiacodxa = 'CH-47D' 
+ORDER BY lsaconxb
+
+-- A-AB-AB-AAE-AA-AF-AA-AA0-A
+-- AAAXAAAA, AAAXBAAA - ENGINE,GAS TURBINE
+
+SELECT	* 
+FROM	PFSAPLG.XB 
+WHERE	eiacodxa = 'CH-47D' 
+	AND LENGTH(lsaconxb) = 8	
+--	AND SUBSTR(lsaconxb, 2, 1) = 'A' 
+--	AND SUBSTR(lsaconxb, 5, 1) = 'A' 
+	AND SUBSTR(lsaconxb, 8, 3) = 'A' 
+ORDER BY lsaconxb
+
+SELECT	* 
+FROM	PFSAPLG.XB 
+WHERE	eiacodxa = 'CH-47D' 
+	AND lcnindxb = UPPER('c')	
+ORDER BY lsaconxb
+
+SELECT	* 
+FROM	PFSAPLG.XB 
+WHERE	eiacodxa = 'CH-47D' 
+	AND lcnamexb LIKE UPPER('%sens%')	
+	AND lcnamexb NOT LIKE UPPER('%TAPE%')
+	AND lcnamexb NOT LIKE UPPER('%BRACKET%')
+ORDER BY lsaconxb
+
+-- A-AB-AB-AAE-AA-AF-AA-AA0-A
+
+SELECT	LSACONXB, lcnamexb 
+FROM	PFSAPLG.XB 
+WHERE	eiacodxa = 'CH-47D' 
+	AND LSACONXB = 'AAAAV'	
+
+SELECT	LSACONXB, lcnamexb 
+FROM	PFSAPLG.XB 
+WHERE	eiacodxa = 'CH-47D' 
+	AND LSACONXB = 'AAAXBAAAAH'	
+
+SELECT	LSACONXB, lcnamexb 
+FROM	PFSAPLG.XB 
+WHERE	eiacodxa = 'CH-47D' 
+	AND LSACONXB = 'AAAXBAAA'	
+
+SELECT	LSACONXB, lcnamexb 
+FROM	PFSAPLG.XB 
+WHERE	eiacodxa = 'CH-47D' 
+	AND LSACONXB = 'AAAXB'	
+
+SELECT	LSACONXB, lcnamexb 
+FROM	PFSAPLG.XB 
+WHERE	eiacodxa = 'CH-47D' 
+	AND LSACONXB = 'AAA'	
+	
+SELECT	LSACONXB, lcnamexb 
+FROM	PFSAPLG.XB 
+WHERE	eiacodxa = 'CH-47D' 
+	AND LSACONXB = 'A'	

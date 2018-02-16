@@ -1,0 +1,14 @@
+/*----- Sequence  -----*/
+
+DROP SEQUENCE PFSA_PBA_ITM_MET_RUL_MAP_seq;
+
+CREATE SEQUENCE PFSA_PBA_ITM_MET_RUL_MAP_seq
+    START WITH 1000000
+--    MAXVALUE   9999999
+    MINVALUE   1
+    NOCYCLE
+    NOCACHE
+    NOORDER; 
+
+/*----- Create the Trigger now -----*/
+

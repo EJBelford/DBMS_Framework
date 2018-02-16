@@ -1,0 +1,12 @@
+/*----- Sequence  -----*/
+
+DROP SEQUENCE pfsa_pba_met_ref_seq;
+
+CREATE SEQUENCE pfsa_pba_met_ref_seq
+    START WITH 1000000
+--    MAXVALUE   9999999
+    MINVALUE   1
+    NOCYCLE
+    NOCACHE
+    NOORDER; 
+

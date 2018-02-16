@@ -1,0 +1,6 @@
+    DIAG.LogSQL( v_ProcName, SQL%ROWCOUNT || ' rows inserted.', DiagLogging, v_DiagCategories );
+
+-- if checking the row count later
+    v_NumInserted := SQL%ROWCOUNT;
+    DIAG.LogSQL( v_ProcName, v_NumInserted || ' rows inserted.', DiagLogging, v_DiagCategories );
+    if( v_NumInserted ...

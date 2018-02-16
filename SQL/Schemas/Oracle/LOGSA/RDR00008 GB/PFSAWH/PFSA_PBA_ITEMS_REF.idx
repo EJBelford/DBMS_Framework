@@ -1,0 +1,36 @@
+/*--*----|----*----|----*----|---- TEAM ITSS ----*----|----|----*----|----*---*/
+--
+--         NAME: pfsa_pba_items_ref
+--      PURPOSE: To calculate the desired information.
+--
+--       SOURCE: pfsa_pba_items_ref.sql
+--
+--   CREATED BY: Gene Belford
+-- CREATED DATE: 10 March 2008 
+--
+--  ASSUMPTIONS:
+--
+--  LIMITATIONS:
+--
+--        NOTES:
+--
+-- 
+/*--*----|----*----|----*----|----*----|----*----|----*----|----*----|----*---*/
+--     Change History:
+-- DDMMMYY - Who - Ticket # - CR # - Details
+-- 20FEB08 - GB  -          -      - Created 
+--
+/*--*----|----*----|----*----|---- TEAM ITSS ----*----|----|----*----|----*---*/
+--
+--
+
+/*----- Indexs -----*/
+
+CREATE UNIQUE INDEX ixu_pfsa_pba_items_ref 
+    ON pfsa_pba_items_ref
+    (
+    pba_id,
+    item_identifier_type_id,
+    item_type_value
+    );
+

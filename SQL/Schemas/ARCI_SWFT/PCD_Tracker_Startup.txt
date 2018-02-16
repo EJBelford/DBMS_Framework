@@ -1,0 +1,101 @@
+===============================================================================
+
+Error: listen EADDRINUSE :::7331
+
+  ps -eaf | grep node
+  kill -9 16085
+
+  grep --color=auto 
+
+===============================================================================
+TRACKER REBUILD PROCESS
+===============================================================================
+
+cd /home/emencke/git_10-04-2017/pcd/pcd-tracker
+
+https://unix.stackexchange.com/questions/3886/difference-between-nohup-disown-and
+nohup mongod --dbpath=/data --port 27017 &
+/opt/nodejs/bin/npm run develop
+
+http://158.187.251.195:1338/ 
+
+
+\\mvnf02\TEAMSUB\Program Tracking Tool Development
+
+===============================================================================
+START PROCESS
+===============================================================================
+QUESTION:	Where do the server messages go to, and can I see them?
+Answer:		
+
+clear; ps -a -u -f -x | egrep -w 'ebelford|emencke'
+
+nohup mongod --dbpath=/data --port 27017 &
+
+cd /home/emencke/git_10-23-2017/pcd/pcd-tracker
+/opt/nodejs/bin/npm run build
+
+/usr/lib/forever/bin/forever start build/server
+Close the terminal
+
+
+***OLD***
+nohup /opt/nodejs/bin/npm run start &
+exit // Do not just click the x to close terminal, as that will not work
+
+===============================================================================
+PCD DEPLOYMENT PROCESS
+===============================================================================
+
+Your home directory on foss3 is the same home directory that zircon uses, so what you need to do to "deploy" on zircon is:
+	•	Log into foss3 (rsync is not available on zircon). You will automatically be in /home/ebelford
+	•	Copy your latest code from the foss3 vm to foss3/zircon home directory
+		o	rsync -avz centos@pcd-dev:/home/ebelford/git/* ./git_10-30-2017
+		o   <p>
+	•	Log into zircon and cd into /home/ebelford/git_10-30-2017/pcd/pcd-tracker/
+	    o   cd /home/ebelford/git_10-30-2017/pcd/pcd-tracker/
+	•	Update two files as follows:
+		o	vi config/values.js
+				update the HOST value to be zircon’s ip address at line 31 <158.187.251.195>
+		o	vi server/middleware/mySqlConnection.js
+				update the host value to be zircon’s ip address at lines 37 and 46
+				update the password to be the correct MySQL database password for zircon at lines 39 and 48
+	•	Rebuild with your changes
+		o	/opt/nodejs/bin/npm run build
+	•	Start mongo if it is not already running (run “ps –eaf | grep mongo” to see if it is already running)
+		o	nohup mongod --dbpath=/data --port 27017 &
+	•	Start PCD Tracker
+		o	/usr/lib/forever/bin/forever start build/server 
+	•	Exit the terminal by typing “exit” and not by clicking the “x” at the top right.
+	•	You should now see your new code in the browser.
+
+•	logon foss3
+    ./rsync_pcd.sh
+
+•	logon zircon 
+    cd /pcd-test
+	./deploy_pcd.sh ebelford 
+
+===============================================================================
+MYSQL UPDATE PROCESS
+===============================================================================
+
+Command Line
+	•	cd /home/ebelford/git_10-26-2017/pcd/pcd-tracker/database/<sub-directory>
+	•	ll
+
+
+MySQL Session
+	•	cd /home/ebelford/git_10-30-2017/pcd/pcd-tracker/database
+	•   mysql -u root -p<m> -v
+	•   use pcd_tracker;
+	•   prompt \u@\h [\d]>
+	•   source ./270_procedures/<filename>
+
+===============================================================================
+BACKUP INSTRUCTIONS
+===============================================================================
+
+cd \downloads\git_10-30-2017
+..\..\putty\psftp ebelford@158.187.205.124
+mget -r ./git_10-30-2017/*

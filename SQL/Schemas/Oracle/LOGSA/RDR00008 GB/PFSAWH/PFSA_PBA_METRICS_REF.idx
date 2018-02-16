@@ -1,0 +1,10 @@
+/*----- Indexs -----*/
+/*
+DROP INDEX ixu_gb_pfsa_pba_metrics_ref;
+
+CREATE UNIQUE INDEX ixu_gb_pfsa_pba_metrics_ref 
+    ON gb_pfsa_pba_metrics_ref
+    (
+    rec_id
+    );
+*/

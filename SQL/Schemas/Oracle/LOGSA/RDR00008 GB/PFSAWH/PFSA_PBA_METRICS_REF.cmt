@@ -1,0 +1,99 @@
+/*----- Table Meta-Data -----*/ 
+
+COMMENT ON TABLE pfsa_pba_metrics_ref 
+IS 'PFSA_PBA_METRICS_REF - '; 
+
+
+COMMENT ON COLUMN pfsa_pba_metrics_ref.rec_id 
+IS 'REC_ID - Primary, blind key of the PFSA_PBA_METRICS_REF table.'; 
+
+COMMENT ON COLUMN pfsa_pba_metrics_ref.metric_id 
+IS 'METRIC_ID - '; 
+
+COMMENT ON COLUMN pfsa_pba_metrics_ref.metric_desc 
+IS 'METRIC_DESC - '; 
+
+COMMENT ON COLUMN pfsa_pba_metrics_ref.ar_reg 
+IS 'AR_REG - '; 
+
+COMMENT ON COLUMN pfsa_pba_metrics_ref.ar_reg_sec 
+IS 'AR_REG_SEC - '; 
+
+COMMENT ON COLUMN pfsa_pba_metrics_ref.ar_reg_date_id 
+IS 'AR_REG_DATE_ID  - '; 
+    
+COMMENT ON COLUMN pfsa_pba_metrics_ref.STATUS 
+IS 'STATUS - The Extract-Transform-Load (ETL) status of the record in question.  [C - Current, D - Duplicate, E - Error, H - Historical, L - Logical, P - Processed, Q - Questionable, R - Ready to Process, T- ?????, Z - Future]';
+
+COMMENT ON COLUMN pfsa_pba_metrics_ref.UPDT_BY 
+IS 'UPDT_BY - The date/timestamp of when the record was created/updated.';
+
+COMMENT ON COLUMN pfsa_pba_metrics_ref.LST_UPDT 
+IS 'LST_UPDT - Indicates either the program name or user ID of the person who updated the record.';
+
+COMMENT ON COLUMN pfsa_pba_metrics_ref.ACTIVE_FLAG 
+IS 'ACTIVE_FLAG - Flag indicating if the record is active or not.';
+
+COMMENT ON COLUMN pfsa_pba_metrics_ref.ACTIVE_DATE 
+IS 'ACTIVE_DATE - Additional control for active_Fl indicating when the record became active.';
+
+COMMENT ON COLUMN pfsa_pba_metrics_ref.INACTIVE_DATE 
+IS 'INACTIVE_DATE - Additional control for active_Fl indicating when the record went inactive.';
+
+COMMENT ON COLUMN pfsa_pba_metrics_ref.INSERT_BY 
+IS 'INSERT_BY - Reports who initially created the record.';
+
+COMMENT ON COLUMN pfsa_pba_metrics_ref.INSERT_DATE 
+IS 'INSERT_DATE - Reports when the record was initially created.';
+
+COMMENT ON COLUMN pfsa_pba_metrics_ref.UPDATE_BY 
+IS 'UPDATE_BY - Reports who last updated the record.';
+
+COMMENT ON COLUMN pfsa_pba_metrics_ref.UPDATE_DATE 
+IS 'UPDATE_DATE - Reports when the record was last updated.';
+
+COMMENT ON COLUMN pfsa_pba_metrics_ref.DELETE_FLAG 
+IS 'DELETE_FLAG - Flag indicating if the record can be deleted.';
+
+COMMENT ON COLUMN pfsa_pba_metrics_ref.DELETE_DATE 
+IS 'DELETE_DATE - Additional control for DELETE_FLAG indicating when the record was marked for deletion.';
+
+COMMENT ON COLUMN pfsa_pba_metrics_ref.HIDDEN_FLAG 
+IS 'HIDDEN_FLAG - Flag indicating if the record should be hidden from the general user in things like drop-down lists.';
+
+COMMENT ON COLUMN pfsa_pba_metrics_ref.HIDDEN_DATE 
+IS 'HIDDEN_DATE - Additional control for HIDDEN_FLAG indicating when the record was hidden.';
+
+/*----- Check to see if the table comment is present -----*/
+
+SELECT table_name, comments 
+FROM   user_tab_comments 
+WHERE  table_name = UPPER('pfsa_pba_metrics_ref'); 
+
+/*----- Check to see if the table column comments are present -----*/
+
+SELECT  b.column_id, 
+        a.table_name, 
+        a.column_name, 
+        b.data_type, 
+        b.data_length, 
+        b.nullable, 
+        a.comments 
+FROM    user_col_comments a
+LEFT OUTER JOIN user_tab_columns b  
+    ON  b.table_name  = UPPER('pfsa_pba_metrics_ref') 
+    AND a.column_name = b.column_name
+WHERE    a.table_name = UPPER('pfsa_pba_metrics_ref') 
+ORDER BY b.column_id; 
+
+/*----- Look-up field description from master LIDB table -----*/
+
+SELECT a.* 
+FROM   lidb_cmnt@pfsawh.lidbdev a
+WHERE  a.col_name LIKE UPPER('%supply%')
+ORDER BY a.col_name;  
+   
+SELECT a.* 
+FROM   user_col_comments a
+WHERE  a.column_name LIKE UPPER('%rec_id%'); 
+   

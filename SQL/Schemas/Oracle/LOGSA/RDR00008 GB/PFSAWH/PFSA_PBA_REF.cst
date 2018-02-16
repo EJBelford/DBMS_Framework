@@ -1,0 +1,55 @@
+/*--*----|----*----|----*----|---- TEAM ITSS ----*----|----|----*----|----*---*/
+--
+--         NAME: pfsa_pba_ref 
+--      PURPOSE: PERFORMANCE BASED LOGISTICS - Parent record for all the 
+--               contract related information, (NIIN, UIC, SN, etc.) 
+--
+--       SOURCE: pfsa_pba_ref.cst
+--
+--   CREATED BY: Gene Belford 
+-- CREATED DATE: 20 February 2008
+--
+--  ASSUMPTIONS:
+--
+--  LIMITATIONS:
+--
+--        NOTES:
+--
+-- 
+/*--*----|----*----|----*----|----*----|----*----|----*----|----*----|----*---*/
+--     Change History:
+-- DDMMMYY - Who - Ticket # - CR # - Details
+-- 20FEB08 - GB  -          -      - Created 
+--
+/*--*----|----*----|----*----|---- TEAM ITSS ----*----|----|----*----|----*---*/
+--
+--
+
+ALTER TABLE pfsa_pba_ref
+    ADD CONSTRAINT pk_pfsa_pba_ref 
+    PRIMARY KEY 
+        (
+        pba_id
+        );
+
+/*----- Constraints -----*/
+
+ALTER TABLE pfsa_pba_ref  
+    ADD CONSTRAINT ck_pfsa_pba_ref_act_fl 
+    CHECK (active_flag='I' OR active_flag='N' OR active_flag='Y');
+
+ALTER TABLE pfsa_pba_ref  
+    ADD CONSTRAINT ck_pfsa_pba_ref_del_fl 
+    CHECK (delete_flag='N' OR delete_flag='Y');
+
+ALTER TABLE pfsa_pba_ref  
+    ADD CONSTRAINT ck_pfsa_pba_ref_hide_fl 
+    CHECK (hidden_flag='N' OR hidden_flag='Y');
+
+ALTER TABLE pfsa_pba_ref  
+    ADD CONSTRAINT ck_pfsa_pba_ref_status 
+    CHECK (status='C' OR status='D' OR status='E' OR status='H' 
+        OR status='L' OR status='P' OR status='Q' OR status='R'
+        OR status='T' OR status='Z' OR status='N'
+        );
+

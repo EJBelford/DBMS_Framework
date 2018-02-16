@@ -1,0 +1,84 @@
+/*--*----|----*----|----*----|---- TEAM ITSS ----*----|----|----*----|----*---*/
+--
+--         NAME: pfsa_pba_items_ref
+--      PURPOSE: To calculate the desired information.
+--
+--       SOURCE: pfsa_pba_items_ref.cst
+--
+--   CREATED BY: Gene Belford
+-- CREATED DATE: 10 March 2008 
+--
+--  ASSUMPTIONS:
+--
+--  LIMITATIONS:
+--
+--        NOTES:
+--
+-- 
+/*--*----|----*----|----*----|----*----|----*----|----*----|----*----|----*---*/
+--     Change History:
+-- DDMMMYY - Who - Ticket # - CR # - Details
+-- 20FEB08 - GB  -          -      - Created 
+--
+/*--*----|----*----|----*----|---- TEAM ITSS ----*----|----|----*----|----*---*/
+--
+--
+
+/*----- Primary Key -----*/
+
+ALTER TABLE pfsa_pba_items_ref  
+    ADD CONSTRAINT pk_pfsa_pba_items_ref  
+    PRIMARY KEY 
+    (
+    rec_id
+    );
+
+/*----- Foreign Key -----*/
+
+ALTER TABLE pfsa_pba_items_ref  
+    ADD CONSTRAINT fk_pfsa_pba_items_ref  
+    FOREIGN KEY (pba_id) 
+    REFERENCES pfsa_pba_ref(pba_id);
+
+ALTER TABLE pfsa_pba_items_ref  
+    ADD CONSTRAINT fk_pfsa_pba_type_id_ref  
+    FOREIGN KEY (item_identifier_type_id) 
+    REFERENCES pfsa_pba_type_ref(rec_id);
+
+ALTER TABLE pfsa_pba_items_ref  
+    ADD CONSTRAINT fk_pfsawh_item_id_ref  
+    FOREIGN KEY (physical_item_id) 
+    REFERENCES pfsawh_item_dim(physical_item_id);
+
+ALTER TABLE pfsa_pba_items_ref  
+    ADD CONSTRAINT fk_pfsawh_item_sn_id_ref  
+    FOREIGN KEY 
+        (
+        physical_item_sn_id
+        ) 
+    REFERENCES pfsawh_item_sn_dim
+        (
+        physical_item_sn_id
+        );
+
+/*----- Constraints -----*/
+
+ALTER TABLE pfsa_pba_items_ref  
+    ADD CONSTRAINT ck_pfsa_item_gl_met_ref_act_fl 
+    CHECK (active_flag='I' OR active_flag='N' OR active_flag='Y');
+
+ALTER TABLE pfsa_pba_items_ref  
+    ADD CONSTRAINT ck_pfsa_item_gl_met_ref_del_fl 
+    CHECK (delete_flag='N' OR delete_flag='Y');
+
+ALTER TABLE pfsa_pba_items_ref  
+    ADD CONSTRAINT ck_pfsa_item_gl_met_ref_hid_fl 
+    CHECK (hidden_flag='N' OR hidden_flag='Y');
+
+ALTER TABLE pfsa_pba_items_ref   
+    ADD CONSTRAINT ck_pfsa_item_gl_met_ref_status 
+    CHECK (status='C' OR status='D' OR status='E' OR status='H' 
+        OR status='L' OR status='P' OR status='Q' OR status='R'
+        OR status='T' OR status='Z' OR status='N'
+        );
+

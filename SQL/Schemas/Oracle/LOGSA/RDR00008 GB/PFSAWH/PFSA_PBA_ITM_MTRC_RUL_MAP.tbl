@@ -1,0 +1,168 @@
+/*--*----|----*----|----*----|---- TEAM ITSS ----*----|----|----*----|----*---*/
+--
+--         NAME: pfsa_pba_itm_metric_rul_map 
+--      PURPOSE: To calculate the desired information.
+--
+-- TABLE SOURCE: PFSA_PBA_ITM_METRIC_RUL_MAP.sql 
+--
+--   CREATED BY: Gene Belford
+-- CREATED DATE: 19 March 2008 
+--
+--  ASSUMPTIONS:
+--
+--  LIMITATIONS:
+--
+--        NOTES:
+--
+-- 
+/*--*----|----*----|----*----|----*----|----*----|----*----|----*----|----*---*/
+--     Change History:
+-- DDMMMYY - Who - Ticket # - CR # - Details
+-- 19MAR08 - GB  -          -      - Created 
+--
+/*--*----|----*----|----*----|---- TEAM ITSS ----*----|----|----*----|----*---*/
+
+DROP TABLE pfsa_pba_itm_metric_rul_map; 
+	
+CREATE TABLE pfsa_pba_itm_metric_rul_map 
+(
+    rec_id                           NUMBER              NOT NULL ,
+--
+    pba_id                           NUMBER              DEFAULT 0 ,
+    physical_item_id                 NUMBER              DEFAULT 0 ,
+    metric_id                        NUMBER              DEFAULT 0 ,
+    rule_id                          NUMBER              DEFAULT 0 ,
+--
+    status                           VARCHAR2(1)         DEFAULT 'C' ,
+    updt_by                          VARCHAR2(30)        DEFAULT USER ,
+    lst_updt                         DATE                DEFAULT SYSDATE ,
+--
+    active_flag                      VARCHAR2(1)         DEFAULT 'Y' , 
+    active_date                      DATE                DEFAULT '01-JAN-1900' , 
+    inactive_date                    DATE                DEFAULT '31-DEC-2099' ,
+--
+    insert_by                        VARCHAR2(20)        DEFAULT USER , 
+    insert_date                      DATE                DEFAULT SYSDATE , 
+    update_by                        VARCHAR2(20)        NULL ,
+    update_date                      DATE                DEFAULT '01-JAN-1900' ,
+    delete_flag                      VARCHAR2(1)         DEFAULT 'N' ,
+    delete_date                      DATE                DEFAULT '01-JAN-1900' ,
+    hidden_flag                      VARCHAR2(1)         DEFAULT 'Y' ,
+    hidden_date                      DATE                DEFAULT '01-JAN-1900' 
+)TABLESPACE ECPTBS
+PCTUSED    0
+PCTFREE    10
+INITRANS   1
+MAXTRANS   255
+STORAGE    (
+            INITIAL          64K
+            NEXT             32K
+            MINEXTENTS       1
+            MAXEXTENTS       UNLIMITED
+            PCTINCREASE      0
+            BUFFER_POOL      DEFAULT
+           )
+LOGGING 
+NOCOMPRESS 
+NOCACHE
+NOPARALLEL
+MONITORING;
+
+
+/*----- Table Meta-Data -----*/ 
+
+COMMENT ON TABLE pfsa_pba_itm_metric_rul_map 
+IS 'PFSA_PBA_ITM_METRIC_RUL_MAP - '; 
+
+
+COMMENT ON COLUMN pfsa_pba_itm_metric_rul_map.rec_id 
+IS 'REC_ID - Primary, blind key of the PFSA_PBA_ITM_METRIC_RUL_MAP table.'; 
+
+COMMENT ON COLUMN pfsa_pba_itm_metric_rul_map.pba_id 
+IS 'PBA_ID - Foreign key to the PFSA_PBA_REF table.'; 
+
+COMMENT ON COLUMN pfsa_pba_itm_metric_rul_map.physical_item_id 
+IS 'PHYSICAL_ITEM_ID - Foreign key to the PFSA_PBA_ITEM_REF table.'; 
+
+COMMENT ON COLUMN pfsa_pba_itm_metric_rul_map.metric_id 
+IS 'METRIC_ID - Foreign key to the PFSA_PBA_METRIC_REF table.'; 
+
+COMMENT ON COLUMN pfsa_pba_itm_metric_rul_map.rule_id 
+IS 'RULE_ID - Foreign key to the PFSA_PBA_RULE_REF table.'; 
+
+COMMENT ON COLUMN pfsa_pba_itm_metric_rul_map.status 
+IS 'STATUS - The status of the record in question.';
+
+COMMENT ON COLUMN pfsa_pba_itm_metric_rul_map.updt_by 
+IS 'UPDT_BY - The date/timestamp of when the record was created/updated.';
+
+COMMENT ON COLUMN pfsa_pba_itm_metric_rul_map.lst_updt 
+IS 'LST_UPDT - Indicates either the program name or user ID of the person who updated the record.';
+
+COMMENT ON COLUMN pfsa_pba_itm_metric_rul_map.active_flag 
+IS 'ACTIVE_FLAG - Flag indicating if the record is active or not.';
+
+COMMENT ON COLUMN pfsa_pba_itm_metric_rul_map.active_date 
+IS 'ACTIVE_DATE - Additional control for active_Fl indicating when the record became active.';
+
+COMMENT ON COLUMN pfsa_pba_itm_metric_rul_map.inactive_date 
+IS 'INACTIVE_DATE - Additional control for active_Fl indicating when the record went inactive.';
+
+COMMENT ON COLUMN pfsa_pba_itm_metric_rul_map.insert_by 
+IS 'INSERT_BY - Reports who initially created the record.';
+
+COMMENT ON COLUMN pfsa_pba_itm_metric_rul_map.insert_date 
+IS 'INSERT_DATE - Reports when the record was initially created.';
+
+COMMENT ON COLUMN pfsa_pba_itm_metric_rul_map.update_by 
+IS 'UPDATE_BY - Reports who last updated the record.';
+
+COMMENT ON COLUMN pfsa_pba_itm_metric_rul_map.update_date 
+IS 'UPDATE_DATE - Reports when the record was last updated.';
+
+COMMENT ON COLUMN pfsa_pba_itm_metric_rul_map.delete_flag 
+IS 'DELETE_FLAG - Flag indicating if the record can be deleted.';
+
+COMMENT ON COLUMN pfsa_pba_itm_metric_rul_map.delete_date 
+IS 'DELETE_DATE - Additional control for DELETE_FLAG indicating when the record was marked for deletion.';
+
+COMMENT ON COLUMN pfsa_pba_itm_metric_rul_map.hidden_flag 
+IS 'HIDDEN_FLAG - Flag indicating if the record should be hidden from the general user in things like drop-down lists.';
+
+COMMENT ON COLUMN pfsa_pba_itm_metric_rul_map.hidden_date 
+IS 'HIDDEN_DATE - Addition control for HIDDEN_FLAG indicating when the record was hidden.';
+
+/*----- Check to see if the table comment is present -----*/
+
+SELECT table_name, comments 
+FROM   user_tab_comments 
+WHERE  table_name = UPPER('pfsa_pba_itm_metric_rul_map'); 
+
+/*----- Check to see if the table column comments are present -----*/
+
+SELECT  b.column_id, 
+        a.table_name, 
+        a.column_name, 
+        b.data_type, 
+        b.data_length, 
+        b.nullable, 
+        b.data_default,  
+        a.comments 
+--        , '|', b.*  
+FROM    user_col_comments a
+LEFT OUTER JOIN user_tab_columns b ON b.table_name = UPPER('pfsa_pba_itm_metric_rul_map') 
+    AND  a.column_name = b.column_name
+WHERE    a.table_name = UPPER('pfsa_pba_itm_metric_rul_map') 
+ORDER BY b.column_id; 
+
+/*----- Look-up field description from master LIDB table -----*/
+
+SELECT a.* 
+FROM   lidb_cmnt@pfsawh.lidbdev a
+WHERE  a.col_name LIKE UPPER('%supply%')
+ORDER BY a.col_name;  
+   
+SELECT a.* 
+FROM   user_col_comments a
+WHERE  a.column_name LIKE UPPER('%ITEM_SYS_EI_ID%'); 
+   

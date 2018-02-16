@@ -1,0 +1,1402 @@
+====
+SILC
+====
+
+https://silcweb.external.lmco.com/silcweb/default.aspx
+
+
+============
+DEVELOPEMENT
+============
+
+Open in Terminal 
+
+
+-- Daily Version --
+
+[n67154@632VLL1 Desktop]$ ssh -Y mvnspruance
+n67154@mvnspruance's password: 
+Last login: Fri Apr 18 13:22:58 2014 from 632vll1
+[n67154@mvnspruance ~]$ firefox &
+[1] 19201
+[n67154@mvnspruance ~]$
+
+In Firefox go to: 
+
+https://omegai:8443/owf
+
+supervisor1 or analyst1
+
+-- Initial Connection Version --
+
+[n67154@632VLL1 Desktop]$ ssh -Y mvnspruance
+The authenticity of host 'mvnspruance (158.187.252.134)' can't be established.
+RSA key fingerprint is 2d:d9:88:e4:8d:51:cc:92:ad:5a:4d:d0:a1:54:b5:08.
+
+Are you sure you want to continue connecting (yes/no)? yes
+
+Warning: Permanently added 'mvnspruance,158.187.252.134' (RSA) to the list of known hosts.
+n67154@mvnspruance's password: 
+
+Last login: Wed Jun 26 12:33:01 2013 from manl1scx9k1.acct05.us.lmco.com
+/usr/bin/xauth:  creating new authority file /home/evans_home/n67154/.Xauthority
+
+[n67154@mvnspruance ~]$ firefox &
+[1] 26523
+[n67154@mvnspruance ~]$ ^C
+[n67154@mvnspruance ~]$ 
+
+In Firefox go to: 
+
+https://omegai:8443/owf
+
+
+============
+TEST
+============
+
+Open in Terminal 
+
+[n67154@632VLL1 Desktop]$ ssh -Y mvnspruance
+
+n67154@mvnspruance's password: 
+
+Last login: Fri Apr 18 09:15:31 2014 from 632vll1
+
+[n67154@mvnspruance ~]$ ssh -Y root@sysp1
+The authenticity of host 'sysp1 (10.0.51.50)' can't be established.
+RSA key fingerprint is b8:78:d6:f6:63:78:31:ca:b0:3f:8e:7f:2a:4f:e4:9e.
+Are you sure you want to continue connecting (yes/no)? yes
+Warning: Permanently added 'sysp1,10.0.51.50' (RSA) to the list of known hosts.
+You are accessing a U.S. Government (USG) Information System (IS) that is provided for USG-authorized use only.
+
+By using this IS (which includes any device attached to this IS), you consent to the following conditions:
+-  The USG routinely intercepts and monitors communications on this IS for purposes including, but not limited to, penetration testing, COMSEC monitoring, network operations and defense, personnel misconduct (PM), law enforcement (LE), and counterintelligence (CI) investigations.
+-  At any time, the USG may inspect and seize data stored on this IS.
+-  Communications using, or data stored on, this IS are not private, are subject to routine monitoring, interception, and search, and may be disclosed or used for any USG-authorized purpose.
+-  This IS includes security measures (e.g., authentication and access controls) to protect USG interests--not for your personal benefit or privacy.
+-  Notwithstanding the above, using this IS does not constitute consent to PM, LE or CI investigative searching or monitoring of the content of privileged communications, or work product, related to personal representation or services by attorneys, psychotherapists, or clergy, and their assistants. Such communications and work product are private and confidential. See User Agreement for details.
+
+
+root@sysp1's password: 
+Permission denied, please try again.
+root@sysp1's password: 
+
+
+==================
+COALESCE
+==================
+
+SELECT ce.name, COUNT(ce.name) 
+FROM   omega.coalesceentity ce
+GROUP BY ce.name 
+ORDER BY ce.name;
+
+
+SELECT ce.* 
+FROM   omega.coalesceentity ce 
+WHERE  ce.name = 'Base Data Object'
+ORDER BY ce.datecreated DESC 
+LIMIT 100;
+
+
+SELECT bdor.* 
+FROM   omega.base_data_object_recordset bdor
+WHERE  bdor.entitykey = '21cacc17-13c4-48a9-95e3-68c6a23eb1c0'::uuid 
+ORDER BY bdor.objectkey DESC 
+LIMIT 10; 
+
+
+SELECT ce.*, bdor.* 
+FROM   omega.coalesceentity ce, 
+       omega.base_data_object_recordset bdor 
+WHERE  ce.name = 'Base Data Object'
+    AND ce.objectkey = bdor.entitykey
+LIMIT 10000; 
+
+/*-------------------*/
+/* coalesceEntity    */
+/*-------------------*/
+
+select count(*) from coalesceEntity;
+
+select name, count(*) from coalesceentity group by name order by name;
+
+select * from coalesceentity LIMIT 5;
+
+select * from coalesceentity where objectkey = '9746b1d5-49bb-4e24-bb70-46014c8e79a1';
+
+/*-------------------*/
+/* coalesceSection   */
+/*-------------------*/
+
+select count(*) from coalesceSection;
+
+select * from coalescesection where parentkey = '9746b1d5-49bb-4e24-bb70-46014c8e79a1';
+
+/*-------------------*/
+/* coalesceRecordSet */
+/*-------------------*/
+
+select * from coalesceRecordSet where parentkey = 'eedc5f48-5095-4773-9a06-19135d64beec';
+
+/*-------------------------*/
+/* coalesceFieldDefinition */
+/*-------------------------*/
+
+select * from coalesceFieldDefinition where STR * ///-----------SECURITY CLASSIFICATION: UNCLASSIFIED------------------------
+
+package com.lmco.omega.ecm.dal.server.model.project;
+
+import com.lmco.omega.dss.common.model.ValidationResults;
+
+/**
+ * Validate the records in a Project Object
+ */
+public final class ProjectValidator {
+
+    private ProjectValidator() {}
+
+    /**
+     * Validate a Project Record object.
+     */
+    public static ValidationResults validateProjectRecord(BaseRecord record) {
+        ValidationResults validationResults = new ValidationResults();
+        validationResults.setValid(true);
+
+        // TODO Validate object data
+
+        return validationResults;
+    }
+}
+ING(parentkey) LIKE 'eedc5f48%';
+
+select * from coalescerecordset where STRING(parentkey) LIKE 'eedc5f48%';
+
+/*-------------------*/
+/* coalesceRecord    */
+/*-------------------*/
+
+select count(*) from coalesceRecord;
+
+select name, count(*) from coalescerecord GROUP BY name ORDER BY name;
+
+select * from coalescerecord where STRING(parentkey) LIKE 'fc5935b2%';
+
+select * from coalescerecord where parentkey = 'fc5935b2-49ec-4955-a808-1edc9c81c092';
+
+/*-------------------*/
+/* coalesceField     */
+/*-------------------*/
+
+select count(*) from coalesceField;
+
+select name, count(*) from coalescefield GROUP BY name ORDER BY name;
+
+select * from coalescefield where STRING(parentkey) LIKE '7f846663%';
+
+select * from coalescefield where parentkey = '7f846663-d7ba-4240-9160-8ea1e7026744';
+
+/*----------------------*/
+/* coalesceFieldHistory */
+/*----------------------*/
+
+select count(*) from coalesceFieldHistory;
+
+select name, count(*) from coalescefieldhistory GROUP BY name ORDER BY name;
+
+select * from coalescefieldhistory ORDER BY name LIMIT 5 ;
+
+/*------------------------*/
+/* coalesceLinkageSection */
+/*------------------------*/
+
+select count(*) from coalesceLinkageSection;
+
+/*-------------------*/
+/* coalesceLinkage   */
+/*-------------------*/
+
+select count(*) from coalesceLinkage;
+
+/*-------------------*/
+/* coalesceObjectMap */
+/*-------------------*/
+
+select count(*) from coalesceObjectMap;
+
+/*-------------------------*/
+/* coalesceFieldBinaryData */
+/*-------------------------*/
+
+select count(*) from coalesceFieldBinaryData;
+
+/*------------------------*/
+/* coalesceEntityTemplate */
+/*------------------------*/
+
+select count(*) from coalesceEntityTemplate;
+
+/*------------------------*/
+/*------------------------*/
+/* Log Monitoring         */
+/*------------------------*/
+/*------------------------*/
+
+ssh from mvnkimmel, mvnspruance, or mvnnimitz:
+
+ssh jlcooke@dbsp3 
+(‘q’ password)
+cd /var/log
+
+grep deadlock messages
+
+tail -f messages | grep -v audispd: 
+tail -f messages | grep POSTGRES
+tail -f messages | grep POSTGRES -i
+
+tail -f messages | grep ERROR -i
+
+/*------------------------*/
+
+SHOW ALL;
+
+SHOW search_path;
+
+SET search_path TO "$user",postgis,public; 
+
+ALTER ROLE enterprisedb SET search_path TO "$user",postgis,public;
+
+ALTER DATABASE coalesce SET search_path TO "$user",postgis,public;
+
+SHOW max_connections;
+
+SELECT 500 - SUM(numbackends) FROM pg_stat_database; 
+
+SHOW log_destination;        -- syslog 
+
+SHOW syslog_facility;        -- local0
+
+SHOW syslog_ident;           -- postgres
+
+/var/log 
+  cron-yyyymmdd            .qz
+  mailog-yyyymmdd          .gz
+  messages-yyyymmdd        .gz
+  update-yyyymmdd          .gz 
+  xrdp-sesman.log-yyymmdd  .gz
+ 
+==================
+==================
+POSTGRESQL 
+==================key
+==================
+
+chkconfig --list 
+
+service --status-all 
+service --status-all | grep pg
+
+service ppas-9.2 status
+
+service DDS-karaf stop 
+service ppas-9.2  stop 
+
+service ppas-9.2  start 
+service DDS-karaf start 
+
+mutt
+
+======================
+SERVER LIST
+======================
+dbsp3:5444   - dss dev - 9.2
+dbsv021:     -  - 9.2
+dbsv202:5432 - ecmdev202 - 9.2
+dbsv210:     - daqdev210 - 9.2
+dbsv211:     -  - 9.2
+dbsv223:5432 - ecm ev223 - 9.?
+dbsv4:       - dsscqt4 - 9.2
+dbsv5:       - geo
+dbsv099:     - migration - 9.4
+vh1 - Cross Domain - 9.2
+vl2 - Cross Domain - 9.2
+
+==================
+dbsp3 - 10.0.51.90 
+==================
+
+cd /db/data 
+
+config_file:           "/db/data/postgresql.conf" 
+data_directory:        "/db/data/pg_log"
+edb_audit_directory:   "edb_audit"
+   "audit-%Y%m%d_%H%M%S"
+log_directory:         "pg_log"
+   "enterprisedb-%Y-%m-%d_%H%M%S.log"
+
+/*-------------------------------------*/
+/* dbsp3                               */
+/*-------------------------------------*/
+
+ssh -Y root@10.0.51.90
+ssh -Y root@dbsp3
+
+ssh -Y root@dbsv4  
+
+cd /opt/PostgresPlus/9.2AS/client-v3/backup
+
+/opt/PostgresPlus/9.2AS/client-v3/scripts/launchPEMClient.sh 
+
+SELECT pg_terminate_backend(26851);
+
+SELECT version();               -- PostgreSQL 
+SELECT PostGIS_Version();       -- PostGIS 
+SELECT PostGIS_Full_Version();  -- PostGIS 
+
+SELECT relname 
+FROM pg_stat_all_tables 
+WHERE UPPER(schemaname) = UPPER('coalesce') 
+ORDER BY schemaname, relname
+
+SELECT name, source, version, templatexml 
+FROM "coalesce".coalesceentitytemplate
+ORDER BY templatexml;
+
+SELECT table_name, dsql2('select count(*) from '||table_name) as rownum
+FROM information_schema.tables
+WHERE table_type='BASE TABLE'
+    AND table_schema='livescreen'
+ORDER BY 2 DESC;
+
+/*-------------------------------------*/
+/* dbsm002                             */
+/*-------------------------------------*/
+
+ssh –Y root@sysp2     'r'
+
+ssh –Y root@dbsm002   'r'
+
+/opt/PEM/client-v5/scripts/launchPEMClient.sh
+
+./SetupDSS.sh -D 1 -R 1 -U postgres -d OMEGA -f 1 -h localhost -n coalesce -p 5444 -x /opt/PostgreSQL/9.4/bin/psql
+
+/*-------------------------------------*/
+
+ssh -Y jlcooke@sysp2    'q'
+
+ssh -Y 11.3.51.4        'q'
+
+ssh -Y root@dbsm002     'r'
+
+cd /opt/PEM/client-v5/scripts 
+./launchPEMClient.sh 
+
+'q'
+
+scp -r ../../../../../backups/dbsp3/backup_dbms/coalesce/OMEGA_coalesce_20150901_0100 jlcooke@sysp2:../../tmp/OMEGA_coalesce_20150901_0100
+
+scp -r ../../tmp/OMEGA_coalesce_20150901_0100 jlcooke@11.3.51.4:../../tmp/OMEGA_coalesce_20150901_0100
+
+scp -r ../../tmp/OMEGA_coalesce_20150901_0100 root@dbsm002:../../tmp/OMEGA_coalesce_20150901_0100
+
+/*-------------------------------------*/
+/* dbsv099                             */
+/* dbsv100                             */
+/*-------------------------------------*/
+
+ssh -Y root@dbsp3 'r'
+
+ssh -Y root@dbsv099 'r'
+
+ps -ef | grep ppas
+
+service ppas-9.4 status
+
+service ppas-9.4 stop 
+
+service ppas-9.4 start 
+
+/usr/ppas-9.4/client-v5/scripts/launchPEMClient.sh
+/var/lib/ppas-9.4/data/client-v5/scripts/launchPEMClient.sh
+
+SELECT 'Server: ' || INET_SERVER_ADDR()::VARCHAR  
+    || ' DB: ' || CURRENT_DATABASE()  
+    || ' Schema: ' || CURRENT_SCHEMA()  
+    || ' User: ' || CURRENT_USER;
+
+/*-------------------------------------*/
+/* dbsh020                             */
+/*-------------------------------------*/
+
+ssh -Y root@sysp2 'r'
+
+ssh -Y root@appm002 'r'
+
+ssh -Y root@dbsh002
+
+/opt/PEM/client-v5/scripts/launchPEMClient.sh
+
+/*-------------------------------------*/
+/* dbsv020 - 10.0.10.158 - 5444        */
+/*-------------------------------------*/
+
+cd /usr/local/DSS-1.2-SNAPSHOT
+
+systemctl status karaf-DSS-1.2-SNAPSHOT.service
+
+systemctl stop karaf-DSS-1.2-SNAPSHOT.service
+
+systemctl start karaf-DSS-1.2-SNAPSHOT.service
+
+ssh -Y root@dbsp3 'r'
+
+ssh -Y root@dbsv020 'r'
+
+/usr/ppas-9.4/client-v5/scripts/launchPEMClient.sh <r>
+
+===============================
+dev - dbsp1 - 10.0.51.82 : 5444
+dev - dbsp2 - 10.0.51.83 : 5444
+===============================
+
+ssh -Y root@dbsp3 <r>
+
+ssh -Y root@dbsp1 <r> 
+
+<psql>
+cd /opt/PostgresPlus/9.2AS/bin
+
+<gui>
+cd /opt/PostgresPlus/9.2AS/client-v3/scripts
+./launchPEMClient.sh <q>
+
+/opt/PostgresPlus/9.2AS/client-v3/scripts/launchPEMClient.sh
+
+cd /opt/PostgresPlus/9.2AS/scripts/server
+./runpsql.sh
+
+
+mount -t cifs -o "username=root,password=root,ip=10.0.51.82" isd_gpfs
+mount -t cifs -o "username=root,password=root,ip=10.0.51.85" //bssp2/gpfs isd_gpfs
+
+more ../../../../etc/fstab
+
+../../../../isd_gpfs
+
+https://www.centos.org/forums/viewtopic.php?t=51515
+
+============ 
+sut - dbsp1 - 
+============
+
+ssh -Y sysp1 <q>
+
+ssh -Y dbsp 
+
+su - <p>
+
+history | grep PEM
+
+<psql>
+cd /opt/PostgresPlus/9.2AS/bin
+
+<gui>
+cd /opt/PostgresPlus/9.2AS/client-v3/scripts
+./launchPEMClient.sh <q>
+
+cd /opt/PostgresPlus/9.2AS/scripts/server
+./runpsql.sh
+
+/*------------------------------------------------*/
+/* dbsp001 - 10.0.51.66 : 5432 <e> - 11.2.51.66   */
+/* dbsp002 - 10.0.51.67 : 5444 <q> - 11.2.51.67   */
+/*------------------------------------------------*/
+
+..aside8 to sysp2..
+
+cd ../omega_etl/runnableJar
+sftp root@sysp2 <r>
+sftp> cd Gene/runnableJar
+sftp> put DSS-ETL-ISD2FSD.jar or sftp> put *.*
+
+put debug.properties > ./config
+put etlConfig.properties > ./config
+put dss-config.properties > ./config
+
+..dbsp3 to sysp002..
+
+ssh -Y root@sysp2   <r>
+cd Gene/runnableJar  
+sftp root@sysp002 
+sftp> cd /opt/Gene/runnableJar
+sftp> put DSS-ETL-ISD2FSD.jar or sftp> put *.*
+
+..sysp002 to dbms002..
+
+ssh -Y root@sysp2   <r>
+ssh -Y root@sysp002 <>
+cd /opt/Gene/runnableJar  
+sftp root@dbsm002   <> 
+sftp> cd ../../opt/Gene/runnableJar 
+sftp> put DSS-ETL-ISD2FSD.jar or sftp> put *.*
+
+..dbms002..
+
+ssh -Y root@sysp2   <r>
+ssh -Y root@sysp002 <>
+ssh -Y root@dbsm002 <>
+cd ../../opt/Gene/runnableJar
+export DSS_CONFIG_LOCATION=./config
+
+java -jar DSS-ETL-ISD2FSD.jar
+
+./launchPEMClient.sh
+
+rm -f ../../../../dropbox/0d414a76-52c6-4834-a965-133c14fa937b.sbts
+rm -f ../../../../dropbox/1b70aedc-0a16-4336-bbc6-3b6179e10600.txt
+rm -f ../../../../dropbox/515b591b-0a11-4cac-95ea-641c6e3e61b3.cts
+rm -f ../../../../dropbox/6ba26d79-bbfb-4d3c-a4ca-6da6f9378fbc.txt
+rm -f ../../../../dropbox/76fe4e97-c5c2-4ab6-b1bd-7a8681d1c421.txt
+rm -f ../../../../dropbox/96b29fcf-a4f5-4c85-b183-23c3cd28f3bd.txt
+rm -f ../../../../dropbox/abf0c680-cd46-456b-bb82-9d7cfa12e23a.tif
+rm -f ../../../../dropbox/d2630461-541d-4772-805b-3815340b4759.cts
+rm -f ../../../../dropbox/de1686f7-3713-4a67-9da5-0202adeb80c8.cts
+rm -f ../../../../dropbox/f6497659-39f5-44de-8a04-4e9e1589c139.sbts
+
+rm -rf ../../../../gpfs_hdd/online/gpfs/0d/0d414a76-52c6-4834-a965-133c14fa937b
+rm -rf ../../../../gpfs_hdd/online/gpfs/1b/1b70aedc-0a16-4336-bbc6-3b6179e10600
+rm -rf ../../../../gpfs_hdd/online/gpfs/51/515b591b-0a11-4cac-95ea-641c6e3e61b3
+rm -rf ../../../../gpfs_hdd/online/gpfs/6b/6ba26d79-bbfb-4d3c-a4ca-6da6f9378fbc
+rm -rf ../../../../gpfs_hdd/online/gpfs/76/76fe4e97-c5c2-4ab6-b1bd-7a8681d1c421
+rm -rf ../../../../gpfs_hdd/online/gpfs/96/96b29fcf-a4f5-4c85-b183-23c3cd28f3bd
+rm -rf ../../../../gpfs_hdd/online/gpfs/ab/abf0c680-cd46-456b-bb82-9d7cfa12e23a
+rm -rf ../../../../gpfs_hdd/online/gpfs/26/d2630461-541d-4772-805b-3815340b4759
+rm -rf ../../../../gpfs_hdd/online/gpfs/de/de1686f7-3713-4a67-9da5-0202adeb80c8
+rm -rf ../../../../gpfs_hdd/online/gpfs/f6/f6497659-39f5-44de-8a04-4e9e1589c139
+
+date
+ls ../../../../../gpfs_hdd/online/gpfs/0d/*
+
+ls ../../../../../gpfs_hdd/online/gpfs/1b/*
+ls ../../../../../gpfs_hdd/online/gpfs/51/*
+ls ../../../../../gpfs_hdd/online/gpfs/6b/*
+ls ../../../../../gpfs_hdd/online/gpfs/76/*
+ls ../../../../../gpfs_hdd/online/gpfs/96/*
+ls ../../../../../gpfs_hdd/online/gpfs/ab/*
+ls ../../../../../gpfs_hdd/online/gpfs/26/*
+ls ../../../../../gpfs_hdd/online/gpfs/de/*
+ls ../../../../../gpfs_hdd/online/gpfs/f6/*
+
+ls ../../../../opt/gpfs/BULKSTORAGE
+ls ../../../../opt/gpfs/DROPBOX
+ls ../../../../../gpfs_hdd/online/gpfs
+
+cp ../../../../opt/gpfs/BULKSTORAGE/backup/* ../../../../opt/gpfs/BULKSTORAGE
+
+/*----------------------------------------*/
+/* Filters                                */
+/*----------------------------------------*/
+
+/*
+name LIKE 'Life-Cycle Policy Object%'
+AND (
+objectkey::CHAR(32) LIKE '08eb7b1f%' OR 
+objectkey::CHAR(32) LIKE '2de09630%'
+)
+*/
+
+
+name LIKE 'Workflow Instance%' 
+AND (
+objectkey::CHAR(32) LIKE '0607563f%' OR 
+objectkey::CHAR(32) LIKE 'a73dcb48%' OR 
+objectkey::CHAR(32) LIKE '2317cf08%'
+)
+
+
+/*
+name LIKE 'Workflow Activity Instance Object' 
+AND (
+objectkey::CHAR(32) LIKE '03815b37%' OR 
+objectkey::CHAR(32) LIKE '005b37c9%'
+)
+*/
+
+/*
+name LIKE 'Base File Object%' 
+AND (
+objectkey::CHAR(32) LIKE '001f281e%' OR 
+objectkey::CHAR(32) LIKE '0d414a76%'
+)
+*/
+
+-- DAQ Pedigree Example
+/*
+objectkey::varchar(32) LIKE 'abba06c0%'
+OR objectkey::varchar(32) LIKE '734f14d9%'
+OR objectkey::varchar(32) LIKE 'd1fced2b%' 
+OR objectkey::varchar(32) LIKE '523094cb%' 
+OR objectkey::varchar(32) LIKE '9e44864f%' 
+OR objectkey::varchar(32) LIKE '7347c55e%'
+OR objectkey::varchar(32) LIKE '34452d6c%'
+*/
+
+============
+ECLIPSE
+============
+
+/opt/omega/eclipse-luna-gwt/eclipse
+
+
+============
+MAVEN
+============
+
+cd /home/evans_home/n67154/luna_gwt_workspace/data-storage/tools/dss-etl
+
+pom.xml
+
+export MVN_HOME=/opt/omega/maven
+export PATH+=":${MVN_HOME}/bin"
+export $PATH
+
+mvn --version
+
+cd /home/evans_home/n67154/luna_gwt_workspace/data-storage/parent
+mvn clean install -DskipTests
+
+cd /home/evans_home/n67154/luna_gwt_workspace/data-storage/tools/dss-etl
+mvn clean install -DskipTests
+
+change to target directory and copy to home
+cp target/dss-etl-1.4.6-SNAPSHOT.jar /home/evans_home/n67154/Downloads/dss-etl.jar
+
+export DSS_CONFIG_LOCATION=/home/evans_home/n67154/config
+
+java -jar target/dss-etl-1.4.4-SNAPSHOT.jar
+
+usr/local/DSS-MDC/data/log
+
+
+chmod 777 jars
+su - omega <q>
+cd /home/evans_home/n67154/luna_gwt_workspace/data-storage/tools/dss-etl
+export DSS_CONFIG_LOCATION=/home/evans_home/n67154/config
+echo $DSS_CONFIG_LOCATION
+java -jar target/dss-etl-1.4.6-SNAPSHOT.jar
+
+
+/*--------------------------------*/
+/* dss-dev - 10.0.10.46  - 5432   */   
+/* sitedss - 10.0.10.124 - 5432   */
+/* dss-132 - 10.0.10.138 - 5432   */  
+/*--------------------------------*/
+
+SELECT SUM(numbackends) FROM pg_stat_database;
+SHOW max_connections;
+
+
+..aside8 to dbsp3..
+cd omega_etl/runnableJar
+sftp root@dbsp3 <r>
+sftp> cd Gene/runnableJar
+sftp> put DSS-ETL-ISD2FSD.jar or sftp> put 
+
+put debug.properties > ./config
+put etlConfig.properties > ./config
+put dss-config.properties > ./config
+
+..dbsp3 to sitedss..
+ssh -Y root@dbsp3 <r>
+cd Gene/runnableJar  
+sftp root@sitedss <r>
+sftp> cd /root/OmegaSysAdminTools/DSS-ETL-ISD2FSD
+sftp> put DSS-ETL-ISD2FSD.jar or sftp> put *.*
+
+..sitedss..
+ssh -Y root@dbsp3 <r>
+ssh -Y root@sitedss <r>
+cd /root/OmegaSysAdminTools/DSS-ETL-ISD2FSD
+export DSS_CONFIG_LOCATION=./config
+
+echo $DSS_CONFIG_LOCATION
+
+reset
+java -jar DSS-ETL-ISD2FSD.jar
+
+/*-------------------------------------*/
+/* ETL SQL Scripts Backup              */
+/*-------------------------------------*/
+
+cd ../omega_etl/etl_deploy_sql_scripts
+sftp root@dbsp3 <r>
+sftp> cd Gene/etl_deploy_sql_scripts
+sftp> get *.sql
+
+LAPTOP
+------
+get -r runnableJar
+get -r etl_deploy_sql_scripts
+
+scp -r root@sysp2:~/gothamhq/bsm-manager-hmi_1.3.10-SNAPSHOT/repo/* .
+
+/*-------------------------------------*/
+/* WAL                                 */
+/*-------------------------------------*/
+
+ls /var/lib/pgsql/9.4/data/pg_xlog -al
+
+ls /backups/pg_xlog -al
+
+/*-------------------------------------*/
+/* Backup and Snapshot Manager         */
+/*-------------------------------------*/
+
+ssh –Y root@sysp2   <r>
+ssh –Y root@sitedss <r>
+  or 
+ssh -Y root@dss-dev
+
+cd gothamhq
+
+./bsm_hmi/bin/BackupManagerTool.sh
+./bsm_hmi_1.3.8-SNAPSHOT/bin/BackupManagerTool.sh
+
+bsm-manager-hmi/bin/BackupManagerTool.sh
+
+Login with omega
+cd
+omega.dss.bsm.hmi.FullBackupJob.description=Starts a full backup job
+omega.dss.bsm.hmi.AlignmentPointBackupJob.description=Starts an alignment point backup job
+omega.dss.bsm.hmi.BackupCleanupJob.description=Cleans old backup sets
+
+sitedss
+tail -f /usr/local/DSS-MTSC/data/log/karaf.log | grep -i backupdatabasejob
+tail -f /usr/local/DSS-MTSC/data/log/karaf.log | grep -i syncchecktask
+
+bad  
+/opt/PostgresPlus/9.2AS/bin/pg_basebackup, \
+--pgdata=/backups/bsm/20160901-134613/pg_backup, \
+--format=t, --xlog-method=f, --host=localhost, --port=5432, \
+--username=enterprisedb, --compress=9, --verbose
+
+good 
+pg_basebackup                              \
+--pgdata=/backups/bsm/20160901-134613/pg_backup  \
+--format=t  --xlog-method=f  --host=127.0.0.1  --port=5432  \
+--username=postgres      --compress=9  --verbose
+
+pg_basebackup 
+--pgdata=/backups/bsm/20160902-082500/pg_backup 
+--format=t --xlog-method=f --host=localhost --port=5432 
+--username=enterprisedb --compress=9 --verbose
+
+/*-------------------------------------*/
+/* Installation scripts                */
+/*-------------------------------------*/
+
+cd /opt/apps/ISD/dss/zprime/install_files/sql_scripts
+  
+/*-------------------------------------*/
+/* Command Line                        */
+/*-------------------------------------*/
+
+cd /opt/PostgresPlus/9.2AS/bin
+
+/opt/PostgresPlus/9.2AS/bin/psql -U enterprisedb -h localhost --set ON_ERROR_STOP= OMEGA
+
+select now();
+
+/opt/PostgresPlus/9.2AS/bin/psql -U enterprisedb -h localhost --set ON_ERROR_STOP= coalesce
+
+select public.dbms_automated_mgmt();
+
+./dbms_automated_mgmt.sh
+
+/opt/PostgresPlus/9.2AS/client-v3/scripts/dbms_automated_mgmt.sh
+
+========================
+FIELD IN THE entityXML 
+========================
+
+SELECT name, templatexml 
+FROM coalesce.coalesceEntityTemplate 
+WHERE templatexml LIKE '%checksum%' 
+ORDER BY name;
+
+==================
+COUNTS & SIZE 
+==================
+
+SELECT *
+FROM omega_dbms_object_facts 
+WHERE UPPER(schemaname) = UPPER('coalesce') /var/lib/pgsql/9.4/data/postgresql.conf
+-- audit, coalesce, omega, postgis, public
+    AND row_cnt_date > NOW()-10
+ORDER BY schemaname, relname, row_cnt_date DESC;
+
+SELECT pg_database.datname, 
+       pg_size_pretty(pg_database_size(pg_database.datname)) 
+FROM   pg_database
+ORDER BY pg_database.datname;
+
+SELECT schema_name, 
+       pg_size_pretty(sum(table_size)::bigint) 
+       --, (sum(table_size) / pg_database_size(current_database())) * 100
+FROM (
+  SELECT pg_catalog.pg_namespace.nspname as schema_name,
+         pg_relation_size(pg_catalog.pg_class.oid) as table_size
+  FROM   pg_catalog.pg_class
+     JOIN pg_catalog.pg_namespace ON relnamespace = pg_catalog.pg_namespace.oid
+) t
+GROUP BY schema_name
+ORDER BY schema_name;
+
+SELECT objectkey, ROUND(LENGTH(entityxml)/(1024*8), 1) AS xml_kb
+FROM coalesce.coalesceentity LAST 
+LIMIT 1000
+
+SELECT entityName, COUNT(objectkey) 
+FROM coalesce.access_control_recordset 
+GROUP BY entityName
+ORDER BY entityName
+--LIMIT 100;
+
+==================
+INTEGRITY  
+==================
+
+select proname 
+from pg_catalog.pg_namespace n 
+join pg_catalog.pg_proc p
+on   p.pronamespace = n.oid 
+where n.nspname = 'postgis' 
+    and proname LIKE '%recordset%'
+order by proname;
+
+
+==================
+SCHEMA DUMP  
+==================
+
+/opt/PostgresPlus/9.2AS/bin/pg_dump --host localhost --port 5444 --username \
+"enterprisedb" --role "enterprisedb" --no-password  --format plain \
+--schema-only --verbose \
+--file "/opt/PostgresPlus/9.2AS/client-v3/backup/omega_coalesce_schema_only" \
+--schema "omega" "coalesce" 
+
+/opt/PostgresPlus/9.2AS/bin/pg_dump --host localhost --port 5444 --username \
+"enterprisedb" --role "enterprisedb" --no-password  --format plain \
+--schema-only --verbose \
+--file "/opt/PostgresPlus/9.2AS/client-v3/backup/ecm_public_schema_only" \
+--schema "public" "ECM" 
+
+/opt/PostgresPlus/9.2AS/bin/pg_dump --host localhost --port 5444 \
+--username "enterprisedb" --role "enterprisedb" --no-password --format plain \
+--schema-only --verbose \
+--file ../../../../../backups/dbsp3/schema_dump/coalesce_omega_schema_20150709.sql \
+--schema "omega" "coalesce" 
+
+/opt/PostgresPlus/9.2AS/bin/pg_dump --host localhost --port 5444 \
+--username "enterprisedb" --role "enterprisedb" --no-password --format plain \
+--schema-only --verbose \
+--file ../../../../../backups/dbsp3/schema_dump/omega_postgis_schema_20150709.sql \
+--schema "postgis" "OMEGA" 
+
+
+
+==================
+BACKUP & RESTORE  
+==================
+
+logger -i "<message>"
+
+./dbms_automated_backup.sh 
+
+ls -l ../../../../../backups/dbsp3/backup_dbms
+
+/opt/PostgresPlus/9.2AS/bin/pg_dump --host localhost --port 5444 --username "enterprisedb" --role "enterprisedb" --no-password  --format directory --section data --verbose --file "/opt/PostgresPlus/9.2AS/client-v3/backup/omega_coalesce_20150527_0736" --schema "omega" "coalesce" 
+
+/opt/PostgresPlus/9.2AS/bin/pg_dump --host localhost --port 5444 --username "enterprisedb" --role "enterprisedb" --no-password  --format directory --section data --verbose --file "/opt/PostgresPlus/9.2AS/client-v3/backup/omega_benchmarkomega_20150618_1520" --schema "benchmarkomega" "OMEGA" 
+
+find ../../../../../backups/dbsp3/backup_logs -maxdepth 1 -type f -iname 'Backup_*.log' -mtime +1 -ls
+find ../../../../../backups/dbsp3/backup_dbms -maxdepth 1 -type d -iname 'coalesce_*' -mtime +0 -ls
+
+find '/path/to/files*' -mtime +365 -exec rm -rf 
+
+grep -A 2 DBMS_Task messages
+
+rm -rf omega_coalesce_%Y-%m-%d_%H%M%S
+
+find ../../../../../backups/dbsp3/backup_logs -maxdepth 1 -type f -mtime +2 -iname 'Mgmt_*.log' -exec rm -f {} *
+
+/opt/PostgresPlus/9.2AS/bin/pg_restore --host localhost --port 5444 --username "enterprisedb" --dbname "OMEGA" --no-password  --format directory --schema coalesce --create --verbose "/backups/dbsp3/backup_dbms/coalesce_omega_20150604_0100"
+
+/opt/PostgresPlus/9.2AS/bin/pg_restore --host localhost --port 5444 --username "enterprisedb" --dbname "coalesce" --no-password  --format directory --jobs 2 --schema audit --verbose "/opt/PostgresPlus/9.2AS/client-v3/backup/omega_public_20150528_0200"
+
+/opt/PostgresPlus/9.2AS/bin/pg_restore --host localhost --port 5444 --username "enterprisedb" --dbname "coalesce" --no-password  --format directory --schema audit --verbose "/backups/dbsp3/backup_dbms/OMEGA_audit_20150530_0100"
+
+
+==================
+
+1) Rename the coalesce and omega schemas to coalesce.bak and omega.bak respectively. 
+mail
+Example: 
+ALTER SCHEMA "coalesce" 
+  RENAME TO coalesce_bak;
+
+2) The 'dbms_automated_schema_dump.sh' has been automated.  The job runs at \
+   00:55 every day.  
+   
+   This example is documentation purposes.
+  
+Example: 
+/opt/PostgresPlus/9.2AS/bin/pg_dump --host localhost --port 5444 \
+--username "enterprisedb" --role "enterprisedb" --no-password  \
+--format plain --schema-only --verbose \
+--file ../../../../../backups/dbsp3/schema_dump/coalesce_omega_schema_20150709.sql \
+--schema "omega" "coalesce" 
+
+3) Execute the script 'omega_coalesce_schema_only' to create the development 
+   omega schema.  It is found in the directory: 
+   backups/dbsp3/schema_dump 
+
+4) From the command line run the restore command below to load the development 
+   data into proper database.  The month and date will need to be updated to 
+   use the latest backup.  
+
+Example: 
+/opt/PostgresPlus/9.2AS/bin/pg_restore --host localhost --port 5444 \
+--username "enterprisedb" --dbname "OMEGA" --no-password  --format directory \
+--schema omega --verbose "/backups/dbsp3/backup_dbms/coalesce_omega_20150709_0100" 
+
+5) Refresh the schema to see the restores schema.  Renamed the restored omega 
+   schema to coalesce. 
+
+Example:
+ALTER SCHEMA omega
+  RENAME TO "coalesce";
+
+6) Drop (cascade) the coalesce_bak schema. 
+
+Example: 
+DROP SCHEMA "coalesce_bak" CASCADE; 
+
+7) Rename omega_bak to omega. 
+
+Example:
+ALTER SCHEMA omega_bak
+  RENAME TO omega;
+
+8) Compare the table and function counts between the two versions.
+
+
+/opt/PostgresPlus/9.2AS/bin/pg_restore --host localhost --port 5444 \
+--username "enterprisedb" --dbname "OMEGA" --no-password  --format directory \
+--schema coalesce --verbose "/backups/dbsp3/backup_dbms/coalesce/coalesce_omega_20150610_0100"
+
+/opt/PostgresPlus/9.2AS/bin/pg_restore --host localhost --port 5444 \
+--username "enterprisedb" --dbname "OMEGA" --no-password  --format directory \
+--schema public --verbose "/backups/dbsp3/backup_dbms/template_postgis_public_20150604_0100"
+
+/opt/PostgresPlus/9.2AS/bin/pg_restore --host localhost --port 5444 \
+--username "enterprisedb" --dbname "OMEGA" --no-password  --format plain \
+--schema postgis --verbose "/opt/PostgresPlus/9.2AS/client-v3/backup/template_postgis_public_20150525"
+
+ANALYZE VERBOSE
+
+/opt/PostgreSQL/9.4/bin/pg_restore --host localhost --port 5432 \
+--username "gene" --dbname "OMEGA" --password  --format d \
+--schema coalesce --verbose "/tmp/OMEGA_coalesce_20150901_0100"
+
+
+/*-------------------------------------*/
+/* WAL                                 */
+/*-------------------------------------*/
+
+SHOW config_file;
+"/db/data/postgresql.conf"
+
+/*-- Set in the postgresql.conf --*/
+
+SET wal_level TO archive; 
+SET archive_mode TO on;
+SET archive_timeout TO 3600;
+
+test ! -f /gpfs/archive/%f && \
+cp /db/data/pg_xlog/000000010000020A000000A5 \
+/gpfs/archive/%f
+
+/opt/PostgresPlus/9.2AS/data/pg_xlog/pg_xlog
+
+
+/*-------------------------------------*/
+/* Default Data Load                   */
+/*-------------------------------------*/
+
+COPY (
+SELECT 'INSERT INTO coalesce.coalesceentitytemplate(' ||
+    'templatekey, name, source, version, templatexml, ' || 
+    'datecreated, lastmodified) ' || 
+    'VALUES (''' || templatekey::text || 
+    ''', ''' || name || 
+    ''', ''' || source || 
+    ''', ''' || version || 
+    ''', ''' || templatexml || 
+    ''', ''' || datecreated || 
+    ''', ''' || lastmodified || 
+    ''');'
+FROM coalesce.coalesceentitytemplate 
+ORDER BY datecreated DESC 
+) TO '/backups/dbsp3/reload_scripts/coalesceentitytemplate.sql';
+
+
+COPY (
+SELECT 'INSERT INTO "coalesce".enumtype(uuid, enumtype, description, '
+    || 'datecreated, datemodified, lastmodifiedby, classification, constant) '
+    || 'VALUES (''' || uuid::text 
+    || ''', ''' || enumtype 
+    || ''', ''' || description 
+    || ''', ''' || datecreated 
+    || ''', ''' || datemodified 
+    || ''', ''' || lastmodifiedby 
+    || ''', ''' || classification 
+    || ''', ''' || constant 
+    || ''');' 
+FROM coalesce.enumtype 
+ORDER BY datecreated DESC
+) TO '/backups/dbsp3/reload_scripts/enumtype.sql';
+
+
+COPY (
+SELECT 'INSERT INTO "coalesce".enumvalue(' ||
+    'uuid, enumtype, ordering, enumvalue, description, hidden, ' || 
+    'constant) ' || 
+    'VALUES (''' || uuid::text || 
+    ''', ''' || enumtype || 
+    ''', ''' || ordering || 
+    ''', ''' || enumvalue || 
+    ''', ''' || description || 
+    ''', ''' || hidden || 
+    ''', ''' || constant || 
+    ''');'
+FROM coalesce.enumvalue 
+ORDER BY enumtype, ordering 
+) TO '/backups/dbsp3/reload_scripts/enumvalue.sql';
+
+
+COPY (
+SELECT 'INSERT INTO coalesce.coalesceentity(' ||
+    'objectkey, name, source, version, entityid, entityidtype, entityxml, ' || 
+    'datecreated, lastmodified, deleted, securitylow, securityhigh, '
+    'title) ' || 
+    'VALUES (''' || objectkey::text || 
+    ''', ''' || name || 
+    ''', ''' || source || 
+    ''', ''' || version || 
+    ''', ''' || entityid || 
+    ''', ''' || entityidtype || 
+    ''', ''' || entityxml || 
+    ''', ''' || datecreated || 
+    ''', ''' || lastmodified || 
+    ''', ''' || deleted || 
+    ''', ''' || securitylow || 
+    ''', ''' || securityhigh || 
+    ''', ''' || title || 
+    ''');'
+FROM coalesce.coalesceentity 
+WHERE LOWER(name) LIKE 'storage device'
+ORDER BY datecreated DESC 
+) TO '/backups/dbsp3/reload_scripts/coalesceentity_storagedevice.sql';
+
+
+COPY (
+SELECT 'INSERT INTO storage_device_recordset( ' ||
+    'objectkey, entitykey, entityname, entitysource, entitytype, devicename, ' ||
+    'serialnumber, barcode, location, capacity, usage, watermarklow, ' ||
+    'watermarkhigh, weightpriority, weightlastaccessed, weightreviewstatus, ' ||
+    'tier, state, directory) ' || 
+    'VALUES (''' || objectkey::text || 
+    ''', ''' || entitykey::text || 
+    ''', ''' || entityname || 
+    ''', ''' || entitysource || 
+    ''', ''' || devicename || 
+    ''', ''' || serialnumber || 
+    ''', ''' || barcode || 
+    ''', ''' || location || 
+    ''', ''' || capacity || 
+    ''', ''' || usage || 
+    ''', ''' || watermarklow || 
+    ''', ''' || watermarkhigh || 
+    ''', ''' || weightpriority || 
+    ''', ''' || weightlastaccessed || 
+    ''', ''' || weightreviewstatus || 
+    ''', ''' || tier || 
+    ''', ''' || state || 
+    ''', ''' || directory || 
+    ''');'
+FROM coalesce.storage_device_recordset 
+ORDER BY entityname DESC 
+) TO '/backups/dbsp3/reload_scripts/coalesceentity_storagedevicerecordset.sql';
+
+
+SELECT 'INSERT INTO "coalesce".user_object_recordset( ' ||
+    'objectkey, entitykey, entityname, entitysource, entitytype, uniqueuserid, ' ||
+    'username, usertype) ' ||
+    ' VALUES (''' || objectkey::text ||
+    ''', ''' || entitykey::text ||
+    ''', ''' || entityname ||
+    ''', ''' || entitysource ||
+    ''', ''' || entitytype ||
+    ''', ''' || uniqueuserid ||
+    ''', ''' || username ||
+    ''', ''' || usertype ||
+    ''');'   
+FROM coalesce.user_object_recordset 
+ORDER BY entitykey;
+
+
+--COPY (
+SELECT 'INSERT INTO coalesce.coalesceentity(' ||
+    'objectkey, name, source, version, entityid, entityidtype, entityxml, ' || 
+    'datecreated, lastmodified, deleted, securitylow, securityhigh, '
+    'title) ' || 
+    'VALUES (''' || objectkey::text || 
+    ''', ''' || name || 
+    ''', ''' || source || 
+    ''', ''' || version || 
+    ''', ''' || entityid || 
+    ''', ''' || entityidtype || 
+    ''', ''' || entityxml || 
+    ''', ''' || datecreated || 
+    ''', ''' || lastmodified || 
+    ''', ''' || deleted || 
+    ''', ''' || securitylow || 
+    ''', ''' || securityhigh || 
+    ''', ''' || title || 
+    ''');'
+FROM coalesce.coalesceentity 
+WHERE LOWER(name) LIKE '%user_object%'
+ORDER BY objectkey; 
+--) TO '/backups/dbsp3/reload_scripts/coalesceentity_storagedevice.sql';
+
+
+SELECT 'INSERT INTO "coalesce".access_control_recordset( ' ||
+    'objectkey, entitykey, entityname, entitysource, entitytype, accessscope, ' ||
+    'accessgroup, public) ' ||
+    'VALUES (''' || objectkey::text || 
+    ''', ''' || entitykey::text || 
+    ''', ''' || entityname || 
+    ''', ''' || entitysource || 
+    ''', ''' || entitytype || 
+    ''', ''' || accessscope || 
+    ''', ''' || COALESCE(accessgroup, '') || 
+    ''', ''' || public || 
+    ''');'
+FROM coalesce.access_control_recordset 
+WHERE LOWER(entityname) LIKE '%user object%' 
+ORDER BY entitykey;
+
+
+==================
+CRON  
+==================
+
+crontab -e 
+
+50 00 * * * /opt/PostgresPlus/9.2AS/client-v3/scripts/dbms_automated_schema_reload_data.sh > /dev/null 
+55 00 * * * /opt/PostgresPlus/9.2AS/client-v3/scripts/dbms_automated_schema_dump.sh > /dev/null 
+00 01 * * * /opt/PostgresPlus/9.2AS/client-v3/scripts/dbms_automated_backup.sh > /dev/null 
+00 02 * * * /opt/PostgresPlus/9.2AS/client-v3/scripts/dbms_automated_mgmt.sh > /dev/null 
+
+mutt
+
+
+==================
+ENUMERATION
+==================
+
+SELECT et.enumtype, 
+     COUNT(ev.enumtype) 
+FROM coalesce.enumtype et 
+LEFT OUTER JOIN coalesce.enumvalue ev ON et.enumtype = ev.enumtype 
+GROUP BY et.enumtype 
+ORDER BY et.enumtype;
+
+
+SELECT COUNT(ev.*) 
+FROM coalesce.enumvalue ev;
+
+
+SELECT et.enumtype, et.description  
+FROM   omega.enumtype et  
+ORDER BY et.enumtype;
+
+
+SELECT et.enumtype, et.description 
+    , ev.enumvalue, ev.ordering, ev.description 
+FROM   omega.enumtype et, 
+       omega.enumvalue ev 
+WHERE  et.enumtype = ev.enumtype
+    AND UPPER(et.enumtype) = UPPER('platformtype') 
+ORDER BY et.enumtype, ev.ordering; 
+
+
+UPDATE omega.enumvalue  
+SET enumvalue = TRIM(enumvalue), 
+    description = TRIM(description);
+    
+    
+=======================
+SECURITY LOGGING TEST
+=======================
+
+SHOW ALL; 
+
+DROP TABLE test_ejb; 
+CREATE TABLE test_ejb (field_1 INT);
+INSERT INTO test_ejb (field_1) VALUES (1);
+INSERT INTO test_ejb (field_1) VALUES ('a');
+SELECT field_2 FROM test_ejb;
+SELECT * FROM test_ejb1;
+SELECT * FROM test_ejb;
+
+
+==================
+MISC
+==================
+
+Blue color                         - Directory
+Blue color with Green background   - Mount point
+Green color                        - Executable or recognized data file
+Sky Blue color                     - Linked file
+Yellow color with Black background - Device
+Pink color                         - Graphic image file
+Red color                          - Archive file
+
+
+==================
+DESCRIPTIONS
+==================
+
+SELECT isc.table_catalog, 
+    isc.table_schema, 
+    isc.table_name, 
+--    isc.column_name,
+--    isc.is_nullable, 
+--    isc.data_type,
+--    isc.ordinal_position, 
+     (
+     SELECT pd.description 
+     FROM pg_description pd 
+     WHERE ('coalesce'||'.'||isc.table_name)::regclass = pd.objoid 
+    and 0 = pd.objsubid 
+     ) AS desc
+--    , '|', isc.* 
+FROM information_schema.tables isc
+WHERE table_schema = 'coalesce'
+ORDER BY isc.table_schema, isc.table_name;
+
+SELECT isc.table_catalog, 
+    isc.table_schema, 
+    isc.table_name, 
+    isc.column_name,
+    isc.is_nullable, 
+    isc.data_type,
+    isc.ordinal_position, 
+     (
+     SELECT pd.description 
+     FROM pg_description pd 
+     WHERE ('coalesce'||'.'||isc.table_name)::regclass = pd.objoid 
+    and isc.ordinal_position = pd.objsubid 
+     ) AS desc
+--    , '|', isc.* 
+FROM information_schema.columns isc
+WHERE table_schema = 'coalesce'
+ORDER BY isc.table_schema, isc.table_name, isc.ordinal_position;
+
+==================
+PG_TOAST
+==================
+
+SELECT inet_server_addr(), 
+    current_database(), 
+    current_schema(), 
+    name, 
+    COUNT(name) AS name_cnt, 
+    SUM(COALESCE(LENGTH(entityxml), 0)) AS sum_len,
+    SUM(LENGTH(entityxml))/COUNT(name) AS avg_len 
+FROM coalesce.coalesceentity 
+GROUP BY name
+ORDER BY name;
+
+SELECT entityxml FROM coalesce.coalesceentity WHERE SUBSTRING(objectkey::text, 1, 2) BETWEEN '00' AND '0F';
+
+SELECT entityxml FROM coalesce.coalesceentity WHERE SUBSTRING(objectkey::text, 1, 2) BETWEEN '00' AND '01'; -b
+SELECT entityxml FROM coalesce.coalesceentity WHERE SUBSTRING(objectkey::text, 1, 2) BETWEEN '01' AND '02'; -b
+SELECT entityxml FROM coalesce.coalesceentity WHERE SUBSTRING(objectkey::text, 1, 2) BETWEEN '02' AND '03'; -b
+SELECT entityxml FROM coalesce.coalesceentity WHERE SUBSTRING(objectkey::text, 1, 2) BETWEEN '03' AND '04'; -b
+SELECT entityxml FROM coalesce.coalesceentity WHERE SUBSTRING(objectkey::text, 1, 2) BETWEEN '04' AND '05';
+SELECT entityxml FROM coalesce.coalesceentity WHERE SUBSTRING(objectkey::text, 1, 2) BETWEEN '05' AND '06';
+SELECT entityxml FROM coalesce.coalesceentity WHERE SUBSTRING(objectkey::text, 1, 2) BETWEEN '06' AND '07';
+SELECT entityxml FROM coalesce.coalesceentity WHERE SUBSTRING(objectkey::text, 1, 2) BETWEEN '07' AND '08';
+SELECT entityxml FROM coalesce.coalesceentity WHERE SUBSTRING(objectkey::text, 1, 2) BETWEEN '08' AND '09'; -b
+SELECT entityxml FROM coalesce.coalesceentity WHERE SUBSTRING(objectkey::text, 1, 2) BETWEEN '09' AND '0A'; -b
+SELECT entityxml FROM coalesce.coalesceentity WHERE SUBSTRING(objectkey::text, 1, 2) BETWEEN '0A' AND '0B'; -b
+SELECT entityxml FROM coalesce.coalesceentity WHERE SUBSTRING(objectkey::text, 1, 2) BETWEEN '0B' AND '0C'; 
+SELECT entityxml FROM coalesce.coalesceentity WHERE SUBSTRING(objectkey::text, 1, 2) BETWEEN '0C' AND '0D';
+SELECT entityxml FROM coalesce.coalesceentity WHERE SUBSTRING(objectkey::text, 1, 2) BETWEEN '0D' AND '0E';
+SELECT entityxml FROM coalesce.coalesceentity WHERE SUBSTRING(objectkey::text, 1, 2) BETWEEN '0E' AND '0F';
+
+SELECT objectkey FROM coalesce.coalesceentity WHERE SUBSTRING(objectkey::text, 1, 2) BETWEEN '00' AND '01';
+
+UPDATE coalesce.coalesceentity SET entityxml = NULL WHERE objectkey = 'b8b8295e-5553-42f4-b490-4850eae7cf61';
+
+/*-- 
+ERROR: missing chunk number 0 for toast value 25205319 in pg_toast_24312097 
+--*/
+
+SELECT pg_toast_24312097::regclass;
+
+REINDEX TABLE pg_toast.pg_toast_24312097;
+
+REINDEX TABLE coalesce.coalesceentity;
+
+VACUUM ANALYZE coalesce.coalesceentity;
+
+==================
+CONSTRAIN 
+==================
+
+ALTER TABLE ONLY "coalesce".asdfghjklzxcbnmqwertyuiopasdfghjklzxcvbng_ 
+    DROP CONSTRAINT entityid_001_fk;
+
+ALTER TABLE "coalesce".asdfghjklzxcbnmqwertyuiopasdfghjklzxcvbng_
+    ADD CONSTRAINT entityid_001_fk FOREIGN KEY (entitykey)
+    REFERENCES "coalesce".access_control_recordset(objectkey) MATCH FULL
+    ON UPDATE CASCADE 
+    ON DELETE CASCADE;
+    
+================== 
+
+SELECT * 
+FROM coalesce.backup_set_recordset  
+WHERE entityname LIKE ('%' || 'p ' || '%'); 
+
+SELECT * 
+FROM coalesce.backup_set_recordset  
+WHERE dbmsbackupsize LIKE ('%' || '123' || '%'); 
+
+SELECT * 
+FROM coalesce.backup_set_recordset  
+WHERE starttime LIKE ('%' || '11:28' || '%'); 
+
+SELECT * 
+FROM coalesce.backup_set_recordset  
+WHERE dbmsbackup LIKE ('%' || 'f' || '%'); 
+
+SELECT * 
+FROM coalesce.backup_set_recordset  
+WHERE dbmsbackup LIKE ('%' || 'false' || '%');     
+

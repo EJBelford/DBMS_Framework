@@ -1,0 +1,84 @@
+/*--*----|----*----|----*----|---- TEAM ITSS ----*----|----|----*----|----*---*/
+--
+--         NAME: pfsa_pba_type_ref 
+--      PURPOSE: PERFORMANCE BASED LOGISTICS - Parent record for all the 
+--               contract related information, (NIIN, UIC, SN, etc.) 
+--
+--       SOURCE: pfsa_pba_type_ref.cmt
+--
+--   CREATED BY: Gene Belford 
+-- CREATED DATE: 10 March 2008
+--
+--  ASSUMPTIONS:
+--
+--  LIMITATIONS:
+--
+--        NOTES:
+--
+-- 
+/*--*----|----*----|----*----|----*----|----*----|----*----|----*----|----*---*/
+--     Change History:
+-- DDMMMYY - Who - Ticket # - CR # - Details
+-- 10MAR08 - GB  -          -      - Created 
+--
+/*--*----|----*----|----*----|---- TEAM ITSS ----*----|----|----*----|----*---*/
+--
+--
+
+/*----- Table Meta-Data -----*/ 
+
+COMMENT ON TABLE pfsa_pba_type_ref 
+IS 'PFSA_PBA_TYPE_REF - '; 
+
+
+COMMENT ON COLUMN pfsa_pba_type_ref.rec_id 
+IS 'REC_ID - '; 
+
+COMMENT ON COLUMN pfsa_pba_type_ref.item_identifier_type_cd 
+IS 'ITEM_IDENTIFIER_TYPE_CD - ';
+
+COMMENT ON COLUMN pfsa_pba_type_ref.item_identifier_type_desc  
+IS 'ITEM_IDENTIFIER_TYPE_DESC - ';
+
+COMMENT ON COLUMN pfsa_pba_type_ref.status 
+IS 'STATUS - The Extract-Transform-Load (ETL) status of the record in question.  [C - Current, D - Duplicate, E - Error, H - Historical, L - Logical, P - Processed, Q - Questionable, R - Ready to Process, T- ?????, Z - Future]';
+
+COMMENT ON COLUMN pfsa_pba_type_ref.updt_by 
+IS 'UPDT_BY - The date/timestamp of when the record was created/updated.';
+
+COMMENT ON COLUMN pfsa_pba_type_ref.lst_updt 
+IS 'LST_UPDT - Indicates either the program name or user ID of the person who updated the record.';
+
+COMMENT ON COLUMN pfsa_pba_type_ref.active_flag 
+IS 'ACTIVE_FLAG - Flag indicating if the record is active or not.';
+
+COMMENT ON COLUMN pfsa_pba_type_ref.active_date 
+IS 'ACTIVE_DATE - Additional control for active_Fl indicating when the record became active.';
+
+COMMENT ON COLUMN pfsa_pba_type_ref.inactive_date 
+IS 'INACTIVE_DATE - Additional control for active_Fl indicating when the record went inactive.';
+
+COMMENT ON COLUMN pfsa_pba_type_ref.insert_by 
+IS 'INSERT_BY - Reports who initially created the record.';
+
+COMMENT ON COLUMN pfsa_pba_type_ref.insert_date 
+IS 'INSERT_DATE - Reports when the record was initially created.';
+
+COMMENT ON COLUMN pfsa_pba_type_ref.update_by 
+IS 'UPDATE_BY - Reports who last updated the record.';
+
+COMMENT ON COLUMN pfsa_pba_type_ref.update_date 
+IS 'UPDATE_DATE - Reports when the record was last updated.';
+
+COMMENT ON COLUMN pfsa_pba_type_ref.delete_flag 
+IS 'DELETE_FLAG - Flag indicating if the record can be deleted.';
+
+COMMENT ON COLUMN pfsa_pba_type_ref.delete_date 
+IS 'DELETE_DATE - Additional control for DELETE_FLAG indicating when the record was marked for deletion.';
+
+COMMENT ON COLUMN pfsa_pba_type_ref.hidden_flag 
+IS 'HIDDEN_FLAG - Flag indicating if the record should be hidden from the general user in things like drop-down lists.';
+
+COMMENT ON COLUMN pfsa_pba_type_ref.hidden_date 
+IS 'HIDDEN_DATE - Additional control for HIDDEN_FLAG indicating when the record was hidden.';
+

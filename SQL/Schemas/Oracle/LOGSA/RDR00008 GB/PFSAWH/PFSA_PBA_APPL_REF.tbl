@@ -1,0 +1,323 @@
+/*----- Sequence  -----*/
+
+DROP SEQUENCE pfsa_pba_appl_ref_seq;
+
+CREATE SEQUENCE pfsa_pba_appl_ref_seq
+    START WITH 1000
+--    MAXVALUE   9999999
+    MINVALUE   1
+    NOCYCLE
+    NOCACHE
+    NOORDER; 
+
+/*--*----|----*----|----*----|---- TEAM ITSS ----*----|----|----*----|----*---*/
+--
+--         NAME: pfsa_pba_appl_ref
+--      PURPOSE: To calculate the desired information.
+--
+-- TABLE SOURCE: pfsa_pba_appl_ref.sql
+--
+--   CREATED BY: Gene Belford 
+-- CREATED DATE: May 6, 2008 
+--
+--  ASSUMPTIONS:
+--
+--  LIMITATIONS:
+--
+--        NOTES:
+--
+-- 
+/*--*----|----*----|----*----|----*----|----*----|----*----|----*----|----*---*/
+--     Change History:
+-- DDMMMYY - Who - Ticket # - CR # - Details
+-- 06MAY08 - GB  -          -      - Created 
+--
+/*--*----|----*----|----*----|---- TEAM ITSS ----*----|----|----*----|----*---*/
+--
+
+DROP TABLE pfsa_pba_appl_ref;
+    
+--
+
+CREATE TABLE pfsa_pba_appl_ref 
+(
+    rec_id                           NUMBER , 
+--    
+    pba_menu_id                      VARCHAR2(10) , 
+    pba_menu_desc                    VARCHAR2(50) ,   
+    pba_menu_sort_order              NUMBER , 
+--    
+    status                           VARCHAR2(1)         DEFAULT 'C' ,
+    updt_by                          VARCHAR2(30)        DEFAULT USER ,
+    lst_updt                         DATE                DEFAULT SYSDATE ,
+--
+    active_flag                      VARCHAR2(1)         DEFAULT 'Y' , 
+    active_date                      DATE                DEFAULT '01-JAN-1900' , 
+    inactive_date                    DATE                DEFAULT '31-DEC-2099' ,
+--
+    insert_by                        VARCHAR2(20)        DEFAULT USER , 
+    insert_date                      DATE                DEFAULT SYSDATE , 
+    update_by                        VARCHAR2(20)        NULL ,
+    update_date                      DATE                DEFAULT '01-JAN-1900' ,
+    delete_flag                      VARCHAR2(1)         DEFAULT 'N' ,
+    delete_date                      DATE                DEFAULT '01-JAN-1900' ,
+    hidden_flag                      VARCHAR2(1)         DEFAULT 'N' ,
+    hidden_date                      DATE                DEFAULT '01-JAN-1900'  
+)TABLESPACE PFSA
+PCTUSED    0
+PCTFREE    10
+INITRANS   1
+MAXTRANS   255
+STORAGE    (
+            INITIAL          64K
+            NEXT             32K
+            MINEXTENTS       1
+            MAXEXTENTS       UNLIMITED
+            PCTINCREASE      0
+            BUFFER_POOL      DEFAULT
+           )
+LOGGING 
+NOCOMPRESS 
+NOCACHE
+NOPARALLEL
+MONITORING;
+
+/*----- Table Meta-Data -----*/ 
+
+COMMENT ON TABLE pfsa_pba_appl_ref 
+IS 'PFSA_PBA_APPL_REF - '; 
+
+
+COMMENT ON COLUMN pfsa_pba_appl_ref.rec_id 
+IS 'REC_ID - '; 
+
+COMMENT ON COLUMN pfsa_pba_appl_ref.pba_menu_id 
+IS 'PBA_MENU_ID - '; 
+
+COMMENT ON COLUMN pfsa_pba_appl_ref.pba_menu_desc 
+IS 'PBA_MENU_DESC - '; 
+   
+COMMENT ON COLUMN pfsa_pba_appl_ref.pba_menu_sort_order 
+IS 'PBA_MENU_SORT_ORDER - '; 
+
+COMMENT ON COLUMN pfsa_pba_appl_ref.status 
+IS 'STATUS - The Extract-Transform-Load (ETL) status of the record in question.  [C - Current, D - Duplicate, E - Error, H - Historical, L - Logical, P - Processed, Q - Questionable, R - Ready to Process, T- ?????, Z - Future]';
+
+COMMENT ON COLUMN pfsa_pba_appl_ref.updt_by 
+IS 'UPDT_BY - The date/timestamp of when the record was created/updated.';
+
+COMMENT ON COLUMN pfsa_pba_appl_ref.lst_updt 
+IS 'LST_UPDT - Indicates either the program name or user ID of the person who updated the record.';
+
+COMMENT ON COLUMN pfsa_pba_appl_ref.active_flag 
+IS 'ACTIVE_FLAG - Flag indicating if the record is active or not.';
+
+COMMENT ON COLUMN pfsa_pba_appl_ref.active_date 
+IS 'ACTIVE_DATE - Additional control for active_Fl indicating when the record became active.';
+
+COMMENT ON COLUMN pfsa_pba_appl_ref.inactive_date 
+IS 'INACTIVE_DATE - Additional control for active_Fl indicating when the record went inactive.';
+
+COMMENT ON COLUMN pfsa_pba_appl_ref.insert_by 
+IS 'INSERT_BY - Reports who initially created the record.';
+
+COMMENT ON COLUMN pfsa_pba_appl_ref.insert_date 
+IS 'INSERT_DATE - Reports when the record was initially created.';
+
+COMMENT ON COLUMN pfsa_pba_appl_ref.update_by 
+IS 'UPDATE_BY - Reports who last updated the record.';
+
+COMMENT ON COLUMN pfsa_pba_appl_ref.update_date 
+IS 'UPDATE_DATE - Reports when the record was last updated.';
+
+COMMENT ON COLUMN pfsa_pba_appl_ref.delete_flag 
+IS 'DELETE_FLAG - Flag indicating if the record can be deleted.';
+
+COMMENT ON COLUMN pfsa_pba_appl_ref.delete_date 
+IS 'DELETE_DATE - Additional control for DELETE_FLAG indicating when the record was marked for deletion.';
+
+COMMENT ON COLUMN pfsa_pba_appl_ref.hidden_flag 
+IS 'HIDDEN_FLAG - Flag indicating if the record should be hidden from the general user in things like drop-down lists.';
+
+COMMENT ON COLUMN pfsa_pba_appl_ref.hidden_date 
+IS 'HIDDEN_DATE - Addition control for HIDDEN_FLAG indicating when the record was hidden.';
+
+/*----- Check to see if the table comment is present -----*/
+
+SELECT table_name, comments 
+FROM   user_tab_comments 
+WHERE  table_name = UPPER('pfsa_pba_appl_ref'); 
+
+/*----- Check to see if the table column comments are present -----*/
+
+SELECT  b.column_id, 
+        a.table_name, 
+        a.column_name, 
+        b.data_type, 
+        b.data_length, 
+        b.nullable, 
+        b.data_default,  
+        a.comments 
+--        , '|', b.*  
+FROM    user_col_comments a
+LEFT OUTER JOIN user_tab_columns b ON b.table_name = UPPER('pfsa_pba_appl_ref') 
+    AND  a.column_name = b.column_name
+WHERE    a.table_name = UPPER('pfsa_pba_appl_ref') 
+ORDER BY b.column_id; 
+
+/*----- Look-up field description from master LIDB table -----*/
+
+SELECT a.* 
+FROM   lidb_cmnt@pfsawh.lidbdev a
+WHERE  a.col_name LIKE UPPER('%supply%')
+ORDER BY a.col_name;  
+   
+SELECT a.* 
+FROM   user_col_comments a
+WHERE  a.column_name LIKE UPPER('%ITEM_SYS_EI_ID%'); 
+
+/*----- Primary Key -----*/
+
+ALTER TABLE pfsa_pba_appl_ref  
+    DROP CONSTRAINT pk_pfsa_pba_appl_ref;        
+
+ALTER TABLE pfsa_pba_appl_ref  
+    ADD CONSTRAINT pk_pfsa_pba_appl_ref 
+    PRIMARY KEY 
+    (
+    pba_menu_id
+    );    
+   
+/*----- Indexs -----*/
+
+DROP INDEX ixu_pfsa_pba_appl_ref;
+
+CREATE UNIQUE INDEX ixu_pfsa_pba_appl_ref 
+    ON pfsa_pba_appl_ref
+    (
+    rec_id
+    );
+
+/*----- Foreign Key -----*/
+/*
+ALTER TABLE pfsa_pba_appl_ref  
+    DROP CONSTRAINT fk_pfsa_code_xx_id;        
+
+ALTER TABLE pfsa_pba_appl_ref  
+    ADD CONSTRAINT fk_pfsa_code_xx_id 
+    FOREIGN KEY (xx_id) 
+    REFERENCES xx_pfsa_yyyyy_dim(xx_id);
+*/
+/*----- Constraints -----*/
+
+ALTER TABLE pfsa_pba_appl_ref  
+    DROP CONSTRAINT ck_pfsa_pba_appl_ref_act_fl;        
+
+ALTER TABLE pfsa_pba_appl_ref  
+    ADD CONSTRAINT ck_pfsa_pba_appl_ref_act_fl 
+    CHECK (active_flag='I' OR active_flag='N' OR active_flag='Y');
+
+ALTER TABLE pfsa_pba_appl_ref  
+    DROP CONSTRAINT ck_pfsa_pba_appl_ref_del_fl;        
+
+ALTER TABLE pfsa_pba_appl_ref  
+    ADD CONSTRAINT ck_pfsa_pba_appl_ref_del_fl 
+    CHECK (delete_flag='N' OR delete_flag='Y');
+
+ALTER TABLE pfsa_pba_appl_ref  
+    DROP CONSTRAINT ck_pfsa_pba_appl_ref_hide_fl;       
+
+ALTER TABLE pfsa_pba_appl_ref  
+    ADD CONSTRAINT ck_pfsa_pba_appl_ref_hide_fl 
+    CHECK (hidden_flag='N' OR hidden_flag='Y');
+
+ALTER TABLE pfsa_pba_appl_ref  
+    DROP CONSTRAINT ck_pfsa_pba_appl_ref_status;        
+
+ALTER TABLE pfsa_pba_appl_ref  
+    ADD CONSTRAINT ck_pfsa_pba_appl_ref_status 
+    CHECK (status='C' OR status='D' OR status='E' OR status='H' 
+        OR status='L' OR status='P' OR status='Q' OR status='R'
+        OR status='T' OR status='Z' OR status='N'
+        );
+
+/*----- Create the Trigger now -----*/
+
+
+/*----- Synonyms -----*/   
+
+CREATE PUBLIC SYNONYM pfsa_pba_appl_ref FOR pfsawh.pfsa_pba_appl_ref; 
+
+/*----- Grants-----*/
+
+GRANT SELECT ON pfsa_pba_appl_ref TO LIW_BASIC; 
+
+GRANT SELECT ON pfsa_pba_appl_ref TO LIW_RESTRICTED; 
+
+GRANT SELECT ON pfsa_pba_appl_ref TO S_PFSAW; 
+
+-- GRANT SELECT ON pfsa_pba_appl_ref TO MD2L043; 
+
+-- GRANT SELECT ON pfsa_pba_appl_ref TO S_LOGSA_WEBPROP; 
+
+-- GRANT SELECT ON pfsa_pba_appl_ref TO S_PBUSE; 
+
+-- GRANT SELECT ON pfsa_pba_appl_ref TO S_WEBPROP; 
+
+GRANT SELECT ON pfsa_pba_appl_ref TO C_PFSAW; 
+
+
+/*--*----|----*----|----*----|----*----|----*----|----*----|----*----|----*---*/
+/*                                                                            */
+/*                                 Populate                                   */
+/*                                                                            */
+/*--*----|----*----|----*----|----*----|----*----|----*----|----*----|----*---*/ 
+
+DECLARE
+
+    CURSOR code_cur IS
+        SELECT a.xx_ID, a.xx_DESCRIPTION
+        FROM pfsa_pba_appl_ref a
+        ORDER BY a.catcode;
+        
+    code_rec    code_cur%ROWTYPE;
+        
+BEGIN 
+
+    Insert into PFSA_PBA_APPL_REF
+       (REC_ID, PBA_MENU_ID, PBA_MENU_DESC, PBA_MENU_SORT_ORDER, STATUS, UPDT_BY, LST_UPDT, ACTIVE_FLAG, ACTIVE_DATE, INACTIVE_DATE, INSERT_BY, INSERT_DATE, UPDATE_DATE, DELETE_FLAG, DELETE_DATE, HIDDEN_FLAG, HIDDEN_DATE)
+    Values
+       (1000, 'PBA1', 'FUTURE COMBAT SUPPORT/LOGISTICS SUPPORT ACTIVITY', 1, 'C', 'RDR00008', TO_DATE('05/06/2008 07:36:51', 'MM/DD/YYYY HH24:MI:SS'), 'Y', TO_DATE('01/01/1900 00:00:00', 'MM/DD/YYYY HH24:MI:SS'), TO_DATE('12/31/2099 00:00:00', 'MM/DD/YYYY HH24:MI:SS'), 'RDR00008', TO_DATE('05/06/2008 07:36:51', 'MM/DD/YYYY HH24:MI:SS'), TO_DATE('01/01/1900 00:00:00', 'MM/DD/YYYY HH24:MI:SS'), 'N', TO_DATE('01/01/1900 00:00:00', 'MM/DD/YYYY HH24:MI:SS'), 'Y', TO_DATE('01/01/1900 00:00:00', 'MM/DD/YYYY HH24:MI:SS'));
+    
+    COMMIT; 
+    
+    DBMS_OUTPUT.ENABLE(1000000);
+    
+    DBMS_OUTPUT.NEW_LINE;
+    
+    OPEN code_cur;
+    
+    LOOP
+        FETCH code_cur 
+        INTO  code_rec;
+        
+        EXIT WHEN code_cur%NOTFOUND;
+        
+        DBMS_OUTPUT.PUT_LINE(code_rec.xx_ID || ', ' || code_rec.xx_CODE 
+            || ', ' || code_rec.xx_DESCRIPTION
+            );
+        
+    END LOOP;
+    
+    CLOSE code_cur;
+    
+COMMIT;    
+
+END;  
+    
+/*
+
+SELECT * FROM pfsa_pba_appl_ref; 
+
+*/
+

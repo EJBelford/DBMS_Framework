@@ -1,0 +1,94 @@
+/*----- Primary Key -----*/
+
+ALTER TABLE pfsa_pba_itm_metric_rul_map  
+    DROP CONSTRAINT pk_pfsa_pbs_itm_metric_rul_map;        
+
+ALTER TABLE pfsa_pba_itm_metric_rul_map  
+    ADD CONSTRAINT pk_pfsa_pbs_itm_metric_rul_map 
+    PRIMARY KEY 
+    (
+    rec_id
+    );
+
+/*----- Unique Key -----*/
+
+ALTER TABLE pfsa_pba_itm_metric_rul_map  
+    DROP CONSTRAINT ixu0_pfsa_pbs_itm_met_rul_map;
+
+ALTER TABLE pfsa_pba_itm_metric_rul_map  
+    ADD CONSTRAINT ixu0_pfsa_pba_itm_met_rul_map
+    UNIQUE  
+    (
+    pba_id ,
+    physical_item_id ,
+    metric_id ,
+    rule_id 
+    );
+
+/*----- Foreign Key -----*/
+
+ALTER TABLE pfsa_pba_itm_metric_rul_map  
+    DROP CONSTRAINT fk_pfsawh_item_id;        
+
+ALTER TABLE pfsa_pba_itm_metric_rul_map  
+    ADD CONSTRAINT fk_pfsawh_item_id 
+    FOREIGN KEY (physical_item_id) 
+    REFERENCES pfsawh_item_dim(physical_item_id);
+
+ALTER TABLE pfsa_pba_itm_metric_rul_map  
+    DROP CONSTRAINT fk_pfsa_code_item_id;        
+
+ALTER TABLE pfsa_pba_itm_metric_rul_map  
+    ADD CONSTRAINT fk_pfsa_code_item_id 
+    FOREIGN KEY (physical_item_id) 
+    REFERENCES pfsa_pba_items_ref(rec_id);
+
+ALTER TABLE pfsa_pba_itm_metric_rul_map  
+    DROP CONSTRAINT fk_pfsa_code_metric_id;        
+
+ALTER TABLE pfsa_pba_itm_metric_rul_map  
+    ADD CONSTRAINT fk_pfsa_code_metric_id 
+    FOREIGN KEY (metric_id) 
+    REFERENCES pfsa_pba_metrics_ref(metric_id);
+
+ALTER TABLE pfsa_pba_itm_metric_rul_map  
+    DROP CONSTRAINT fk_pfsa_code_rule_id;        
+
+ALTER TABLE pfsa_pba_itm_metric_rul_map  
+    ADD CONSTRAINT fk_pfsa_code_rule_id 
+    FOREIGN KEY (metric_id, rule_id) 
+    REFERENCES pfsa_pba_rules_ref(metric_id, rule_id);
+
+/*----- Constraints -----*/
+
+ALTER TABLE pfsa_pba_itm_metric_rul_map  
+    DROP CONSTRAINT ck_PBA_ITM_MET_RUL_MAP_act_fl;        
+
+ALTER TABLE pfsa_pba_itm_metric_rul_map  
+    ADD CONSTRAINT ck_PBA_ITM_MET_RUL_MAP_act_fl 
+    CHECK (active_flag='I' OR active_flag='N' OR active_flag='Y');
+
+ALTER TABLE pfsa_pba_itm_metric_rul_map  
+    DROP CONSTRAINT ck_PBA_ITM_MET_RUL_MAP_del_fl;        
+
+ALTER TABLE pfsa_pba_itm_metric_rul_map  
+    ADD CONSTRAINT ck_PBA_ITM_MET_RUL_MAP_del_fl 
+    CHECK (delete_flag='N' OR delete_flag='Y');
+
+ALTER TABLE pfsa_pba_itm_metric_rul_map  
+    DROP CONSTRAINT ck_PBA_ITM_MET_RUL_MAP_hide_fl;       
+
+ALTER TABLE pfsa_pba_itm_metric_rul_map  
+    ADD CONSTRAINT ck_PBA_ITM_MET_RUL_MAP_hide_fl 
+    CHECK (hidden_flag='N' OR hidden_flag='Y');
+
+ALTER TABLE pfsa_pba_itm_metric_rul_map  
+    DROP CONSTRAINT ck_PBA_ITM_MET_RUL_MAP_status;        
+
+ALTER TABLE pfsa_pba_itm_metric_rul_map  
+    ADD CONSTRAINT ck_PBA_ITM_MET_RUL_MAP_status 
+    CHECK (status='C' OR status='D' OR status='E' OR status='H' 
+        OR status='L' OR status='P' OR status='Q' OR status='R'
+        OR status='T' OR status='Z' OR status='N'
+        );
+
