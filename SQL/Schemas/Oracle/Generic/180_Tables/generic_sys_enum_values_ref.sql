@@ -141,7 +141,7 @@ IS 'enum_value - The actual specific enumeration value.  ';
 COMMENT ON COLUMN generic_sys_enum_values_ref.order_by 
 IS 'order_by - Integer value used to create a custom sort order not possible programmatically.  ';
 COMMENT ON COLUMN generic_sys_enum_values_ref.enum_display_name 
-IS 'enum_display_name - ',
+IS 'enum_display_name - ';
 COMMENT ON COLUMN generic_sys_enum_values_ref.description 
 IS 'description - Brief description of the enumeration value.  ';	
 COMMENT ON COLUMN generic_sys_enum_values_ref.constant_flag 
@@ -159,8 +159,6 @@ COMMENT ON COLUMN generic_sys_enum_values_ref.active_date
 IS 'ACTIVE_DATE - Additional control for active_Fl indicating when the record became active.';
 COMMENT ON COLUMN generic_sys_enum_values_ref.inactive_date 
 IS 'INACTIVE_DATE - Additional control for active_Fl indicating when the record went inactive.';
-COMMENT ON COLUMN generic_sys_enum_values_ref.source_rec_id 
-IS 'SOURCE_REC_ID - Identifier to the orginial record received from a outside source.';       
 COMMENT ON COLUMN generic_sys_enum_values_ref.insert_by 
 IS 'INSERT_BY - Reports who initially created the record.';
 COMMENT ON COLUMN generic_sys_enum_values_ref.insert_date 

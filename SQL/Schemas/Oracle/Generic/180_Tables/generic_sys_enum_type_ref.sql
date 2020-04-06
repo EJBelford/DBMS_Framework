@@ -134,13 +134,13 @@ COMMENT ON COLUMN generic_sys_enum_type_ref.rec_uuid
 IS 'REC_UUID - Blind uuid key of the generic_sys_enum_type_ref table.'; 
 
 COMMENT ON COLUMN generic_sys_enum_type_ref.enum_type  
-IS 'ENUM_TYPE - Identifying name of the enumeration in the database.  ',
+IS 'ENUM_TYPE - Identifying name of the enumeration in the database.  ';
 COMMENT ON COLUMN generic_sys_enum_type_ref.enum_type_desc 
-IS 'ENUM_TYPE_DESC - Brief description of the enumeration.  ',
+IS 'ENUM_TYPE_DESC - Brief description of the enumeration.  ';
 COMMENT ON COLUMN generic_sys_enum_type_ref.classification 
-IS 'CLASSIFICATION - This simple type is used by the classification attribute to identify the highest level of classification of the information being encoded.',
+IS 'CLASSIFICATION - This simple type is used by the classification attribute to identify the highest level of classification of the information being encoded.';
 COMMENT ON COLUMN generic_sys_enum_type_ref.constant_flag 
-IS 'CONSTANT_FLAG - Whether or not the enumeration is constant (unchangeable, probably used in the system), or dynamic (changeable, probably just used for visualization purposes).  ', 
+IS 'CONSTANT_FLAG - Whether or not the enumeration is constant (unchangeable, probably used in the system), or dynamic (changeable, probably just used for visualization purposes).  '; 
 
 COMMENT ON COLUMN generic_sys_enum_type_ref.status 
 IS 'STATUS - The Extract-Transform-Load (ETL) status of the record in question.  [C - Current, D - Duplicate, E - Error, H - Historical, L - Logical, P - Processed, Q - Questionable, R - Ready to Process, T- ?????, Z - Future]';
@@ -159,9 +159,6 @@ IS 'ACTIVE_DATE - Additional control for active_Fl indicating when the record be
 
 COMMENT ON COLUMN generic_sys_enum_type_ref.inactive_date 
 IS 'INACTIVE_DATE - Additional control for active_Fl indicating when the record went inactive.';
-
-COMMENT ON COLUMN generic_sys_enum_type_ref.source_rec_id 
-IS 'SOURCE_REC_ID - Identifier to the orginial record received from a outside source.';       
 
 COMMENT ON COLUMN generic_sys_enum_type_ref.insert_by 
 IS 'INSERT_BY - Reports who initially created the record.';
